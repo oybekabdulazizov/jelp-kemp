@@ -32,6 +32,12 @@ app.put('/campgrounds/:_id', async (req: Request, res: Response) => {
   res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
 });
 
+app.delete('/campgrounds/:_id', async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  await Campground.findByIdAndDelete(_id);
+  res.status(200).send({ code: 200, status: 'OK', msg: 'DELETED' });
+});
+
 app.get('/campgrounds/:_id', async (req: Request, res: Response) => {
   const { _id } = req.params;
   const campground = await Campground.findById(_id);

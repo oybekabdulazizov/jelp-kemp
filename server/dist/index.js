@@ -39,6 +39,11 @@ app.put('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, fun
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body.campground));
     res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
 }));
+app.delete('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.params;
+    yield campground_1.default.findByIdAndDelete(_id);
+    res.status(200).send({ code: 200, status: 'OK', msg: 'DELETED' });
+}));
 app.get('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     const campground = yield campground_1.default.findById(_id);
