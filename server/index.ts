@@ -13,10 +13,23 @@ connect('mongodb://127.0.0.1:27017/jelp-kemp')
   });
 
 const app: Express = express();
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/campgrounds', async (req: Request, res: Response) => {
   const campgrounds = await Campground.find({});
   res.json(campgrounds);
+});
+
+app.post('/campgrounds', async (req: Request, res: Response) => {
+  const newCampground = new Campground({ ...req.body });
+  newCampground.save();
+  res.status(200).send({ code: 200, status: 'OK', msg: 'CREATED' });
+});
+
+app.put('/campgrounds/:_id', async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  await Campground.findByIdAndUpdate(_id, { ...req.body.campground });
+  res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
 });
 
 app.get('/campgrounds/:_id', async (req: Request, res: Response) => {

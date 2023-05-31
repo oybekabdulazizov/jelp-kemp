@@ -24,9 +24,20 @@ const campground_1 = __importDefault(require("./models/campground"));
     console.log(err);
 });
 const app = (0, express_1.default)();
+app.use(express_1.default.urlencoded({ extended: true }));
 app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const campgrounds = yield campground_1.default.find({});
     res.json(campgrounds);
+}));
+app.post('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newCampground = new campground_1.default(Object.assign({}, req.body));
+    newCampground.save();
+    res.status(200).send({ code: 200, status: 'OK', msg: 'CREATED' });
+}));
+app.put('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.params;
+    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body.campground));
+    res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
 }));
 app.get('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
