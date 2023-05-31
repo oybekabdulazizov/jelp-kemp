@@ -28,6 +28,11 @@ app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function
     const campgrounds = yield campground_1.default.find({});
     res.json(campgrounds);
 }));
+app.get('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id } = req.params;
+    const campground = yield campground_1.default.findById(_id);
+    res.json(campground);
+}));
 app.listen('3001', () => {
     console.log('Listening to port 3001...');
 });

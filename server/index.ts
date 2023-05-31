@@ -19,6 +19,12 @@ app.get('/campgrounds', async (req: Request, res: Response) => {
   res.json(campgrounds);
 });
 
+app.get('/campgrounds/:_id', async (req: Request, res: Response) => {
+  const { _id } = req.params;
+  const campground = await Campground.findById(_id);
+  res.json(campground);
+});
+
 app.listen('3001', () => {
   console.log('Listening to port 3001...');
 });
