@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
-const camground_1 = __importDefault(require("./models/camground"));
+const campground_1 = __importDefault(require("./models/campground"));
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
     console.log('Database connected...');
@@ -24,15 +24,9 @@ const camground_1 = __importDefault(require("./models/camground"));
     console.log(err);
 });
 const app = (0, express_1.default)();
-app.get('/makecampground', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const camp = new camground_1.default({
-        title: 'My Backyard',
-        price: '1',
-        description: 'Cheap camping :)',
-        location: 'Warsaw, Poland',
-    });
-    yield camp.save();
-    res.send(camp);
+app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const campgrounds = yield campground_1.default.find({});
+    res.json(campgrounds);
 }));
 app.listen('3001', () => {
     console.log('Listening to port 3001...');

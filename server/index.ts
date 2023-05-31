@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import { connect } from 'mongoose';
 
-import Campground from './models/camground';
+import Campground from './models/campground';
 
 connect('mongodb://127.0.0.1:27017/jelp-kemp')
   .then(() => {
@@ -14,15 +14,9 @@ connect('mongodb://127.0.0.1:27017/jelp-kemp')
 
 const app: Express = express();
 
-app.get('/makecampground', async (req: Request, res: Response) => {
-  const camp = new Campground({
-    title: 'My Backyard',
-    price: '1',
-    description: 'Cheap camping :)',
-    location: 'Warsaw, Poland',
-  });
-  await camp.save();
-  res.send(camp);
+app.get('/campgrounds', async (req: Request, res: Response) => {
+  const campgrounds = await Campground.find({});
+  res.json(campgrounds);
 });
 
 app.listen('3001', () => {
