@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from 'express';
 import { connect } from 'mongoose';
+import cors from 'cors';
 
 import Campground from './models/campground';
 
@@ -14,6 +15,7 @@ connect('mongodb://127.0.0.1:27017/jelp-kemp')
 
 const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.get('/campgrounds', async (req: Request, res: Response) => {
   const campgrounds = await Campground.find({});

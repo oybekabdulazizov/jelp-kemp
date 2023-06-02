@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
+const cors_1 = __importDefault(require("cors"));
 const campground_1 = __importDefault(require("./models/campground"));
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -25,6 +26,7 @@ const campground_1 = __importDefault(require("./models/campground"));
 });
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cors_1.default)());
 app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const campgrounds = yield campground_1.default.find({});
     res.json(campgrounds);
