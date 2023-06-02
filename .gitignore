@@ -7,6 +7,9 @@
 /.pnp
 .pnp.js
 
+*/.vite
+/vite
+
 # testing
 */coverage
 
