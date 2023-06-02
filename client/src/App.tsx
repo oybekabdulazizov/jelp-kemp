@@ -21,8 +21,8 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <div className='container bg-dark text-light'>
       <Campgrounds campgroundsData={campgroundsData} />
-    </>
+    </div>
   );
 }
