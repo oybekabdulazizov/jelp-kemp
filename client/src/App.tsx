@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Campground_Type } from './shared/types';
 import NavBar from './components/NavBar';
 import Campgrounds from './components/campground/Index';
+import Footer from './components/Footer';
 
 export default function App() {
   const [campgroundsData, setCampgroundsData] = useState<Campground_Type[]>([]);
@@ -22,11 +23,10 @@ export default function App() {
   }, []);
 
   return (
-    <div>
+    <>
       <NavBar />
-      <div className='container bg-dark text-light'>
-        <Campgrounds campgroundsData={campgroundsData} />
-      </div>
-    </div>
+      <Campgrounds campgroundsData={campgroundsData} />
+      <Footer />
+    </>
   );
 }
