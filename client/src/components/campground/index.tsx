@@ -1,4 +1,5 @@
 import { Campground_Type } from '../../shared/types';
+import Campground from './Campground';
 
 type Props = {
   campgroundsData: Array<Campground_Type>;
@@ -6,12 +7,10 @@ type Props = {
 
 export default function Campgrounds({ campgroundsData }: Props) {
   return (
-    <div>
+    <div className='container'>
       <ul>
-        {campgroundsData.map((camp, id) => (
-          <li key={id}>
-            {camp.title} ({camp.location}) - ${camp.price}/night
-          </li>
+        {campgroundsData.map((campground) => (
+          <Campground {...campground} key={campground._id} />
         ))}
       </ul>
     </div>
