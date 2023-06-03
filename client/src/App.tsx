@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Route, Routes } from 'react-router-dom';
 
 import { Campground_Type } from './shared/types';
 import NavBar from './components/NavBar';
@@ -25,7 +26,12 @@ export default function App() {
   return (
     <>
       <NavBar />
-      <Campgrounds campgroundsData={campgroundsData} />
+      <Routes>
+        <Route
+          path='campgrounds'
+          element={<Campgrounds campgroundsData={campgroundsData} />}
+        />
+      </Routes>
       <Footer />
     </>
   );
