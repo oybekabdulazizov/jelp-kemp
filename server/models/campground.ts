@@ -5,7 +5,7 @@ interface ICampground {
   description: string;
   price: number;
   location: string;
-  imgUrl?: string;
+  image?: string;
 }
 
 const CampgroundSchema = new Schema<ICampground>({
@@ -30,7 +30,7 @@ const CampgroundSchema = new Schema<ICampground>({
     required: true,
     maxLength: [100, 'Location cannot exceed 250 characters'],
   },
-  imgUrl: { type: String, required: false },
+  image: { type: String, required: false },
 });
 
 const Campground = model<ICampground>('Campground', CampgroundSchema);

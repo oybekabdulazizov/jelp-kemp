@@ -23,7 +23,7 @@ const CampgroundSchema = new mongoose_1.Schema({
         required: true,
         maxLength: [100, 'Location cannot exceed 250 characters'],
     },
-    imgUrl: { type: String, required: false },
+    image: { type: String, required: false },
 });
 const Campground = (0, mongoose_1.model)('Campground', CampgroundSchema);
 exports.default = Campground;
