@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Campground_Type } from './shared/types';
 import NavBar from './components/NavBar';
-import Campgrounds from './components/campground/Index';
+import Campgrounds from './components/campground';
 import Details from './components/campground/Details';
 import NewCampgroundForm from './components/campground/NewCampgroundForm';
 import EditCampgroundForm from './components/campground/EditCampgroundForm';
@@ -40,6 +40,7 @@ export default function App() {
           path='/campgrounds/:_id'
           element={<Details campgrounds={campgroundsData} />}
         />
+        <Route path='/*' element={<Navigate to='/' replace={true} />} />
       </Routes>
       <Footer />
     </>

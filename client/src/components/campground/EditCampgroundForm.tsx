@@ -1,5 +1,10 @@
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {
+  Link,
+  NavigateFunction,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import axios from 'axios';
 
 import { Campground_Type } from '../../shared/types';
@@ -16,6 +21,7 @@ export default function EditCampgroundForm() {
     [x: string]: string | number;
   }>(initialState);
   const { _id } = useParams();
+  const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
     const findCampground = async () => {
@@ -60,6 +66,7 @@ export default function EditCampgroundForm() {
     }
 
     setCamproundToBeEdited(initialState);
+    navigate(`/campgrounds/${_id}`);
   };
 
   return (

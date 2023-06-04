@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {
+  Link,
+  NavigateFunction,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import axios from 'axios';
 
 import { Campground_Type } from '../../shared/types';
@@ -12,8 +17,8 @@ type Props = {
 export default function Details({}: Props) {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
-
   const { width } = useResize();
+  const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
     const findCampground = async () => {
@@ -33,10 +38,8 @@ export default function Details({}: Props) {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:3001/campgrounds/${_id}`
-      );
-      console.log(response);
+      await axios.delete(`http://localhost:3001/campgrounds/${_id}`);
+      navigate(`/campgrounds`);
     } catch (err) {
       console.log(err);
     }

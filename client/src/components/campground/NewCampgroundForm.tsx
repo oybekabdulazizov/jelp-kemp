@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
 
 import { Campground_Type } from '../../shared/types';
 
@@ -15,6 +15,7 @@ export default function NewCampgroundForm() {
   const [formData, setFormData] = useState<{
     [x: string]: string | number;
   }>(initialState);
+  const navigate: NavigateFunction = useNavigate();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -45,6 +46,7 @@ export default function NewCampgroundForm() {
     }
 
     setFormData(initialState);
+    navigate(`/campgrounds`);
   };
 
   return (
