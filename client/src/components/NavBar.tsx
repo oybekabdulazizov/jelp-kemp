@@ -1,21 +1,23 @@
+import { Link, NavLink } from 'react-router-dom';
+
 export default function NavBar() {
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
       <div className='container'>
-        <a href='/' className='navbar-brand text-light'>
+        <Link to='/' className='navbar-brand text-light'>
           Jelp-Kemp
-        </a>
+        </Link>
         <div className='collapse navbar-collapse' data-bs-theme='dark'>
           <div className='navbar-nav'>
-            <a className='nav-link mx-2' href='/'>
+            <NavLink to='/' className='nav-link mx-2'>
               Home
-            </a>
-            <a className='nav-link mx-2' href='/campgrounds'>
+            </NavLink>
+            <NavLink to='/campgrounds' className='nav-link mx-2'>
               Campgrounds
-            </a>
-            <a className='nav-link mx-2' href='/campgrounds/new'>
+            </NavLink>
+            <NavLink to='/campgrounds/new' className='nav-link mx-2'>
               New Campground
-            </a>
+            </NavLink>
           </div>
         </div>
         <div className='dropstart' data-bs-theme='dark'>
@@ -28,22 +30,22 @@ export default function NavBar() {
             <span className='navbar-toggler-icon'></span>
           </button>
           <div className='dropdown-menu d-lg-none'>
-            <a className='dropdown-item' href='/'>
+            <NavLink to='/' className='dropdown-item'>
               Home
-            </a>
-            <a className='dropdown-item' href='/campgrounds'>
+            </NavLink>
+            <NavLink to='/campgrounds' className='dropdown-item'>
               Campgrounds
-            </a>
-            <a className='dropdown-item' href='/campgrounds/new'>
+            </NavLink>
+            <NavLink to='/campgrounds/new' className='dropdown-item'>
               New Campground
-            </a>
+            </NavLink>
             <hr className='dropdown-divider' />
-            <a className='dropdown-item' href='/campgrounds/new'>
+            <NavLink to='/something' className='dropdown-item'>
               Something
-            </a>
-            <a className='dropdown-item' href='/campgrounds/new'>
+            </NavLink>
+            <NavLink to='/another-thing' className='dropdown-item'>
               Another thing
-            </a>
+            </NavLink>
           </div>
         </div>
       </div>
