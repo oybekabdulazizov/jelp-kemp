@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { Campground_Type } from '../../shared/types';
@@ -48,7 +48,14 @@ export default function Details({}: Props) {
           <li className='list-group-item'>{campground?.location}</li>
           <li className='list-group-item'>${campground?.price}/night</li>
         </ul>
-        <div className='card-body'></div>
+        <div className='card-body'>
+          <Link
+            to={`/campgrounds/${campground?._id}/edit`}
+            className='btn btn-primary me-2'
+          >
+            Edit
+          </Link>
+        </div>
         <div className='card-footer text-body-secondary'>2 days ago</div>
       </div>
     </div>
