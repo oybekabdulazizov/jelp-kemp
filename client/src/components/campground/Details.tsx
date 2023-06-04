@@ -10,11 +10,7 @@ import axios from 'axios';
 import { Campground_Type } from '../../shared/types';
 import useResize from '../../hooks/useResize';
 
-type Props = {
-  campgrounds: Array<Campground_Type>;
-};
-
-export default function Details({}: Props) {
+export default function Details() {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
   const { width } = useResize();

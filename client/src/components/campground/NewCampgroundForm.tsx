@@ -31,16 +31,11 @@ export default function NewCampgroundForm() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        'http://localhost:3001/campgrounds',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
-      );
-      console.log(response);
+      await axios.post('http://localhost:3001/campgrounds', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
     } catch (err) {
       console.log(err);
     }
