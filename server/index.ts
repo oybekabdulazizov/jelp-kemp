@@ -30,7 +30,7 @@ app.post('/campgrounds', async (req: Request, res: Response) => {
 
 app.put('/campgrounds/:_id', async (req: Request, res: Response) => {
   const { _id } = req.params;
-  await Campground.findByIdAndUpdate(_id, { ...req.body.campground });
+  await Campground.findByIdAndUpdate(_id, { ...req.body });
   res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
 });
 
