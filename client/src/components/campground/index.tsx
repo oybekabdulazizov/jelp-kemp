@@ -7,7 +7,8 @@ type Props = {
 
 export default function Campgrounds({ campgroundsData }: Props) {
   return (
-    <div className='container'>
+    <div className='container mt-4'>
+      <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
       {campgroundsData.map((campground) => (
         <Campground {...campground} key={campground._id} />
       ))}
