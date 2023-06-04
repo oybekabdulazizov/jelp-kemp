@@ -5,6 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Campground_Type } from './shared/types';
 import NavBar from './components/NavBar';
 import Campgrounds from './components/campground/Index';
+import Details from './components/campground/Details';
 import Footer from './components/Footer';
 
 export default function App() {
@@ -28,8 +29,12 @@ export default function App() {
       <NavBar />
       <Routes>
         <Route
-          path='campgrounds'
+          path='/campgrounds'
           element={<Campgrounds campgroundsData={campgroundsData} />}
+        />
+        <Route
+          path='/campgrounds/:_id'
+          element={<Details campgrounds={campgroundsData} />}
         />
       </Routes>
       <Footer />
