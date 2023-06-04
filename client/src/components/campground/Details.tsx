@@ -31,6 +31,17 @@ export default function Details({}: Props) {
     findCampground();
   }, []);
 
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3001/campgrounds/${_id}`
+      );
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className={`container my-4 ${width < 576 && 'px-4'}`}>
       <div className={`card ${width >= 992 ? 'w-50' : 'w-75'} mx-auto`}>
@@ -55,6 +66,9 @@ export default function Details({}: Props) {
           >
             Edit
           </Link>
+          <button className='btn btn-danger' onClick={handleDelete}>
+            Delete
+          </button>
         </div>
         <div className='card-footer text-body-secondary'>2 days ago</div>
       </div>
