@@ -1,14 +1,9 @@
-import { useEffect, useState } from 'react';
-
-import { Campground_Type } from '../../shared/types';
 import { Link } from 'react-router-dom';
 
-type Props = Campground_Type;
+import { Campground_Type } from '../../shared/types';
+import useResize from '../../hooks/useResize';
 
-type Dimentions_Type = {
-  width: number;
-  height: number;
-};
+type Props = Campground_Type;
 
 export default function Campground({
   _id,
@@ -18,32 +13,11 @@ export default function Campground({
   image,
   location,
 }: Props) {
-  const [dimentions, setDimentions] = useState<Dimentions_Type>({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    const handleResize = () => {
-      setDimentions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  });
+  const { width } = useResize();
 
   return (
     <div className='container'>
-      <div
-        className={`card mb-3 ${
-          dimentions.width >= 992 ? 'w-75' : 'w-100'
-        } mx-auto`}
-      >
+      <div className={`card mb-3 ${width >= 992 ? 'w-75' : 'w-100'} mx-auto`}>
         <div className='row g-0'>
           <div className='col-md-4'>
             <img

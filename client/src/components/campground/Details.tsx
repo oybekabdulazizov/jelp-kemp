@@ -1,24 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Campground_Type } from '../../shared/types';
 import axios from 'axios';
+
+import { Campground_Type } from '../../shared/types';
+import useResize from '../../hooks/useResize';
 
 type Props = {
   campgrounds: Array<Campground_Type>;
 };
 
-type Dimentions_Type = {
-  width: number;
-  height: number;
-};
-
 export default function Details({}: Props) {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
-  const [dimentions, setDimentions] = useState<Dimentions_Type>({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
+
+  const { width } = useResize();
 
   useEffect(() => {
     const findCampground = async () => {
@@ -33,25 +28,12 @@ export default function Details({}: Props) {
       }
     };
 
-    const handleResize = () => {
-      setDimentions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
     findCampground();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
   }, []);
 
   return (
-    <div className={`container my-4 ${dimentions.width < 576 && 'px-4'}`}>
-      <div
-        className={`card ${dimentions.width >= 992 ? 'w-50' : 'w-75'} mx-auto`}
-      >
+    <div className={`container my-4 ${width < 576 && 'px-4'}`}>
+      <div className={`card ${width >= 992 ? 'w-50' : 'w-75'} mx-auto`}>
         <img
           src={`${campground?.image}`}
           className='card-img-top'

@@ -7,4 +7,9 @@ type Campground_Type = {
   image?: string;
 };
 
-export { type Campground_Type };
+type Dimentions_Type = {
+  width: number;
+  height: number;
+};
+
+export type { Campground_Type, Dimentions_Type };
