@@ -8,11 +8,9 @@ type Props = {
 export default function Campgrounds({ campgroundsData }: Props) {
   return (
     <div className='container'>
-      <ul>
-        {campgroundsData.map((campground) => (
-          <Campground {...campground} key={campground._id} />
-        ))}
-      </ul>
+      {campgroundsData.map((campground) => (
+        <Campground {...campground} key={campground._id} />
+      ))}
     </div>
   );
 }
