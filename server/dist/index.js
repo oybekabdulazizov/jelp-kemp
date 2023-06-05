@@ -15,49 +15,82 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
+const safe_1 = __importDefault(require("colors/safe"));
 const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
+const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
     console.log('Database connected...');
 })
     .catch((err) => {
-    console.log('ERROR OCCURRED WHILE CONNECTING TO THE DATABASE:');
-    console.log(err);
+    console.log(error('***** FAILED TO CONNECT TO MONGODB *****'));
+    console.log(err.message);
 });
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
-app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const campgrounds = yield campground_1.default.find({});
-    res.json(campgrounds);
+app.get('/campgrounds', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const campgrounds = yield campground_1.default.find({});
+        res.json(campgrounds);
+    }
+    catch (err) {
+        console.log(error('***** GET - Unexpected error occurred *****'));
+        next(err);
+    }
 }));
-app.post('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCampground = new campground_1.default(Object.assign({}, req.body));
-    newCampground.save();
-    res.status(200).send();
+app.post('/campgrounds', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newCampground = new campground_1.default(Object.assign({}, req.body));
+        yield newCampground.save();
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(error('***** POST - Campground Validation Failed *****'));
+        next(err);
+    }
 }));
-app.put('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.put('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
-    res.status(200).send();
+    try {
+        yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(error('***** PUT - Campground Validation Failed *****'));
+        next(err);
+    }
 }));
-app.delete('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.delete('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    yield campground_1.default.findByIdAndDelete(_id);
-    res.status(200).send();
+    try {
+        const deleted = yield campground_1.default.findByIdAndDelete(_id);
+        console.log(deleted);
+        res.status(200).send();
+    }
+    catch (err) {
+        console.log(error('***** DELETE - Campground Deletion Failed *****'));
+        next(err);
+    }
 }));
 app.get('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id } = req.params;
-    const campground = yield campground_1.default.findById(_id);
-    if (!campground)
-        return next(new AppError_1.default(404, 'Campground Not Found!'));
-    res.json(campground);
+    try {
+        const { _id } = req.params;
+        const campground = yield campground_1.default.findById(_id);
+        if (!campground)
+            return next(new AppError_1.default(404, 'Not Found!'));
+        res.json(campground);
+    }
+    catch (err) {
+        console.log(error('***** GET(id) - Campground Not Found *****'));
+        next(new AppError_1.default(404, 'Not Found!'));
+    }
 }));
-app.use((err, req, res) => {
+app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { status = 500, message = 'Something went wrong!' } = err;
     res.status(status).send(message);
-});
+}));
 app.listen('3001', () => {
     console.log('Listening to port 3001...');
 });
