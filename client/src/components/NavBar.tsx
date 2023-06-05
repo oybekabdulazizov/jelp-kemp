@@ -9,13 +9,13 @@ export default function NavBar() {
         </Link>
         <div className='collapse navbar-collapse' data-bs-theme='dark'>
           <div className='navbar-nav'>
-            <NavLink to='/' className='nav-link mx-2'>
+            <NavLink to='/' end className='nav-link mx-2'>
               Home
             </NavLink>
-            <NavLink to='/campgrounds' className='nav-link mx-2'>
+            <NavLink to='/campgrounds' end className='nav-link mx-2'>
               Campgrounds
             </NavLink>
-            <NavLink to='/campgrounds/new' className='nav-link mx-2'>
+            <NavLink to='/campgrounds/new' end className='nav-link mx-2'>
               New Campground
             </NavLink>
           </div>
@@ -30,20 +30,20 @@ export default function NavBar() {
             <span className='navbar-toggler-icon'></span>
           </button>
           <div className='dropdown-menu d-lg-none'>
-            <NavLink to='/' className='dropdown-item'>
+            <NavLink to='/' end className='dropdown-item'>
               Home
             </NavLink>
-            <NavLink to='/campgrounds' className='dropdown-item'>
+            <NavLink to='/campgrounds' end className='dropdown-item'>
               Campgrounds
             </NavLink>
-            <NavLink to='/campgrounds/new' className='dropdown-item'>
+            <NavLink to='/campgrounds/new' end className='dropdown-item'>
               New Campground
             </NavLink>
             <hr className='dropdown-divider' />
-            <NavLink to='/something' className='dropdown-item'>
+            <NavLink to='/something' end className='dropdown-item'>
               Something
             </NavLink>
-            <NavLink to='/another-thing' className='dropdown-item'>
+            <NavLink to='/another-thing' end className='dropdown-item'>
               Another thing
             </NavLink>
           </div>
