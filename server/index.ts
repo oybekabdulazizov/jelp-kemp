@@ -1,7 +1,8 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 
+import AppError from './AppError';
 import Campground from './models/campground';
 
 connect('mongodb://127.0.0.1:27017/jelp-kemp')
@@ -25,25 +26,38 @@ app.get('/campgrounds', async (req: Request, res: Response) => {
 app.post('/campgrounds', async (req: Request, res: Response) => {
   const newCampground = new Campground({ ...req.body });
   newCampground.save();
-  res.status(200).send({ code: 200, status: 'OK', msg: 'CREATED' });
+  res.status(200).send();
 });
 
 app.put('/campgrounds/:_id', async (req: Request, res: Response) => {
   const { _id } = req.params;
-  await Campground.findByIdAndUpdate(_id, { ...req.body });
-  res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
+  await Campground.findByIdAndUpdate(
+    _id,
+    { ...req.body },
+    { runValidators: true }
+  );
+  res.status(200).send();
 });
 
 app.delete('/campgrounds/:_id', async (req: Request, res: Response) => {
   const { _id } = req.params;
   await Campground.findByIdAndDelete(_id);
-  res.status(200).send({ code: 200, status: 'OK', msg: 'DELETED' });
+  res.status(200).send();
 });
 
-app.get('/campgrounds/:_id', async (req: Request, res: Response) => {
-  const { _id } = req.params;
-  const campground = await Campground.findById(_id);
-  res.json(campground);
+app.get(
+  '/campgrounds/:_id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.params;
+    const campground = await Campground.findById(_id);
+    if (!campground) return next(new AppError(404, 'Campground Not Found!'));
+    res.json(campground);
+  }
+);
+
+app.use((err: any, req: Request, res: Response) => {
+  const { status = 500, message = 'Something went wrong!' } = err;
+  res.status(status).send(message);
 });
 
 app.listen('3001', () => {

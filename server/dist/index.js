@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
+const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -34,23 +35,29 @@ app.get('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function
 app.post('/campgrounds', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newCampground = new campground_1.default(Object.assign({}, req.body));
     newCampground.save();
-    res.status(200).send({ code: 200, status: 'OK', msg: 'CREATED' });
+    res.status(200).send();
 }));
 app.put('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body));
-    res.status(200).send({ code: 200, status: 'OK', msg: 'PUT_UPDATED' });
+    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
+    res.status(200).send();
 }));
 app.delete('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     yield campground_1.default.findByIdAndDelete(_id);
-    res.status(200).send({ code: 200, status: 'OK', msg: 'DELETED' });
+    res.status(200).send();
 }));
-app.get('/campgrounds/:_id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     const campground = yield campground_1.default.findById(_id);
+    if (!campground)
+        return next(new AppError_1.default(404, 'Campground Not Found!'));
     res.json(campground);
 }));
+app.use((err, req, res) => {
+    const { status = 500, message = 'Something went wrong!' } = err;
+    res.status(status).send(message);
+});
 app.listen('3001', () => {
     console.log('Listening to port 3001...');
 });
