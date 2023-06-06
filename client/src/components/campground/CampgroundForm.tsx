@@ -95,12 +95,14 @@ export default function CampgroundForm() {
   }, []);
 
   return (
-    <div className='vh-100'>
-      <div className='col-4 offset-4 py-2'>
-        <h2 className='text-center py-4 m-0'>New Campground</h2>
+    <div>
+      <div className='col-4 offset-4 py-1'>
+        <h2 className='text-center py-3 m-0'>
+          {isCreate ? 'New Campground' : 'Edit Campground'}
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
-            <label htmlFor='title' className='form-label'>
+            <label htmlFor='title' className='form-label fw-medium'>
               Title
             </label>
             <input
@@ -121,53 +123,62 @@ export default function CampgroundForm() {
           </div>
 
           <div className='mb-3'>
-            <label htmlFor='location' className='form-label'>
-              Location
-            </label>
-            <input
-              type='text'
-              className={`form-control ${
-                errors.location && touched.location && 'border border-danger'
-              }`}
-              id='location'
-              name='location'
-              value={values.location}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {errors.location && touched.location && (
-              <div className='text-danger'>{errors.location}</div>
-            )}
-            {allValid && <div className='text-success'>Looks good!</div>}
-          </div>
-
-          <div className='mb-3'>
-            <label htmlFor='price' className='form-label'>
-              Price
-            </label>
-            <div className='input-group'>
-              <span className='input-group-text bg-body-secondary'>$</span>
+            <div className='d-inline-block me-2' style={{ width: '49%' }}>
+              <label htmlFor='location' className='form-label fw-medium'>
+                Location
+              </label>
               <input
-                type='number'
+                type='text'
                 className={`form-control ${
-                  errors.price && touched.price && 'border border-danger'
+                  errors.location && touched.location && 'border border-danger'
                 }`}
-                id='price'
-                placeholder='0'
-                name='price'
-                value={values.price}
+                id='location'
+                name='location'
+                value={values.location}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
+              {errors.location && touched.location && (
+                <div className='text-danger'>{errors.location}</div>
+              )}
+              {allValid && <div className='text-success'>Looks good!</div>}
             </div>
-            {errors.price && touched.price && (
-              <div className='text-danger'>{errors.price}</div>
-            )}
-            {allValid && <div className='text-success'>Looks good!</div>}
+            <div className='d-inline-block' style={{ width: '49%' }}>
+              <label htmlFor='price' className='form-label fw-medium'>
+                Price
+              </label>
+              <div className='input-group'>
+                <span
+                  className={`input-group-text bg-body-secondary ${
+                    errors.location &&
+                    touched.location &&
+                    'border border-danger'
+                  }`}
+                >
+                  $
+                </span>
+                <input
+                  type='number'
+                  className={`form-control ${
+                    errors.price && touched.price && 'border border-danger'
+                  }`}
+                  id='price'
+                  placeholder='0'
+                  name='price'
+                  value={values.price}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </div>
+              {errors.price && touched.price && (
+                <div className='text-danger'>{errors.price}</div>
+              )}
+              {allValid && <div className='text-success'>Looks good!</div>}
+            </div>
           </div>
 
           <div className='mb-3'>
-            <label htmlFor='image' className='form-label'>
+            <label htmlFor='image' className='form-label fw-medium'>
               Image (Url)
             </label>
             <input
@@ -188,7 +199,7 @@ export default function CampgroundForm() {
           </div>
 
           <div className='mb-3'>
-            <label htmlFor='description' className='form-label'>
+            <label htmlFor='description' className='form-label fw-medium'>
               Description
             </label>
             <textarea
@@ -199,6 +210,7 @@ export default function CampgroundForm() {
               }`}
               id='description'
               name='description'
+              rows={6}
               value={values.description}
               onChange={handleChange}
               onBlur={handleBlur}
@@ -211,14 +223,22 @@ export default function CampgroundForm() {
 
           <button
             type='submit'
-            className='btn btn-success w-100 py-2'
+            className='btn btn-success w-100 py-2 fw-medium'
             disabled={isSubmitting}
           >
-            Add Campground
+            {isCreate ? 'Add Campground' : 'Save'}
           </button>
         </form>
+        {!isCreate && (
+          <Link
+            to={`/campgrounds/${_id}`}
+            className='btn btn-secondary mt-2 w-100 py-2 fw-medium'
+          >
+            Cancel
+          </Link>
+        )}
         <div className='mt-3 text-center'>
-          <Link to='/campgrounds' className='link-offset-2'>
+          <Link to='/campgrounds' className='link-offset-2 fw-medium'>
             All Campgrounds
           </Link>
         </div>
