@@ -1,132 +1,74 @@
 import axios from 'axios';
-import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
 
-import { Campground_Type, Validation_Type } from '../../shared/types';
 import { CampgroundSchema } from '../../shared/schemas';
 
 export default function NewCampgroundForm() {
-  const initialState: Campground_Type = {
-    title: '',
-    location: '',
-    price: 0,
-    image: '',
-    description: '',
-  };
-  const [formData, setFormData] = useState<{
-    [x: string]: string | number;
-  }>(initialState);
-  const [validationMessages, setValidationMessages] = useState<Validation_Type>(
-    {
-      title: 'initial',
-      location: 'initial',
-      image: 'initial',
-      description: 'initial',
-      price: 'initial',
-    }
-  );
-
   const navigate: NavigateFunction = useNavigate();
+  const [allValid, setAllValid] = useState<boolean>(false);
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name } = e.target;
-    let value: number | string =
-      name === 'price' ? parseInt(e.target.value) : e.target.value;
-
-    setFormData((prevState) => ({ ...prevState, [name]: value }));
-    setTimeout(() => {
-      setValidationMessages((prevState) => ({
-        ...prevState,
-        [name]: value ? true : false,
-      }));
-    }, 1000);
-  };
-
-  const handleSubmit = async (e: SyntheticEvent): Promise<void> => {
-    e.preventDefault();
-
-    const isValid: boolean = await CampgroundSchema.isValid(formData, {
-      abortEarly: false,
-    });
-
-    if (isValid) {
-      setValidationMessages({
-        title: true,
-        description: true,
-        location: true,
-        price: true,
-        image: true,
+  const onSubmit = async (values: any, actions: any) => {
+    if (Object.keys(errors).length < 1) setAllValid(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      await axios.post('http://localhost:3001/campgrounds', values, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
       });
-      try {
-        await axios.post('http://localhost:3001/campgrounds', formData, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        });
-        setTimeout(() => {
-          setFormData(initialState);
-          navigate(`/campgrounds`);
-          return;
-        }, 1000);
-      } catch (err: any) {
-        console.log(err);
-      }
-    } else {
-      setValidationMessages({
-        title: true,
-        description: true,
-        location: true,
-        price: true,
-        image: true,
-      });
-      let schemaValidationResponse = await CampgroundSchema.validate(formData, {
-        abortEarly: false,
-      }).catch((err) => {
-        return err.inner.reduce((acc: any, error: any) => {
-          return {
-            ...acc,
-            [error.path]: error.message,
-          };
-        }, {});
-      });
-      setValidationMessages((prevState) => ({
-        ...prevState,
-        ...schemaValidationResponse,
-      }));
+      actions.resetForm();
+      navigate(`/campgrounds`);
+    } catch (err: any) {
+      console.log(err);
     }
   };
+
+  const {
+    errors,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    isSubmitting,
+    touched,
+    values,
+  } = useFormik({
+    initialValues: {
+      title: '',
+      location: '',
+      price: '',
+      image: '',
+      description: '',
+    },
+    validationSchema: CampgroundSchema,
+    onSubmit,
+  });
 
   return (
     <div className='vh-100'>
       <div className='col-4 offset-4 py-2'>
         <h2 className='text-center py-4 m-0'>New Campground</h2>
-        <form className={'needs-validation'} onSubmit={handleSubmit} noValidate>
-          <div className='mb-3 has-validation'>
+        <form onSubmit={handleSubmit}>
+          <div className='mb-3'>
             <label htmlFor='title' className='form-label'>
               Title
             </label>
             <input
               type='text'
               className={`form-control ${
-                validationMessages.title !== 'initial' &&
-                validationMessages.title !== true &&
-                'border border-danger'
+                errors.title && touched.title && 'border border-danger'
               }`}
               id='title'
               name='title'
-              value={formData.title}
+              value={values.title}
               onChange={handleChange}
-              required
+              onBlur={handleBlur}
             />
-            {validationMessages.title === true && (
-              <div className='text-success'>Looks good!</div>
+            {errors.title && touched.title && (
+              <div className='text-danger'>{errors.title}</div>
             )}
-            {validationMessages.title !== true &&
-              validationMessages.title !== 'initial' && (
-                <div className='text-danger'>{validationMessages.title}</div>
-              )}
+            {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
           <div className='mb-3'>
@@ -136,23 +78,18 @@ export default function NewCampgroundForm() {
             <input
               type='text'
               className={`form-control ${
-                validationMessages.location !== 'initial' &&
-                validationMessages.location !== true &&
-                'border border-danger'
+                errors.location && touched.location && 'border border-danger'
               }`}
               id='location'
               name='location'
-              value={formData.location}
+              value={values.location}
               onChange={handleChange}
-              required
+              onBlur={handleBlur}
             />
-            {validationMessages.location === true && (
-              <div className='text-success'>Looks good!</div>
+            {errors.location && touched.location && (
+              <div className='text-danger'>{errors.location}</div>
             )}
-            {validationMessages.location !== true &&
-              validationMessages.location !== 'initial' && (
-                <div className='text-danger'>{validationMessages.location}</div>
-              )}
+            {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
           <div className='mb-3'>
@@ -164,25 +101,20 @@ export default function NewCampgroundForm() {
               <input
                 type='number'
                 className={`form-control ${
-                  validationMessages.price !== 'initial' &&
-                  validationMessages.price !== true &&
-                  'border border-danger'
+                  errors.price && touched.price && 'border border-danger'
                 }`}
                 id='price'
                 placeholder='0'
                 name='price'
-                value={formData.price}
+                value={values.price}
                 onChange={handleChange}
-                required
+                onBlur={handleBlur}
               />
             </div>
-            {validationMessages.price === true && (
-              <div className='text-success'>Looks good!</div>
+            {errors.price && touched.price && (
+              <div className='text-danger'>{errors.price}</div>
             )}
-            {validationMessages.price !== true &&
-              validationMessages.price !== 'initial' && (
-                <div className='text-danger'>{validationMessages.price}</div>
-              )}
+            {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
           <div className='mb-3'>
@@ -192,22 +124,18 @@ export default function NewCampgroundForm() {
             <input
               type='text'
               className={`form-control ${
-                validationMessages.image !== 'initial' &&
-                validationMessages.image !== true &&
-                'border border-danger'
+                errors.image && touched.image && 'border border-danger'
               }`}
               id='image'
               name='image'
-              value={formData.image}
+              value={values.image}
               onChange={handleChange}
+              onBlur={handleBlur}
             />
-            {validationMessages.image === true && (
-              <div className='text-success'>Looks good!</div>
+            {errors.image && touched.image && (
+              <div className='text-danger'>{errors.image}</div>
             )}
-            {validationMessages.image !== true &&
-              validationMessages.image !== 'initial' && (
-                <div className='text-danger'>{validationMessages.image}</div>
-              )}
+            {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
           <div className='mb-3'>
@@ -216,28 +144,27 @@ export default function NewCampgroundForm() {
             </label>
             <textarea
               className={`form-control ${
-                validationMessages.description !== 'initial' &&
-                validationMessages.description !== true &&
+                errors.description &&
+                touched.description &&
                 'border border-danger'
               }`}
               id='description'
               name='description'
-              value={formData.description}
+              value={values.description}
               onChange={handleChange}
-              required
+              onBlur={handleBlur}
             />
-            {validationMessages.description === true && (
-              <div className='text-success'>Looks good!</div>
+            {errors.description && touched.description && (
+              <div className='text-danger'>{errors.description}</div>
             )}
-            {validationMessages.description !== true &&
-              validationMessages.description !== 'initial' && (
-                <div className='text-danger'>
-                  {validationMessages.description}
-                </div>
-              )}
+            {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
-          <button type='submit' className='btn btn-success w-100 py-2'>
+          <button
+            type='submit'
+            className='btn btn-success w-100 py-2'
+            disabled={isSubmitting}
+          >
             Add Campground
           </button>
         </form>
