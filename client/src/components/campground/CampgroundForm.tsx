@@ -13,7 +13,6 @@ import { CampgroundSchema } from '../../shared/schemas';
 export default function CampgroundForm() {
   const navigate: NavigateFunction = useNavigate();
   const [allValid, setAllValid] = useState<boolean>(false);
-
   const { _id } = useParams();
   const isCreate: boolean = !_id;
 
@@ -56,23 +55,26 @@ export default function CampgroundForm() {
     }
   };
 
+  const initialValues = {
+    title: '',
+    location: '',
+    price: '',
+    image: '',
+    description: '',
+  };
+
   const {
     errors,
     handleBlur,
     handleChange,
     handleSubmit,
     isSubmitting,
+    resetForm,
     setValues,
     touched,
     values,
   } = useFormik({
-    initialValues: {
-      title: '',
-      location: '',
-      price: '',
-      image: '',
-      description: '',
-    },
+    initialValues,
     validationSchema: CampgroundSchema,
     onSubmit,
   });
@@ -91,13 +93,15 @@ export default function CampgroundForm() {
         }
       };
       findCampground();
+    } else {
+      resetForm();
     }
-  }, []);
+  }, [isCreate]);
 
   return (
     <div>
-      <div className='col-4 offset-4 py-1'>
-        <h2 className='text-center py-3 m-0'>
+      <div className='col-4 offset-4 pb-4 pt-3'>
+        <h2 className='text-center pt-3 pb-2 m-0'>
           {isCreate ? 'New Campground' : 'Edit Campground'}
         </h2>
         <form onSubmit={handleSubmit}>
@@ -122,8 +126,8 @@ export default function CampgroundForm() {
             {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
-          <div className='mb-3'>
-            <div className='d-inline-block me-2' style={{ width: '49%' }}>
+          <div className='mb-3 row'>
+            <div className='d-inline-block col-6'>
               <label htmlFor='location' className='form-label fw-medium'>
                 Location
               </label>
@@ -143,16 +147,14 @@ export default function CampgroundForm() {
               )}
               {allValid && <div className='text-success'>Looks good!</div>}
             </div>
-            <div className='d-inline-block' style={{ width: '49%' }}>
+            <div className='d-inline-block col-6'>
               <label htmlFor='price' className='form-label fw-medium'>
                 Price
               </label>
               <div className='input-group'>
                 <span
                   className={`input-group-text bg-body-secondary ${
-                    errors.location &&
-                    touched.location &&
-                    'border border-danger'
+                    errors.price && touched.price && 'border border-danger'
                   }`}
                 >
                   $
