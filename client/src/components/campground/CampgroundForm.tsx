@@ -1,27 +1,58 @@
 import axios from 'axios';
-import { useState } from 'react';
-import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+  Link,
+  NavigateFunction,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { useFormik } from 'formik';
 
 import { CampgroundSchema } from '../../shared/schemas';
 
-export default function NewCampgroundForm() {
+export default function CampgroundForm() {
   const navigate: NavigateFunction = useNavigate();
   const [allValid, setAllValid] = useState<boolean>(false);
 
-  const onSubmit = async (values: any, actions: any) => {
-    if (Object.keys(errors).length < 1) setAllValid(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+  const { _id } = useParams();
+  const isCreate: boolean = !_id;
+
+  const create = async (values: any) => {
     try {
       await axios.post('http://localhost:3001/campgrounds', values, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      actions.resetForm();
-      navigate(`/campgrounds`);
     } catch (err: any) {
       console.log(err);
+    }
+  };
+
+  const edit = async (values: any) => {
+    try {
+      await axios.put(`http://localhost:3001/campgrounds/${_id}`, values, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const onSubmit = async (values: any, actions: any) => {
+    if (Object.keys(errors).length < 1) setAllValid(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    if (isCreate) {
+      await create(values);
+      actions.resetForm();
+      navigate(`/campgrounds`);
+    } else {
+      await edit(values);
+      actions.resetForm();
+      navigate(`/campgrounds/${_id}`);
     }
   };
 
@@ -31,6 +62,7 @@ export default function NewCampgroundForm() {
     handleChange,
     handleSubmit,
     isSubmitting,
+    setValues,
     touched,
     values,
   } = useFormik({
@@ -44,6 +76,23 @@ export default function NewCampgroundForm() {
     validationSchema: CampgroundSchema,
     onSubmit,
   });
+
+  useEffect(() => {
+    if (!isCreate) {
+      const findCampground = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3001/campgrounds/${_id}`
+          );
+          const data = await response.data;
+          setValues(data);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      findCampground();
+    }
+  }, []);
 
   return (
     <div className='vh-100'>
