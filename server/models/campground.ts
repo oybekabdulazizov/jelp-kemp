@@ -30,7 +30,11 @@ const CampgroundSchema = new Schema<ICampground>({
     required: true,
     maxLength: [100, 'Location cannot exceed 250 characters'],
   },
-  image: { type: String, required: false },
+  image: {
+    type: String,
+    maxLength: [250, 'Image Url length cannot exceed 250 characters'],
+    required: true,
+  },
 });
 
 const Campground = model<ICampground>('Campground', CampgroundSchema);
