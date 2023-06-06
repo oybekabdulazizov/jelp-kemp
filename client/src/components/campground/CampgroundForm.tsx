@@ -223,13 +223,47 @@ export default function CampgroundForm() {
             {allValid && <div className='text-success'>Looks good!</div>}
           </div>
 
-          <button
-            type='submit'
-            className='btn btn-success w-100 py-2 fw-medium'
-            disabled={isSubmitting}
-          >
-            {isCreate ? 'Add Campground' : 'Save'}
-          </button>
+          {isCreate && (
+            <button
+              type='submit'
+              className='btn btn-success w-100 py-2 fw-medium'
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span
+                    className='spinner-border spinner-border-sm'
+                    role='status'
+                    aria-hidden='true'
+                  ></span>{' '}
+                  Adding
+                </>
+              ) : (
+                'Add Campground'
+              )}
+            </button>
+          )}
+          {!isCreate && (
+            <button
+              type='submit'
+              className='btn btn-success w-100 py-2 fw-medium'
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span
+                    className='spinner-border spinner-border-sm'
+                    role='status'
+                    aria-hidden='true'
+                  ></span>{' '}
+                  {''}
+                  Saving
+                </>
+              ) : (
+                'Save'
+              )}
+            </button>
+          )}
         </form>
         {!isCreate && (
           <Link
