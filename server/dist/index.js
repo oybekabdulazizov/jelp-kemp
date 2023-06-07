@@ -16,9 +16,9 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
 const safe_1 = __importDefault(require("colors/safe"));
-const joi_1 = __importDefault(require("joi"));
 const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
+const schemas_1 = require("./schemas");
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -31,6 +31,15 @@ const error = safe_1.default.red;
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
+const validateCampgroundFormData = (req, res, next) => {
+    const { error } = schemas_1.campgroundSchemaJoi.validate(req.body);
+    if (error) {
+        throw new AppError_1.default(400, error.details[0].message);
+    }
+    else {
+        next();
+    }
+};
 const asyncHandler = (func) => (req, res, next) => {
     func(req, res, next).catch(next);
 };
@@ -43,19 +52,8 @@ app.get('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 
     //   next(err);
     // }
 })));
-app.post('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.post('/campgrounds', validateCampgroundFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // try {
-    const campgroundSchemaJoi = joi_1.default.object({
-        title: joi_1.default.string().max(100).required(),
-        location: joi_1.default.string().max(100).required(),
-        price: joi_1.default.number().min(0).max(1000).required(),
-        image: joi_1.default.string().max(250).required(),
-        description: joi_1.default.string().max(1000).required(),
-    });
-    const { error } = campgroundSchemaJoi.validate(req.body);
-    if (error) {
-        throw new AppError_1.default(400, error.details[0].message);
-    }
     const newCampground = new campground_1.default(Object.assign({}, req.body));
     yield newCampground.save();
     res.status(200).send();
@@ -64,20 +62,9 @@ app.post('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void
     //   next(err);
     // }
 })));
-app.put('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.put('/campgrounds/:_id', validateCampgroundFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     // try {
-    const campgroundSchemaJoi = joi_1.default.object({
-        title: joi_1.default.string().max(100).required(),
-        location: joi_1.default.string().max(100).required(),
-        price: joi_1.default.number().min(0).max(1000).required(),
-        image: joi_1.default.string().max(250).required(),
-        description: joi_1.default.string().max(1000).required(),
-    });
-    const { error } = campgroundSchemaJoi.validate(req.body);
-    if (error) {
-        throw new AppError_1.default(400, error.details[0].message);
-    }
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
     res.status(200).send();
     // } catch (err: any) {
