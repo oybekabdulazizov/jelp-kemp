@@ -30,66 +30,69 @@ const error = safe_1.default.red;
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
-app.get('/campgrounds', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const campgrounds = yield campground_1.default.find({});
-        res.json(campgrounds);
-    }
-    catch (err) {
-        console.log(error('***** GET - Unexpected error occurred *****'));
-        next(err);
-    }
-}));
-app.post('/campgrounds', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const newCampground = new campground_1.default(Object.assign({}, req.body));
-        yield newCampground.save();
-        res.status(200).send();
-    }
-    catch (err) {
-        console.log(error('***** POST - Campground Validation Failed *****'));
-        next(err);
-    }
-}));
-app.put('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const asyncHandler = (func) => (req, res, next) => {
+    func(req, res, next).catch(next);
+};
+app.get('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // try {
+    const campgrounds = yield campground_1.default.find({});
+    res.json(campgrounds);
+    // } catch (err: any) {
+    //   console.log(error('***** GET - Unexpected error occurred *****'));
+    //   next(err);
+    // }
+})));
+app.post('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // try {
+    const newCampground = new campground_1.default(Object.assign({}, req.body));
+    yield newCampground.save();
+    res.status(200).send();
+    // } catch (err: any) {
+    //   console.log(error('***** POST - Campground Validation Failed *****'));
+    //   next(err);
+    // }
+})));
+app.put('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    try {
-        yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
-        res.status(200).send();
-    }
-    catch (err) {
-        console.log(error('***** PUT - Campground Validation Failed *****'));
-        next(err);
-    }
-}));
-app.delete('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // try {
+    const isFormDataValid = Object.values(req.body).every((field) => field);
+    if (!isFormDataValid)
+        throw new AppError_1.default(400, 'Invalid Campground Data!');
+    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
+    res.status(200).send();
+    // } catch (err: any) {
+    //   console.log(error('***** PUT - Campground Update Failed *****'));
+    //   next(err);
+    // }
+})));
+app.delete('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    try {
-        const deleted = yield campground_1.default.findByIdAndDelete(_id);
-        console.log(deleted);
-        res.status(200).send();
-    }
-    catch (err) {
-        console.log(error('***** DELETE - Campground Deletion Failed *****'));
-        next(err);
-    }
-}));
-app.get('/campgrounds/:_id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { _id } = req.params;
-        const campground = yield campground_1.default.findById(_id);
-        if (!campground)
-            return next(new AppError_1.default(404, 'Not Found!'));
-        res.json(campground);
-    }
-    catch (err) {
-        console.log(error('***** GET(id) - Campground Not Found *****'));
-        next(new AppError_1.default(404, 'Not Found!'));
-    }
-}));
+    // try {
+    yield campground_1.default.findByIdAndDelete(_id);
+    res.status(200).send();
+    // } catch (err) {
+    //   console.log(error('***** DELETE - Campground Deletion Failed *****'));
+    //   next(err);
+    // }
+})));
+app.get('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    // try {
+    const { _id } = req.params;
+    const campground = yield campground_1.default.findById(_id);
+    if (!campground)
+        return next(new AppError_1.default(404, 'Campground Not Found!'));
+    res.json(campground);
+    // } catch (err: any) {
+    //   console.log(error('***** GET(id) - Campground Not Found *****'));
+    //   next(new AppError(404, 'Not Found!'));
+    // }
+})));
+app.get('*', (req, res, next) => {
+    next(new AppError_1.default(404, 'Page Not Found!'));
+});
 app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { status = 500, message = 'Something went wrong!' } = err;
-    res.status(status).send(message);
+    const { code = 500, message = 'Something went wrong!' } = err;
+    res.status(code).send(message);
 }));
 app.listen('3001', () => {
     console.log('Listening to port 3001...');
