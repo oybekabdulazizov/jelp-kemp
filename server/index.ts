@@ -116,13 +116,20 @@ app.get(
   })
 );
 
-app.get('*', (req, res, next) => {
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));
 });
 
 app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   const { code = 500, message = 'Something went wrong!' } = err;
-  res.status(code).send(message);
+  let updatedCode: number = code;
+  let updatedMessage: string = message;
+
+  if (message.includes('Cast to ObjectId failed')) {
+    updatedCode = 400;
+    updatedMessage = 'Campground Not Found!';
+  }
+  res.status(updatedCode).send(updatedMessage);
 });
 
 app.listen('3001', () => {

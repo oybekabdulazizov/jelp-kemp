@@ -99,7 +99,13 @@ app.get('*', (req, res, next) => {
 });
 app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { code = 500, message = 'Something went wrong!' } = err;
-    res.status(code).send(message);
+    let updatedCode = code;
+    let updatedMessage = message;
+    if (message.includes('Cast to ObjectId failed')) {
+        updatedCode = 400;
+        updatedMessage = 'Campground Not Found!';
+    }
+    res.status(updatedCode).send(updatedMessage);
 }));
 app.listen('3001', () => {
     console.log('Listening to port 3001...');
