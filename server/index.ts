@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import colors from 'colors/safe';
+import Joi from 'joi';
 
 import AppError from './AppError';
 import Campground from './models/campground';
@@ -43,6 +44,17 @@ app.post(
   '/campgrounds',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     // try {
+    const campgroundSchemaJoi = Joi.object({
+      title: Joi.string().max(100).required(),
+      location: Joi.string().max(100).required(),
+      price: Joi.number().min(0).max(1000).required(),
+      image: Joi.string().max(250).required(),
+      description: Joi.string().max(1000).required(),
+    });
+    const { error } = campgroundSchemaJoi.validate(req.body);
+    if (error) {
+      throw new AppError(400, error.details[0].message);
+    }
     const newCampground = new Campground({ ...req.body });
     await newCampground.save();
     res.status(200).send();
@@ -58,8 +70,17 @@ app.put(
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
     // try {
-    const isFormDataValid = Object.values(req.body).every((field) => field);
-    if (!isFormDataValid) throw new AppError(400, 'Invalid Campground Data!');
+    const campgroundSchemaJoi = Joi.object({
+      title: Joi.string().max(100).required(),
+      location: Joi.string().max(100).required(),
+      price: Joi.number().min(0).max(1000).required(),
+      image: Joi.string().max(250).required(),
+      description: Joi.string().max(1000).required(),
+    });
+    const { error } = campgroundSchemaJoi.validate(req.body);
+    if (error) {
+      throw new AppError(400, error.details[0].message);
+    }
     await Campground.findByIdAndUpdate(
       _id,
       { ...req.body },

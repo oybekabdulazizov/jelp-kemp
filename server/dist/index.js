@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
 const safe_1 = __importDefault(require("colors/safe"));
+const joi_1 = __importDefault(require("joi"));
 const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
 const error = safe_1.default.red;
@@ -44,6 +45,17 @@ app.get('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 
 })));
 app.post('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // try {
+    const campgroundSchemaJoi = joi_1.default.object({
+        title: joi_1.default.string().max(100).required(),
+        location: joi_1.default.string().max(100).required(),
+        price: joi_1.default.number().min(0).max(1000).required(),
+        image: joi_1.default.string().max(250).required(),
+        description: joi_1.default.string().max(1000).required(),
+    });
+    const { error } = campgroundSchemaJoi.validate(req.body);
+    if (error) {
+        throw new AppError_1.default(400, error.details[0].message);
+    }
     const newCampground = new campground_1.default(Object.assign({}, req.body));
     yield newCampground.save();
     res.status(200).send();
@@ -55,9 +67,17 @@ app.post('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void
 app.put('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     // try {
-    const isFormDataValid = Object.values(req.body).every((field) => field);
-    if (!isFormDataValid)
-        throw new AppError_1.default(400, 'Invalid Campground Data!');
+    const campgroundSchemaJoi = joi_1.default.object({
+        title: joi_1.default.string().max(100).required(),
+        location: joi_1.default.string().max(100).required(),
+        price: joi_1.default.number().min(0).max(1000).required(),
+        image: joi_1.default.string().max(250).required(),
+        description: joi_1.default.string().max(1000).required(),
+    });
+    const { error } = campgroundSchemaJoi.validate(req.body);
+    if (error) {
+        throw new AppError_1.default(400, error.details[0].message);
+    }
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
     res.status(200).send();
     // } catch (err: any) {
