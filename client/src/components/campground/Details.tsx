@@ -39,7 +39,7 @@ export default function Details() {
     };
 
     findCampground();
-  }, [campground]);
+  }, []);
 
   const handleDelete = async () => {
     try {
