@@ -65,6 +65,9 @@ app.post('/campgrounds', validateCampgroundFormData, asyncHandler((req, res, nex
 app.put('/campgrounds/:_id', validateCampgroundFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     // try {
+    const campground = yield campground_1.default.findById(_id);
+    if (!campground)
+        return next(new AppError_1.default(404, 'Campground Not Found!'));
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
     res.status(200).send();
     // } catch (err: any) {

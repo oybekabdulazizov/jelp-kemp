@@ -74,6 +74,8 @@ app.put(
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
     // try {
+    const campground = await Campground.findById(_id);
+    if (!campground) return next(new AppError(404, 'Campground Not Found!'));
     await Campground.findByIdAndUpdate(
       _id,
       { ...req.body },
