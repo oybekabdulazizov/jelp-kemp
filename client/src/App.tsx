@@ -3,8 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import Campgrounds from './components/campground';
 import Details from './components/campground/Details';
-import Footer from './components/Footer';
 import CampgroundForm from './components/campground/CampgroundForm';
+import PageNotFound from './components/PageNotFound';
+import Footer from './components/Footer';
 
 export default function App() {
   return (
@@ -15,7 +16,11 @@ export default function App() {
         <Route path='/campgrounds/new' element={<CampgroundForm />} />
         <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
         <Route path='/campgrounds/:_id' element={<Details />} />
-        <Route path='/*' element={<Navigate to='/' replace={true} />} />
+        <Route path='/404-notfound' element={<PageNotFound message='' />} />
+        <Route
+          path='/*'
+          element={<Navigate to='/404-notfound' replace={true} />}
+        />
       </Routes>
       <Footer />
     </>
