@@ -5,7 +5,7 @@ import colors from 'colors/safe';
 
 import AppError from './AppError';
 import Campground from './models/campground';
-import { campgroundSchemaJoi } from './schemas';
+import { validateCampgroundFormData } from './utils';
 
 const error = colors.red;
 
@@ -22,19 +22,6 @@ const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-const validateCampgroundFormData = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { error } = campgroundSchemaJoi.validate(req.body);
-  if (error) {
-    throw new AppError(400, error.details[0].message);
-  } else {
-    next();
-  }
-};
-
 const asyncHandler =
   (func: any) => (req: Request, res: Response, next: NextFunction) => {
     func(req, res, next).catch(next);
@@ -43,13 +30,8 @@ const asyncHandler =
 app.get(
   '/campgrounds',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // try {
     const campgrounds = await Campground.find({});
     res.json(campgrounds);
-    // } catch (err: any) {
-    //   console.log(error('***** GET - Unexpected error occurred *****'));
-    //   next(err);
-    // }
   })
 );
 
@@ -57,14 +39,9 @@ app.post(
   '/campgrounds',
   validateCampgroundFormData,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // try {
     const newCampground = new Campground({ ...req.body });
     await newCampground.save();
     res.status(200).send();
-    // } catch (err: any) {
-    //   console.log(error('***** POST - Campground Validation Failed *****'));
-    //   next(err);
-    // }
   })
 );
 
@@ -73,7 +50,6 @@ app.put(
   validateCampgroundFormData,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
-    // try {
     const campground = await Campground.findById(_id);
     if (!campground) return next(new AppError(404, 'Campground Not Found!'));
     await Campground.findByIdAndUpdate(
@@ -82,10 +58,6 @@ app.put(
       { runValidators: true }
     );
     res.status(200).send();
-    // } catch (err: any) {
-    //   console.log(error('***** PUT - Campground Update Failed *****'));
-    //   next(err);
-    // }
   })
 );
 
@@ -93,28 +65,18 @@ app.delete(
   '/campgrounds/:_id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
-    // try {
     await Campground.findByIdAndDelete(_id);
     res.status(200).send();
-    // } catch (err) {
-    //   console.log(error('***** DELETE - Campground Deletion Failed *****'));
-    //   next(err);
-    // }
   })
 );
 
 app.get(
   '/campgrounds/:_id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // try {
     const { _id } = req.params;
     const campground = await Campground.findById(_id);
     if (!campground) return next(new AppError(404, 'Campground Not Found!'));
     res.json(campground);
-    // } catch (err: any) {
-    //   console.log(error('***** GET(id) - Campground Not Found *****'));
-    //   next(new AppError(404, 'Not Found!'));
-    // }
   })
 );
 
