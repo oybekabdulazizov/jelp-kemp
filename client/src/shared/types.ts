@@ -1,16 +1,9 @@
 import { InferType } from 'yup';
 import { CampgroundSchema } from './schemas';
 
-// type Campground_Type = {
-//   _id?: string;
-//   title: string;
-//   description: string;
-//   price: number;
-//   location: string;
-//   image: string;
-// };
+export type Campground_Validation_Type_Yup = InferType<typeof CampgroundSchema>;
 
-export type Campground_Type = InferType<typeof CampgroundSchema> & {
+export type Campground_Type = Campground_Validation_Type_Yup & {
   _id?: string;
 };
 
