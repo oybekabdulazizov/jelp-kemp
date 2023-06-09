@@ -16,7 +16,7 @@ export default function App() {
         <Route path='/campgrounds/new' element={<CampgroundForm />} />
         <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
         <Route path='/campgrounds/:_id' element={<Details />} />
-        <Route path='/404-notfound' element={<PageNotFound message='' />} />
+        <Route path='/404-notfound' element={<PageNotFound />} />
         <Route
           path='/*'
           element={<Navigate to='/404-notfound' replace={true} />}
