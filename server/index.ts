@@ -90,7 +90,7 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   let updatedMessage: string = message;
 
   if (message.includes('Cast to ObjectId failed')) {
-    updatedCode = 400;
+    updatedCode = 404;
     updatedMessage = 'Campground Not Found!';
   }
   res.status(updatedCode).send(updatedMessage);

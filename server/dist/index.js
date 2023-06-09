@@ -71,7 +71,7 @@ app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     let updatedCode = code;
     let updatedMessage = message;
     if (message.includes('Cast to ObjectId failed')) {
-        updatedCode = 400;
+        updatedCode = 404;
         updatedMessage = 'Campground Not Found!';
     }
     res.status(updatedCode).send(updatedMessage);
