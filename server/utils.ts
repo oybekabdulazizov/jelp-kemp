@@ -7,7 +7,14 @@ export const validateCampgroundFormData = (
   res: Response,
   next: NextFunction
 ) => {
-  const { error } = campgroundSchemaJoi.validate(req.body);
+  const { title, location, price, image, description } = req.body;
+  const { error } = campgroundSchemaJoi.validate({
+    title,
+    location,
+    price,
+    image,
+    description,
+  });
   if (error) {
     throw new AppError(400, error.details[0].message);
   } else {
