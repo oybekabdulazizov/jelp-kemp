@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
+import Home from './components/Home';
 import Campgrounds from './components/campground';
 import Details from './components/campground/Details';
 import CampgroundForm from './components/campground/CampgroundForm';
@@ -12,6 +13,7 @@ export default function App() {
     <>
       <NavBar />
       <Routes>
+        <Route path='/' element={<Home />} />
         <Route path='/campgrounds' element={<Campgrounds />} />
         <Route path='/campgrounds/new' element={<CampgroundForm />} />
         <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
