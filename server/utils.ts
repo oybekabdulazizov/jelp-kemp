@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { campgroundSchemaJoi } from './schemas';
+import { campgroundSchemaJoi, reviewSchemaJoi } from './schemas';
 import AppError from './AppError';
 
 export const validateCampgroundFormData = (
@@ -16,6 +16,21 @@ export const validateCampgroundFormData = (
     description,
   });
   if (error) {
+    throw new AppError(400, error.details[0].message);
+  } else {
+    next();
+  }
+};
+
+export const validateReviewFormData = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { rating, text } = req.body;
+  const { error } = reviewSchemaJoi.validate({ rating, text });
+  if (error) {
+    console.dir(error);
     throw new AppError(400, error.details[0].message);
   } else {
     next();

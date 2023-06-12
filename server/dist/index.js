@@ -18,6 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const safe_1 = __importDefault(require("colors/safe"));
 const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
+const review_1 = __importDefault(require("./models/review"));
 const utils_1 = require("./utils");
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
@@ -66,6 +67,17 @@ app.get('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, 
 app.get('*', (req, res, next) => {
     next(new AppError_1.default(404, 'Page Not Found!'));
 });
+app.post('/campgrounds/:_id/reviews', utils_1.validateReviewFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const campground = yield campground_1.default.findById(req.params._id);
+    if (!campground)
+        return next(new AppError_1.default(404, 'Campground Not Found!'));
+    const { rating, text } = req.body;
+    const review = new review_1.default({ rating, text });
+    campground.reviews.push(review);
+    yield review.save();
+    yield campground.save();
+    res.status(200).send();
+})));
 app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { code = 500, message = 'Something went wrong!' } = err;
     let updatedCode = code;

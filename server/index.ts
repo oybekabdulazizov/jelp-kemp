@@ -5,7 +5,8 @@ import colors from 'colors/safe';
 
 import AppError from './AppError';
 import Campground from './models/campground';
-import { validateCampgroundFormData } from './utils';
+import Review from './models/review';
+import { validateCampgroundFormData, validateReviewFormData } from './utils';
 
 const error = colors.red;
 
@@ -83,6 +84,24 @@ app.get(
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));
 });
+
+app.post(
+  '/campgrounds/:_id/reviews',
+  validateReviewFormData,
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const campground = await Campground.findById(req.params._id);
+    if (!campground) return next(new AppError(404, 'Campground Not Found!'));
+
+    const { rating, text } = req.body;
+    const review = new Review({ rating, text });
+
+    campground.reviews.push(review);
+    await review.save();
+    await campground.save();
+
+    res.status(200).send();
+  })
+);
 
 app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   const { code = 500, message = 'Something went wrong!' } = err;
