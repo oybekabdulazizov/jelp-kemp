@@ -6,15 +6,19 @@ import {
   useParams,
 } from 'react-router-dom';
 import axios from 'axios';
+import { useFormik } from 'formik';
 
 import { Campground_Type } from '../../shared/types';
 import useResize from '../../hooks/useResize';
 import { NotFound_Type } from './types';
 import { NotFound } from './ErrorTemplate';
+import { ReviewSchema } from '../../shared/schemas';
+import ReviewForm from './ReviewForm';
 
 export default function Details() {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
+  const [isValidReview, setIsValidReview] = useState<boolean>(false);
   const [notFound, setNotFound] = useState<NotFound_Type>({
     status: 0,
     message: '',
@@ -49,6 +53,38 @@ export default function Details() {
       console.log(err);
     }
   };
+
+  const initialValues = {
+    rating: 5,
+    text: '',
+  };
+
+  const onSubmit = async (values: any, actions: any) => {
+    if (Object.keys(formik.errors).length < 1) setIsValidReview(true);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    try {
+      await axios.post(
+        `http://localhost:3001/campgrounds/${_id}/reviews`,
+        values,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
+      actions.resetForm();
+      setIsValidReview(false);
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema: ReviewSchema,
+    onSubmit,
+  });
 
   return (
     <>
@@ -85,47 +121,7 @@ export default function Details() {
               </div>
               <div className='card-footer text-body-secondary'>2 days ago</div>
             </div>
-            <div className={`w-auto`}>
-              <h2 className='pt-3 pb-2 m-0'>Leave a review</h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  console.log(e.target);
-                }}
-              >
-                <div className='mb-3'>
-                  <label htmlFor='rating' className='form-label fw-medium'>
-                    Rating
-                  </label>
-                  <input
-                    type='range'
-                    className='form-range'
-                    name='rating'
-                    min={1}
-                    max={5}
-                    id='rating'
-                  />
-                </div>
-
-                <div className='mb-3'>
-                  <label htmlFor='text' className='form-label fw-medium'>
-                    Review
-                  </label>
-                  <textarea
-                    className={`form-control`}
-                    id='text'
-                    name='text'
-                    rows={4}
-                  />
-                </div>
-                <button
-                  type='submit'
-                  className='btn btn-success py-2 fw-medium'
-                >
-                  Submit
-                </button>
-              </form>
-            </div>
+            <ReviewForm {...formik} isValidReview={isValidReview} />
           </div>
         </div>
       )}

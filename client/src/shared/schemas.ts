@@ -23,3 +23,14 @@ export const CampgroundSchema = object({
     .max(100, 'Location length cannot exceed 100 characters.')
     .required('Please provide a location.'),
 });
+
+export const ReviewSchema = object({
+  rating: number()
+    .min(0, 'Rating cannot be below 1.')
+    .max(5, 'Rating cannot be higher than 5.')
+    .required('Please add a rating.'),
+  text: string()
+    .trim()
+    .max(1000, 'Review cannot exceed 1000 characters.')
+    .required('Please provide a review.'),
+});
