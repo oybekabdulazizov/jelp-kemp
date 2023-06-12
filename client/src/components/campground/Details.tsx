@@ -9,7 +9,6 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 
 import { Campground_Type } from '../../shared/types';
-import useResize from '../../hooks/useResize';
 import { NotFound_Type } from './types';
 import { NotFound } from './ErrorTemplate';
 import { ReviewSchema } from '../../shared/schemas';
@@ -23,7 +22,6 @@ export default function Details() {
     status: 0,
     message: '',
   });
-  const { width } = useResize();
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
@@ -91,9 +89,9 @@ export default function Details() {
       {notFound.status === 404 ? (
         <NotFound status={notFound.status} message={notFound.message} />
       ) : (
-        <div className={`container my-4 ${width < 576 && 'px-4'}`}>
-          <div className={`${width >= 992 ? 'w-50' : 'w-75'} mx-auto`}>
-            <div className={`card w-auto`}>
+        <div className='row'>
+          <div className='col-6'>
+            <div className='card mb-3'>
               <img
                 src={`${campground?.image}`}
                 className='card-img-top'
@@ -121,7 +119,19 @@ export default function Details() {
               </div>
               <div className='card-footer text-body-secondary'>2 days ago</div>
             </div>
+          </div>
+          <div className='col-6'>
             <ReviewForm {...formik} isValidReview={isValidReview} />
+            <div className='card'>
+              <ul className='list-group list-group-flush'>
+                {campground?.reviews.map((review) => (
+                  <li className='list-group-item' key={review._id}>
+                    <h5 className='card-title'>Rating: {review.rating}</h5>
+                    <p className='card-text'>Review: {review.text}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       )}

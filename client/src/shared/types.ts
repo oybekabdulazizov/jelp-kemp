@@ -5,6 +5,7 @@ export type Campground_Validation_Type_Yup = InferType<typeof CampgroundSchema>;
 
 export type Campground_Type = Campground_Validation_Type_Yup & {
   _id?: string;
+  reviews: Array<Review_Type>;
 };
 
 export type Review_Validation_Type_Yup = InferType<typeof ReviewSchema>;

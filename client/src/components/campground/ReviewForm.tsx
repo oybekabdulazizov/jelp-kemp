@@ -17,9 +17,9 @@ export default function ReviewForm({
   isValidReview,
 }: Props) {
   return (
-    <div className={`w-auto`}>
-      <h2 className='pt-3 pb-2 m-0'>Leave a review</h2>
-      <form onSubmit={handleSubmit}>
+    <>
+      <h3 className='pb-2 m-0'>Leave a review</h3>
+      <form onSubmit={handleSubmit} className='mb-3'>
         <div className='mb-3'>
           <label htmlFor='rating' className='form-label fw-medium'>
             Rating
@@ -71,6 +71,6 @@ export default function ReviewForm({
           )}
         </button>
       </form>
-    </div>
+    </>
   );
 }

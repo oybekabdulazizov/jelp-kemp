@@ -59,7 +59,7 @@ app.delete('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 
 })));
 app.get('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    const campground = yield campground_1.default.findById(_id);
+    const campground = yield campground_1.default.findById(_id).populate('reviews');
     if (!campground)
         return next(new AppError_1.default(404, 'Campground Not Found!'));
     res.json(campground);

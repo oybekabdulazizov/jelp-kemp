@@ -75,7 +75,7 @@ app.get(
   '/campgrounds/:_id',
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
-    const campground = await Campground.findById(_id);
+    const campground = await Campground.findById(_id).populate('reviews');
     if (!campground) return next(new AppError(404, 'Campground Not Found!'));
     res.json(campground);
   })
