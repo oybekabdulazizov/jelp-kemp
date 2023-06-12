@@ -103,6 +103,18 @@ app.post(
   })
 );
 
+app.delete(
+  '/campgrounds/:campground_id/reviews/:review_id',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { campground_id, review_id } = req.params;
+    await Review.findByIdAndDelete(review_id);
+    await Campground.findByIdAndUpdate(campground_id, {
+      $pull: { reviews: review_id },
+    });
+    res.status(200).send();
+  })
+);
+
 app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   const { code = 500, message = 'Something went wrong!' } = err;
   let updatedCode: number = code;

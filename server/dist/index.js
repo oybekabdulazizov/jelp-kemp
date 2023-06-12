@@ -78,6 +78,14 @@ app.post('/campgrounds/:_id/reviews', utils_1.validateReviewFormData, asyncHandl
     yield campground.save();
     res.status(200).send();
 })));
+app.delete('/campgrounds/:campground_id/reviews/:review_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { campground_id, review_id } = req.params;
+    yield review_1.default.findByIdAndDelete(review_id);
+    yield campground_1.default.findByIdAndUpdate(campground_id, {
+        $pull: { reviews: review_id },
+    });
+    res.status(200).send();
+})));
 app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { code = 500, message = 'Something went wrong!' } = err;
     let updatedCode = code;

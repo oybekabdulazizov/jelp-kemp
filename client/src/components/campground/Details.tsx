@@ -41,7 +41,7 @@ export default function Details() {
     };
 
     findCampground();
-  }, []);
+  }, [campground]);
 
   const handleDelete = async () => {
     try {
@@ -73,6 +73,18 @@ export default function Details() {
       );
       actions.resetForm();
       setIsValidReview(false);
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
+  const handleReviewDelete = async (
+    review_id: string | undefined
+  ): Promise<void> => {
+    try {
+      await axios.delete(
+        `http://localhost:3001/campgrounds/${_id}/reviews/${review_id}`
+      );
     } catch (err: any) {
       console.log(err);
     }
@@ -128,6 +140,12 @@ export default function Details() {
                   <li className='list-group-item' key={review._id}>
                     <h5 className='card-title'>Rating: {review.rating}</h5>
                     <p className='card-text'>Review: {review.text}</p>
+                    <button
+                      className='btn btn-sm btn-danger'
+                      onClick={() => handleReviewDelete(review._id)}
+                    >
+                      Delete
+                    </button>
                   </li>
                 ))}
               </ul>
