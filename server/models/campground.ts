@@ -1,5 +1,7 @@
 import { model, Schema } from 'mongoose';
 
+import Review from './review';
+
 interface ICampground {
   title: string;
   description: string;
@@ -42,6 +44,16 @@ const CampgroundSchema = new Schema<ICampground>({
       ref: 'Review',
     },
   ],
+});
+
+CampgroundSchema.post('findOneAndDelete', async function (campground) {
+  if (campground) {
+    await Review.deleteMany({
+      _id: {
+        $in: campground.reviews,
+      },
+    });
+  }
 });
 
 const Campground = model<ICampground>('Campground', CampgroundSchema);
