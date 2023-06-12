@@ -6,6 +6,7 @@ interface ICampground {
   price: number;
   location: string;
   image?: string;
+  reviews: Array<Object>;
 }
 
 const CampgroundSchema = new Schema<ICampground>({
@@ -35,6 +36,12 @@ const CampgroundSchema = new Schema<ICampground>({
     maxLength: [250, 'Image Url length cannot exceed 250 characters'],
     required: true,
   },
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Review',
+    },
+  ],
 });
 
 const Campground = model<ICampground>('Campground', CampgroundSchema);

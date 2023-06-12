@@ -28,6 +28,12 @@ const CampgroundSchema = new mongoose_1.Schema({
         maxLength: [250, 'Image Url length cannot exceed 250 characters'],
         required: true,
     },
+    reviews: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'Review',
+        },
+    ],
 });
 const Campground = (0, mongoose_1.model)('Campground', CampgroundSchema);
 exports.default = Campground;
