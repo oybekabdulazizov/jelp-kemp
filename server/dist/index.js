@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.asyncHandler = void 0;
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
@@ -20,6 +21,7 @@ const AppError_1 = __importDefault(require("./AppError"));
 const campground_1 = __importDefault(require("./models/campground"));
 const review_1 = __importDefault(require("./models/review"));
 const utils_1 = require("./utils");
+const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -32,42 +34,12 @@ const error = safe_1.default.red;
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
+app.use('/campgrounds', campgroundRoutes_1.default);
 const asyncHandler = (func) => (req, res, next) => {
     func(req, res, next).catch(next);
 };
-app.get('/campgrounds', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const campgrounds = yield campground_1.default.find({});
-    res.json(campgrounds);
-})));
-app.post('/campgrounds', utils_1.validateCampgroundFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCampground = new campground_1.default(Object.assign({}, req.body));
-    yield newCampground.save();
-    res.status(200).send();
-})));
-app.put('/campgrounds/:_id', utils_1.validateCampgroundFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id } = req.params;
-    const campground = yield campground_1.default.findById(_id);
-    if (!campground)
-        return next(new AppError_1.default(404, 'Campground Not Found!'));
-    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
-    res.status(200).send();
-})));
-app.delete('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id } = req.params;
-    yield campground_1.default.findByIdAndDelete(_id);
-    res.status(200).send();
-})));
-app.get('/campgrounds/:_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id } = req.params;
-    const campground = yield campground_1.default.findById(_id).populate('reviews');
-    if (!campground)
-        return next(new AppError_1.default(404, 'Campground Not Found!'));
-    res.json(campground);
-})));
-app.get('*', (req, res, next) => {
-    next(new AppError_1.default(404, 'Page Not Found!'));
-});
-app.post('/campgrounds/:_id/reviews', utils_1.validateReviewFormData, asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.asyncHandler = asyncHandler;
+app.post('/campgrounds/:_id/reviews', utils_1.validateReviewFormData, (0, exports.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const campground = yield campground_1.default.findById(req.params._id);
     if (!campground)
         return next(new AppError_1.default(404, 'Campground Not Found!'));
@@ -78,7 +50,7 @@ app.post('/campgrounds/:_id/reviews', utils_1.validateReviewFormData, asyncHandl
     yield campground.save();
     res.status(200).send();
 })));
-app.delete('/campgrounds/:campground_id/reviews/:review_id', asyncHandler((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.delete('/campgrounds/:campground_id/reviews/:review_id', (0, exports.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { campground_id, review_id } = req.params;
     yield review_1.default.findByIdAndDelete(review_id);
     yield campground_1.default.findByIdAndUpdate(campground_id, {
@@ -86,6 +58,9 @@ app.delete('/campgrounds/:campground_id/reviews/:review_id', asyncHandler((req, 
     });
     res.status(200).send();
 })));
+app.get('*', (req, res, next) => {
+    next(new AppError_1.default(404, 'Page Not Found!'));
+});
 app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { code = 500, message = 'Something went wrong!' } = err;
     let updatedCode = code;
