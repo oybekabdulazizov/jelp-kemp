@@ -4,10 +4,8 @@ import cors from 'cors';
 import colors from 'colors/safe';
 
 import AppError from './AppError';
-import Campground from './models/campground';
-import Review from './models/review';
-import { validateReviewFormData } from './utils';
 import campgroundRouter from './routes/campgroundRoutes';
+import reviewRouter from './routes/reviewRoutes';
 
 const error = colors.red;
 
@@ -24,41 +22,7 @@ const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use('/campgrounds', campgroundRouter);
-
-export const asyncHandler =
-  (func: any) => (req: Request, res: Response, next: NextFunction) => {
-    func(req, res, next).catch(next);
-  };
-
-app.post(
-  '/campgrounds/:_id/reviews',
-  validateReviewFormData,
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const campground = await Campground.findById(req.params._id);
-    if (!campground) return next(new AppError(404, 'Campground Not Found!'));
-
-    const { rating, text } = req.body;
-    const review = new Review({ rating, text });
-
-    campground.reviews.push(review);
-    await review.save();
-    await campground.save();
-
-    res.status(200).send();
-  })
-);
-
-app.delete(
-  '/campgrounds/:campground_id/reviews/:review_id',
-  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const { campground_id, review_id } = req.params;
-    await Review.findByIdAndDelete(review_id);
-    await Campground.findByIdAndUpdate(campground_id, {
-      $pull: { reviews: review_id },
-    });
-    res.status(200).send();
-  })
-);
+app.use('/campgrounds/:campground_id/reviews', reviewRouter);
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));
