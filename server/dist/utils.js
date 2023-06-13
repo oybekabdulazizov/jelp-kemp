@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
+exports.asyncHandler = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
 const schemas_1 = require("./schemas");
 const AppError_1 = __importDefault(require("./AppError"));
 const validateCampgroundFormData = (req, res, next) => {
@@ -35,3 +35,7 @@ const validateReviewFormData = (req, res, next) => {
     }
 };
 exports.validateReviewFormData = validateReviewFormData;
+const asyncHandler = (func) => (req, res, next) => {
+    func(req, res, next).catch(next);
+};
+exports.asyncHandler = asyncHandler;

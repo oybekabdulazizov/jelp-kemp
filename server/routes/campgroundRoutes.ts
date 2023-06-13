@@ -1,14 +1,10 @@
 import express, { Response, Request, NextFunction, Router } from 'express';
-import { validateCampgroundFormData } from '../utils';
+
+import { asyncHandler, validateCampgroundFormData } from '../utils';
 import Campground from '../models/campground';
 import AppError from '../AppError';
 
 const campgroundRouter: Router = express.Router();
-
-export const asyncHandler =
-  (func: any) => (req: Request, res: Response, next: NextFunction) => {
-    func(req, res, next).catch(next);
-  };
 
 campgroundRouter.get(
   '/',

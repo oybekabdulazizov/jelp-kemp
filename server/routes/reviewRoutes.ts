@@ -1,16 +1,11 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 
-import { validateReviewFormData } from '../utils';
+import { asyncHandler, validateReviewFormData } from '../utils';
 import Campground from '../models/campground';
 import AppError from '../AppError';
 import Review from '../models/review';
 
 const reviewRouter: Router = express.Router();
-
-export const asyncHandler =
-  (func: any) => (req: Request, res: Response, next: NextFunction) => {
-    func(req, res, next).catch(next);
-  };
 
 reviewRouter.post(
   '/',

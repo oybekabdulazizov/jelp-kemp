@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+
 import { campgroundSchemaJoi, reviewSchemaJoi } from './schemas';
 import AppError from './AppError';
 
@@ -36,3 +37,8 @@ export const validateReviewFormData = (
     next();
   }
 };
+
+export const asyncHandler =
+  (func: any) => (req: Request, res: Response, next: NextFunction) => {
+    func(req, res, next).catch(next);
+  };
