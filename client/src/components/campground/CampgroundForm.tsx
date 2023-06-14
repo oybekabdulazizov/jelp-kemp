@@ -53,7 +53,13 @@ export default function CampgroundForm() {
     if (isCreate) {
       await create(values);
       actions.resetForm();
-      navigate(`/campgrounds`);
+      navigate(`/campgrounds`, {
+        state: {
+          source: 'newcampgroundform',
+          status: 'success',
+          message: 'New campground created!',
+        },
+      });
     } else {
       await edit(values);
       actions.resetForm();
