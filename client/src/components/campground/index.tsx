@@ -1,13 +1,12 @@
-import { ComponentType, ReactElement, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import Campground from './Campground';
-import { Alert, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import { Slide, SlideProps } from '@mui/material';
 
-import { Campground_Type } from '../../shared/types';
-import { TransitionProps } from '@mui/material/transitions';
+import { Campground_Type, Custom_Snackbar_Type } from '../../shared/types';
 import { Location, useLocation } from 'react-router-dom';
+import CustomSnackbar from '../CustomSnackbar';
 
 const slideTransition = (props: SlideProps) => {
   return <Slide {...props} direction='left' />;
@@ -15,12 +14,7 @@ const slideTransition = (props: SlideProps) => {
 
 export default function Campgrounds() {
   const [campgroundsData, setCampgroundsData] = useState<Campground_Type[]>([]);
-  const [snackbarState, setSnackbarState] = useState<{
-    open: boolean;
-    Transition: ComponentType<
-      TransitionProps & { children: ReactElement<any, any> }
-    >;
-  }>({
+  const [snackbarState, setSnackbarState] = useState<Custom_Snackbar_Type>({
     open: false,
     Transition: slideTransition,
   });
@@ -49,29 +43,11 @@ export default function Campgrounds() {
 
   return (
     <div className='container mt-4'>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={snackbarState.open}
-        autoHideDuration={5000}
-        key={snackbarState.Transition.name}
-        TransitionComponent={snackbarState.Transition}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          severity={location.state?.status}
-          className='d-flex align-items-center'
-        >
-          {location.state?.message}{' '}
-          <IconButton
-            aria-label='close'
-            color='inherit'
-            size='small'
-            onClick={handleCloseSnackbar}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Alert>
-      </Snackbar>
+      <CustomSnackbar
+        snackbarState={snackbarState}
+        handleCloseSnackbar={handleCloseSnackbar}
+        location={location}
+      />
       <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
       {campgroundsData.map((campground) => (
         <Campground {...campground} key={campground._id} />
