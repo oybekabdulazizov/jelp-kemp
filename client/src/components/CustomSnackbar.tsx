@@ -1,19 +1,35 @@
-import { Alert, IconButton, Snackbar } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { Custom_Snackbar_Type } from '../shared/types';
+import { useEffect, useState } from 'react';
 import { Location } from 'react-router-dom';
+import { Alert, IconButton, Slide, SlideProps, Snackbar } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
+import { Custom_Snackbar_Type } from '../shared/types';
 
 type Props = {
-  snackbarState: Custom_Snackbar_Type;
   location: Location;
-  handleCloseSnackbar: () => void;
 };
 
-export default function CustomSnackbar({
-  handleCloseSnackbar,
-  location,
-  snackbarState,
-}: Props) {
+const slideTransition = (props: SlideProps) => {
+  return <Slide {...props} direction='left' />;
+};
+
+export default function CustomSnackbar({ location }: Props) {
+  const [snackbarState, setSnackbarState] = useState<Custom_Snackbar_Type>({
+    open: false,
+    Transition: slideTransition,
+  });
+
+  useEffect(() => {
+    if (location.state) {
+      setSnackbarState({ ...snackbarState, open: true });
+    }
+  }, []);
+
+  const handleCloseSnackbar = () => {
+    setSnackbarState({ ...snackbarState, open: false });
+    window.history.replaceState({}, document.title);
+  };
+
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
