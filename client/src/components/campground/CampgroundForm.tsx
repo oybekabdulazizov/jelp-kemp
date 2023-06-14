@@ -55,7 +55,6 @@ export default function CampgroundForm() {
       actions.resetForm();
       navigate(`/campgrounds`, {
         state: {
-          source: 'newcampgroundform',
           status: 'success',
           message: 'New campground created!',
         },
@@ -65,7 +64,6 @@ export default function CampgroundForm() {
       actions.resetForm();
       navigate(`/campgrounds/${_id}`, {
         state: {
-          source: 'editcampgroundform',
           status: 'success',
           message: 'Campground updated!',
         },

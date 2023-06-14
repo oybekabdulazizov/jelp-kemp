@@ -50,7 +50,12 @@ export default function Details() {
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:3001/campgrounds/${_id}`);
-      navigate(`/campgrounds`);
+      navigate(`/campgrounds`, {
+        state: {
+          status: 'warning',
+          message: `Campground deleted and it can't be retrieved!`,
+        },
+      });
     } catch (err) {
       console.log(err);
     }
