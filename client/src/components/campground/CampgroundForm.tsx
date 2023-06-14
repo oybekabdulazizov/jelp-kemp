@@ -63,7 +63,13 @@ export default function CampgroundForm() {
     } else {
       await edit(values);
       actions.resetForm();
-      navigate(`/campgrounds/${_id}`);
+      navigate(`/campgrounds/${_id}`, {
+        state: {
+          source: 'editcampgroundform',
+          status: 'success',
+          message: 'Campground updated!',
+        },
+      });
     }
   };
 

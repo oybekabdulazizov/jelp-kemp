@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import {
   Link,
+  Location,
   NavigateFunction,
+  useLocation,
   useNavigate,
   useParams,
 } from 'react-router-dom';
@@ -13,6 +15,7 @@ import { NotFound_Type } from './types';
 import { NotFound } from './ErrorTemplate';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
+import CustomSnackbar from '../CustomSnackbar';
 
 export default function Details() {
   const { _id } = useParams();
@@ -23,6 +26,7 @@ export default function Details() {
     message: '',
   });
   const navigate: NavigateFunction = useNavigate();
+  const location: Location = useLocation();
 
   useEffect(() => {
     const findCampground = async () => {
@@ -102,6 +106,7 @@ export default function Details() {
         <NotFound status={notFound.status} message={notFound.message} />
       ) : (
         <div className='row'>
+          <CustomSnackbar location={location} />
           <div className='col-6'>
             <div className='card mb-3'>
               <img
