@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const utils_1 = require("../utils");
 const campground_1 = __importDefault(require("../models/campground"));
 const AppError_1 = __importDefault(require("../AppError"));
-const campgroundRouter = express_1.default.Router();
+const campgroundRouter = express_1.default.Router({ mergeParams: true });
 campgroundRouter.get('/', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const campgrounds = yield campground_1.default.find({});
     res.json(campgrounds);

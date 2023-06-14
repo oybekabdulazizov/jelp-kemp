@@ -4,7 +4,7 @@ import { asyncHandler, validateCampgroundFormData } from '../utils';
 import Campground from '../models/campground';
 import AppError from '../AppError';
 
-const campgroundRouter: Router = express.Router();
+const campgroundRouter: Router = express.Router({ mergeParams: true });
 
 campgroundRouter.get(
   '/',

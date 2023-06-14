@@ -5,7 +5,7 @@ import Campground from '../models/campground';
 import AppError from '../AppError';
 import Review from '../models/review';
 
-const reviewRouter: Router = express.Router();
+const reviewRouter: Router = express.Router({ mergeParams: true });
 
 reviewRouter.post(
   '/',

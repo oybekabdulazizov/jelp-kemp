@@ -17,7 +17,7 @@ const utils_1 = require("../utils");
 const campground_1 = __importDefault(require("../models/campground"));
 const AppError_1 = __importDefault(require("../AppError"));
 const review_1 = __importDefault(require("../models/review"));
-const reviewRouter = express_1.default.Router();
+const reviewRouter = express_1.default.Router({ mergeParams: true });
 reviewRouter.post('/', utils_1.validateReviewFormData, (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const campground = yield campground_1.default.findById(req.params.campground_id);
     if (!campground)
