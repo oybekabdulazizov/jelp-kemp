@@ -23,6 +23,7 @@ const AppError_1 = __importDefault(require("./AppError"));
 const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
 const user_1 = __importDefault(require("./models/user"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -51,11 +52,7 @@ passport_1.default.serializeUser(user_1.default.serializeUser());
 passport_1.default.deserializeUser(user_1.default.deserializeUser());
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
-app.get('/fakeuser', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = new user_1.default({ email: 'oybek@gmail.com', username: 'oybek' });
-    const registeredUser = yield user_1.default.register(user, 'bugatti');
-    res.send(registeredUser);
-}));
+app.use(userRoutes_1.default);
 app.get('*', (req, res, next) => {
     next(new AppError_1.default(404, 'Page Not Found!'));
 });

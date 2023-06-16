@@ -10,6 +10,7 @@ import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
 import User from './models/user';
+import userRouter from './routes/userRoutes';
 
 const error = colors.red;
 
@@ -46,15 +47,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
-
-app.get(
-  '/fakeuser',
-  async (req: Request, res: Response, next: NextFunction) => {
-    const user = new User({ email: 'oybek@gmail.com', username: 'oybek' });
-    const registeredUser = await User.register(user, 'bugatti');
-    res.send(registeredUser);
-  }
-);
+app.use(userRouter);
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));
