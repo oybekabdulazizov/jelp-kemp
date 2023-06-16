@@ -2,10 +2,14 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import colors from 'colors/safe';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy as LocalStrategy } from 'passport-local';
 
 import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
+import User from './models/user';
 
 const error = colors.red;
 
@@ -21,8 +25,36 @@ connect('mongodb://127.0.0.1:27017/jelp-kemp')
 const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use(
+  session({
+    secret: 'justasecretfornow',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      httpOnly: true,
+    },
+  })
+);
+// express session must come before passport sesion.
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
+
+app.get(
+  '/fakeuser',
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = new User({ email: 'oybek@gmail.com', username: 'oybek' });
+    const registeredUser = await User.register(user, 'bugatti');
+    res.send(registeredUser);
+  }
+);
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));

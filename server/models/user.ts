@@ -2,7 +2,7 @@ import { model, Schema } from 'mongoose';
 import passportLocalMongoose from 'passport-local-mongoose';
 
 interface IUser {
-  email: string;
+  email?: string;
 }
 
 const UserSchema = new Schema<IUser>({
