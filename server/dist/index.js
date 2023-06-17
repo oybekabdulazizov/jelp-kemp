@@ -17,12 +17,9 @@ const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
 const safe_1 = __importDefault(require("colors/safe"));
 const express_session_1 = __importDefault(require("express-session"));
-const passport_1 = __importDefault(require("passport"));
-const passport_local_1 = require("passport-local");
 const AppError_1 = __importDefault(require("./AppError"));
 const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
-const user_1 = __importDefault(require("./models/user"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
@@ -45,11 +42,11 @@ app.use((0, express_session_1.default)({
     },
 }));
 // express session must come before passport sesion.
-app.use(passport_1.default.initialize());
-app.use(passport_1.default.session());
-passport_1.default.use(new passport_local_1.Strategy(user_1.default.authenticate()));
-passport_1.default.serializeUser(user_1.default.serializeUser());
-passport_1.default.deserializeUser(user_1.default.deserializeUser());
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
 app.use(userRoutes_1.default);

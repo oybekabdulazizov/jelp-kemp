@@ -38,12 +38,12 @@ app.use(
   })
 );
 // express session must come before passport sesion.
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);

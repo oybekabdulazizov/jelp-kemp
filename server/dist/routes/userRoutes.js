@@ -13,13 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const utils_1 = require("../utils");
 const user_1 = __importDefault(require("../models/user"));
+const AppError_1 = __importDefault(require("../AppError"));
 const userRouter = express_1.default.Router();
 userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, username } = req.body;
-    const user = new user_1.default({ email, username });
-    const registeredUser = yield user_1.default.register(user, password);
-    res.send(registeredUser);
+    const { email, username, password } = req.body;
+    const hash = yield bcrypt_1.default.hash(password, 10);
+    const existingUser = yield user_1.default.findOne({ username });
+    if (existingUser) {
+        throw new AppError_1.default(400, 'Username is already taken.');
+    }
+    const newUser = new user_1.default({ email, username, hash });
+    yield newUser.save();
+    res.json(newUser);
 })));
+userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
 exports.default = userRouter;
