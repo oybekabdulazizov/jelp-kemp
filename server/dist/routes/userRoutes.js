@@ -13,31 +13,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+// import bcrypt from 'bcrypt';
 const utils_1 = require("../utils");
 const user_1 = __importDefault(require("../models/user"));
-const AppError_1 = __importDefault(require("../AppError"));
+// import AppError from '../AppError';
 const passport_1 = __importDefault(require("passport"));
 const userRouter = express_1.default.Router();
 userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, username, password } = req.body;
-    const hash = yield bcrypt_1.default.hash(password, 10);
-    const existingUser = yield user_1.default.findOne({ username });
-    if (existingUser) {
-        throw new AppError_1.default(400, 'Username is already taken.');
+    try {
+        const { email, username, password } = req.body;
+        const user = new user_1.default({ email, username });
+        const registeredUser = yield user_1.default.register(user, password);
+        res.json(registeredUser);
     }
-    const newUser = new user_1.default({ email, username, hash });
-    yield newUser.save();
-    res.json(newUser);
+    catch (err) {
+        console.log(err);
+        return next(err);
+    }
+    // const hash: string = await bcrypt.hash(password, 10);
+    // const existingUser = await User.findOne({ username });
+    // if (existingUser) {
+    //   throw new AppError(400, 'Username is already taken.');
+    // }
+    // const newUser = new User({ email, username, hash });
+    // await newUser.save();
+    // res.json(newUser);
 })));
 userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     passport_1.default.authenticate('local', (err, user, info) => {
-        if (!user) {
-            return res.send(info.message);
+        if (err) {
+            console.log(err);
+            throw err;
         }
-        req.logIn(user, (err) => {
-            return res.send('Successfully authenticated!');
-        });
+        if (info) {
+            return res.status(401).json(info);
+        }
+        if (user)
+            return res.status(200).json(user);
     })(req, res, next);
+    console.log(req.user);
+    //   passport.authenticate('local', (err: any, user: any, info: any) => {
+    //     if (!user) {
+    //       return res.send(info.message);
+    //     }
+    //     req.logIn(user, (err) => {
+    //       return res.send('Successfully authenticated!');
+    //     });
+    //   })(req, res, next);
 })));
 exports.default = userRouter;
