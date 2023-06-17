@@ -5,6 +5,7 @@ import colors from 'colors/safe';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
+import bcrypt from 'bcrypt';
 
 import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
@@ -38,12 +39,34 @@ app.use(
   })
 );
 // express session must come before passport sesion.
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(new LocalStrategy(User.authenticate()));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    const existingUser = await User.findOne({ username });
+    if (!existingUser)
+      return done(null, false, {
+        message: 'Username or password is incorrect.',
+      });
 
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+    const passwordMatches = await bcrypt.compare(password, existingUser.hash);
+    if (passwordMatches) {
+      return done(null, existingUser);
+    } else {
+      return done(null, false, {
+        message: 'Username or password is incorrect.',
+      });
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((id, done) => {
+  const user = User.findOne({ _id: id }).then((res) => res);
+  done(null, user);
+});
 
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);

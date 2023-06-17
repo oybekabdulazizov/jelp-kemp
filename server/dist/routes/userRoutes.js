@@ -17,6 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const utils_1 = require("../utils");
 const user_1 = __importDefault(require("../models/user"));
 const AppError_1 = __importDefault(require("../AppError"));
+const passport_1 = __importDefault(require("passport"));
 const userRouter = express_1.default.Router();
 userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password } = req.body;
@@ -29,5 +30,14 @@ userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awa
     yield newUser.save();
     res.json(newUser);
 })));
-userRouter.post('/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () { }));
+userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    passport_1.default.authenticate('local', (err, user, info) => {
+        if (!user) {
+            return res.send(info.message);
+        }
+        req.logIn(user, (err) => {
+            return res.send('Successfully authenticated!');
+        });
+    })(req, res, next);
+})));
 exports.default = userRouter;

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { asyncHandler } from '../utils';
 import User from '../models/user';
 import AppError from '../AppError';
+import passport from 'passport';
 
 const userRouter: Router = express.Router();
 
@@ -24,6 +25,19 @@ userRouter.post(
   })
 );
 
-userRouter.post('/login', async (req: Request, res: Response) => {});
+userRouter.post(
+  '/login',
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    passport.authenticate('local', (err: any, user: any, info: any) => {
+      if (!user) {
+        return res.send(info.message);
+      }
+
+      req.logIn(user, (err) => {
+        return res.send('Successfully authenticated!');
+      });
+    })(req, res, next);
+  })
+);
 
 export default userRouter;
