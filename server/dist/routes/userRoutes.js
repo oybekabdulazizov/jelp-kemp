@@ -39,8 +39,12 @@ userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awa
     // await newUser.save();
     // res.json(newUser);
 })));
+// userRouter.get('/user', (req: Request, res: Response) => {
+//   console.log(req.user);
+//   res.send(req.user);
+// });
 userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    passport_1.default.authenticate('local', (err, user, info) => {
+    yield passport_1.default.authenticate('local', (err, user, info) => {
         if (err) {
             console.log(err);
             throw err;
@@ -48,17 +52,29 @@ userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaite
         if (info) {
             return res.status(401).json(info);
         }
-        if (user)
-            return res.status(200).json(user);
+        if (user) {
+            req.logIn(user, (err) => {
+                req.user = user;
+                if (err)
+                    throw err;
+            });
+            return res.status(200).json(req.user);
+        }
     })(req, res, next);
-    console.log(req.user);
-    //   passport.authenticate('local', (err: any, user: any, info: any) => {
-    //     if (!user) {
-    //       return res.send(info.message);
-    //     }
-    //     req.logIn(user, (err) => {
-    //       return res.send('Successfully authenticated!');
-    //     });
-    //   })(req, res, next);
+    // passport.authenticate('local', (err: any, user: any, info: any) => {
+    //   if (!user) {
+    //     return res.send(info.message);
+    //   }
+    //   req.logIn(user, (err) => {
+    //     return res.send('Successfully authenticated!');
+    //   });
+    // })(req, res, next);
 })));
+userRouter.get('/logout', (req, res, next) => {
+    req.logOut((err) => {
+        if (err)
+            throw err;
+    });
+    res.status(200).send('Logged you out.');
+});
 exports.default = userRouter;
