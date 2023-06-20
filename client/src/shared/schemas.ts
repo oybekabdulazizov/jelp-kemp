@@ -34,3 +34,19 @@ export const ReviewSchema = object({
     .max(1000, 'Review cannot exceed 1000 characters.')
     .required('Please provide a review.'),
 });
+
+export const SignupSchema = object({
+  email: string()
+    .trim()
+    .email('Please enter a valid email address.')
+    .required('Please provide an email address.'),
+  username: string()
+    .trim()
+    .max(100, 'Username length cannot exceed 100 characters.')
+    .required('Please provide a username.'),
+  password: string()
+    .trim()
+    .min(8, 'Password must be at least 8 characters long.')
+    .max(64, 'Password length cannot exceed 64 characters.')
+    .required('Please add a secure password.'),
+});

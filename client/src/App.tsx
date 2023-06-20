@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
@@ -7,8 +8,10 @@ import Details from './components/campground/Details';
 import CampgroundForm from './components/campground/CampgroundForm';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
+import SignupForm from './components/user/SignupForm';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   return (
     <>
       <NavBar />
@@ -19,6 +22,10 @@ export default function App() {
           <Route path='/campgrounds/new' element={<CampgroundForm />} />
           <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
           <Route path='/campgrounds/:_id' element={<Details />} />
+          <Route
+            path='/signup'
+            element={<SignupForm setIsLoggedIn={setIsLoggedIn} />}
+          />
           <Route path='/404-notfound' element={<PageNotFound />} />
           <Route
             path='/*'
