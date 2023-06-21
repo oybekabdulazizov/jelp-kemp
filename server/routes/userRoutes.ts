@@ -14,10 +14,13 @@ userRouter.post(
     try {
       const { email, username, password } = req.body;
       const user = new User({ email, username });
-      const registeredUser = await User.register(user, password);
-      res.json(registeredUser);
+      await User.register(user, password);
+      res.status(200).json({
+        user_id: user._id,
+        username: username,
+        user_email: email,
+      });
     } catch (err: any) {
-      console.log(err);
       return next(err);
     }
 

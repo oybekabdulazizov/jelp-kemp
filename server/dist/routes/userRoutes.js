@@ -23,11 +23,14 @@ userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awa
     try {
         const { email, username, password } = req.body;
         const user = new user_1.default({ email, username });
-        const registeredUser = yield user_1.default.register(user, password);
-        res.json(registeredUser);
+        yield user_1.default.register(user, password);
+        res.status(200).json({
+            user_id: user._id,
+            username: username,
+            user_email: email,
+        });
     }
     catch (err) {
-        console.log(err);
         return next(err);
     }
     // const hash: string = await bcrypt.hash(password, 10);

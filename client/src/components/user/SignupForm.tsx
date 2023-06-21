@@ -1,8 +1,16 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {
+  Link,
+  Location,
+  NavigateFunction,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useFormik } from 'formik';
+import axios from 'axios';
 
 import { SignupSchema } from '../../shared/schemas';
+import CustomSnackbar from '../CustomSnackbar';
 
 type Props = {
   setIsLoggedIn: (loggedIn: boolean) => void;
@@ -10,12 +18,45 @@ type Props = {
 
 export default function SignupForm({ setIsLoggedIn }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>();
+  const navigate: NavigateFunction = useNavigate();
+  const location: Location = useLocation();
 
   const onSubmit = async (values: any, actions: any) => {
     if (Object.keys(errors).length < 1) setAllValid(true);
     await new Promise((resolve) => setTimeout(resolve, 500));
-    console.log(values);
+    setError(false);
 
+    try {
+      const response = await axios.post(
+        `http://localhost:3001/register`,
+        values,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        }
+      );
+      const userToken = JSON.stringify(response.data);
+      localStorage.clear();
+      localStorage.setItem('user-token', userToken);
+      setIsLoggedIn(true);
+      navigate('/', {
+        state: {
+          status: 'success',
+          message: 'Welcome to Jelp-Kemp🙌',
+        },
+      });
+    } catch (err: any) {
+      setAllValid(false);
+      setError(true);
+      navigate('/signup', {
+        state: {
+          status: 'error',
+          message: err.response.data,
+        },
+      });
+    }
     actions.resetForm();
   };
 
@@ -40,6 +81,7 @@ export default function SignupForm({ setIsLoggedIn }: Props) {
   return (
     <div>
       <div className='col-4 offset-4 pb-4 pt-3'>
+        {error && <CustomSnackbar location={location} />}
         <h2 className='text-center pt-3 pb-2 m-0'>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
