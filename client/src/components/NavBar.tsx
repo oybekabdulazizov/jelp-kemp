@@ -1,13 +1,39 @@
-import { Link, NavLink } from 'react-router-dom';
+import axios from 'axios';
+import { Link, NavLink, NavigateFunction, useNavigate } from 'react-router-dom';
 
-export default function NavBar() {
+type Props = {
+  user: {} | undefined;
+};
+
+export default function NavBar({ user }: Props) {
+  const navigate: NavigateFunction = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/logout', {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      });
+      localStorage.removeItem('user-token');
+      navigate('/login', {
+        state: {
+          status: 'success',
+          message: response.data,
+        },
+      });
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
+
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
       <div className='container'>
         <Link to='/' className='navbar-brand text-light'>
           Jelp-Kemp
         </Link>
-        <div className='collapse navbar-collapse' data-bs-theme='dark'>
+        <div className='collapse navbar-collapse w-auto' data-bs-theme='dark'>
           <div className='navbar-nav'>
             <NavLink to='/' end className='nav-link mx-2'>
               Home
@@ -18,6 +44,26 @@ export default function NavBar() {
             <NavLink to='/campgrounds/new' end className='nav-link mx-2'>
               New Campground
             </NavLink>
+          </div>
+          <div className='navbar-nav ms-auto'>
+            {user ? (
+              <button className='nav-link mx-2' onClick={handleLogout}>
+                Log out
+              </button>
+            ) : (
+              <>
+                <NavLink to='/login' end className='nav-link mx-2'>
+                  Log in
+                </NavLink>
+                <NavLink
+                  to='/signup'
+                  end
+                  className='nav-link mx-2 border border-secondary rounded'
+                >
+                  Sign up
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
         <div className='dropstart' data-bs-theme='dark'>
@@ -40,12 +86,20 @@ export default function NavBar() {
               New Campground
             </NavLink>
             <hr className='dropdown-divider' />
-            <NavLink to='/something' end className='dropdown-item'>
-              Something
-            </NavLink>
-            <NavLink to='/another-thing' end className='dropdown-item'>
-              Another thing
-            </NavLink>
+            {user ? (
+              <button className='dropdown-item' onClick={handleLogout}>
+                Log out
+              </button>
+            ) : (
+              <>
+                <NavLink to='/login' end className='dropdown-item'>
+                  Log in
+                </NavLink>
+                <NavLink to='/signup' end className='dropdown-item'>
+                  Sign up
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>

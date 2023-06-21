@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <>
-      <NavBar />
+      <NavBar user={user} />
       <div className='container my-4'>
         <Routes>
           <Route path='/' element={<Home />} />

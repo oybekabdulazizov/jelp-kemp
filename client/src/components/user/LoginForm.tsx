@@ -32,7 +32,7 @@ export default function LoginForm() {
       const userToken = JSON.stringify(response.data);
       localStorage.clear();
       localStorage.setItem('user-token', userToken);
-      const pathTo: string = location.state?.path as string | '/';
+      const pathTo: string = (location.state?.path as string) || '/';
       navigate(pathTo, {
         state: {
           status: 'success',
