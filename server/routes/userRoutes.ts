@@ -52,6 +52,7 @@ userRouter.post(
       }
 
       if (info) {
+        console.log(info);
         return res.status(401).json(info);
       }
       if (user) {
@@ -59,7 +60,11 @@ userRouter.post(
           req.user = user;
           if (err) throw err;
         });
-        return res.status(200).json(req.user);
+        res.status(200).json({
+          user_id: user._id,
+          username: user.username,
+          user_email: user.email,
+        });
       }
     })(req, res, next);
     // passport.authenticate('local', (err: any, user: any, info: any) => {

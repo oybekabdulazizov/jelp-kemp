@@ -9,9 +9,11 @@ import CampgroundForm from './components/campground/CampgroundForm';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import SignupForm from './components/user/SignupForm';
+import LoginForm from './components/user/LoginForm';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  console.log(isLoggedIn);
   return (
     <>
       <NavBar />
@@ -22,6 +24,10 @@ export default function App() {
           <Route path='/campgrounds/new' element={<CampgroundForm />} />
           <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
           <Route path='/campgrounds/:_id' element={<Details />} />
+          <Route
+            path='/login'
+            element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
+          />
           <Route
             path='/signup'
             element={<SignupForm setIsLoggedIn={setIsLoggedIn} />}

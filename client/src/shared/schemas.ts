@@ -50,3 +50,15 @@ export const SignupSchema = object({
     .max(64, 'Password length cannot exceed 64 characters.')
     .required('Please add a secure password.'),
 });
+
+export const LoginSchema = object({
+  username: string()
+    .trim()
+    .max(100, 'Username length cannot exceed 100 characters.')
+    .required('Please provide a username.'),
+  password: string()
+    .trim()
+    .min(8, 'Password must be at least 8 characters long.')
+    .max(64, 'Password length cannot exceed 64 characters.')
+    .required('Please add a secure password.'),
+});
