@@ -12,11 +12,7 @@ import axios from 'axios';
 import { SignupSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 
-type Props = {
-  setIsLoggedIn: (loggedIn: boolean) => void;
-};
-
-export default function SignupForm({ setIsLoggedIn }: Props) {
+export default function SignupForm() {
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
   const navigate: NavigateFunction = useNavigate();
@@ -40,8 +36,8 @@ export default function SignupForm({ setIsLoggedIn }: Props) {
       const userToken = JSON.stringify(response.data);
       localStorage.clear();
       localStorage.setItem('user-token', userToken);
-      setIsLoggedIn(true);
-      navigate('/', {
+      const pathTo: string = location.state?.path as string | '/';
+      navigate(pathTo, {
         state: {
           status: 'success',
           message: 'Welcome to Jelp-Kemp🙌',

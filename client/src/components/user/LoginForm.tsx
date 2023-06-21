@@ -12,11 +12,7 @@ import {
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
 
-type Props = {
-  setIsLoggedIn: (loggedIn: boolean) => void;
-};
-
-export default function LoginForm({ setIsLoggedIn }: Props) {
+export default function LoginForm() {
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
   const navigate: NavigateFunction = useNavigate();
@@ -36,9 +32,8 @@ export default function LoginForm({ setIsLoggedIn }: Props) {
       const userToken = JSON.stringify(response.data);
       localStorage.clear();
       localStorage.setItem('user-token', userToken);
-      setIsLoggedIn(true);
-      console.log(userToken);
-      navigate('/', {
+      const pathTo: string = location.state?.path as string | '/';
+      navigate(pathTo, {
         state: {
           status: 'success',
           message: 'Welcome back🥳',

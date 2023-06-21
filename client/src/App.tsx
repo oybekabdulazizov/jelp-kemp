@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import NavBar from './components/NavBar';
@@ -12,8 +12,15 @@ import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  console.log(isLoggedIn);
+  const [user, setUser] = useState<{}>();
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('user-token');
+    if (userToken) {
+      setUser(JSON.parse(userToken));
+    }
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -21,17 +28,17 @@ export default function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/campgrounds' element={<Campgrounds />} />
-          <Route path='/campgrounds/new' element={<CampgroundForm />} />
-          <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
+          <Route
+            path='/campgrounds/new'
+            element={<CampgroundForm user={user} />}
+          />
+          <Route
+            path='/campgrounds/:_id/edit'
+            element={<CampgroundForm user={user} />}
+          />
           <Route path='/campgrounds/:_id' element={<Details />} />
-          <Route
-            path='/login'
-            element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
-          />
-          <Route
-            path='/signup'
-            element={<SignupForm setIsLoggedIn={setIsLoggedIn} />}
-          />
+          <Route path='/login' element={<LoginForm />} />
+          <Route path='/signup' element={<SignupForm />} />
           <Route path='/404-notfound' element={<PageNotFound />} />
           <Route
             path='/*'
