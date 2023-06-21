@@ -1,12 +1,22 @@
 import axios from 'axios';
-import { Link, NavLink, NavigateFunction, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+  Link,
+  Location,
+  NavLink,
+  NavigateFunction,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 
-type Props = {
-  user: {} | undefined;
-};
+// type Props = {
+//   user: {} | null;
+//   setUser: (user: {} | null) => void;
+// };
 
-export default function NavBar({ user }: Props) {
+export default function NavBar() {
   const navigate: NavigateFunction = useNavigate();
+  const location: Location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -20,6 +30,7 @@ export default function NavBar({ user }: Props) {
         state: {
           status: 'success',
           message: response.data,
+          path: location.pathname,
         },
       });
     } catch (err: any) {
@@ -46,7 +57,7 @@ export default function NavBar({ user }: Props) {
             </NavLink>
           </div>
           <div className='navbar-nav ms-auto'>
-            {user ? (
+            {localStorage.getItem('user-token') ? (
               <button className='nav-link mx-2' onClick={handleLogout}>
                 Log out
               </button>
@@ -86,7 +97,7 @@ export default function NavBar({ user }: Props) {
               New Campground
             </NavLink>
             <hr className='dropdown-divider' />
-            {user ? (
+            {localStorage.getItem('user-token') ? (
               <button className='dropdown-item' onClick={handleLogout}>
                 Log out
               </button>

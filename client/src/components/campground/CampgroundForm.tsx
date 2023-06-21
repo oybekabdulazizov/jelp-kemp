@@ -12,15 +12,16 @@ import {
 import { useFormik } from 'formik';
 
 import { CampgroundSchema } from '../../shared/schemas';
+import CustomSnackbar from '../CustomSnackbar';
 
-type Props = {
-  user: {} | undefined;
-};
+// type Props = {
+//   user: {} | null;
+// };
 
-export default function CampgroundForm({ user }: Props) {
+export default function CampgroundForm() {
+  const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
-  const [allValid, setAllValid] = useState<boolean>(false);
   const { _id } = useParams();
   const isCreate: boolean = !_id;
 
@@ -124,10 +125,11 @@ export default function CampgroundForm({ user }: Props) {
 
   return (
     <>
-      {!user ? (
+      {!localStorage.getItem('user-token') ? (
         <Navigate to='/login' state={state} />
       ) : (
         <div>
+          <CustomSnackbar location={location} />
           <div className='col-4 offset-4 pb-4 pt-3'>
             <h2 className='text-center pt-3 pb-2 m-0'>
               {isCreate ? 'New Campground' : 'Edit Campground'}

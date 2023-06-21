@@ -12,6 +12,10 @@ import axios from 'axios';
 import { SignupSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 
+// type Props = {
+//   setUser: (user: {} | null) => void;
+// };
+
 export default function SignupForm() {
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
@@ -36,6 +40,7 @@ export default function SignupForm() {
       const userToken = JSON.stringify(response.data);
       localStorage.clear();
       localStorage.setItem('user-token', userToken);
+      // setUser(userToken);
       const pathTo: string = location.state?.path as string | '/';
       navigate(pathTo, {
         state: {

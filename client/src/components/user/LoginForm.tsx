@@ -12,6 +12,10 @@ import {
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
 
+// type Props = {
+//   setUser: (user: {} | null) => void;
+// };
+
 export default function LoginForm() {
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
@@ -32,6 +36,7 @@ export default function LoginForm() {
       const userToken = JSON.stringify(response.data);
       localStorage.clear();
       localStorage.setItem('user-token', userToken);
+      // setUser(userToken);
       const pathTo: string = (location.state?.path as string) || '/';
       navigate(pathTo, {
         state: {
