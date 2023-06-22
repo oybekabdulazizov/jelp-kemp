@@ -16,14 +16,14 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
 const safe_1 = __importDefault(require("colors/safe"));
-const express_session_1 = __importDefault(require("express-session"));
-const passport_1 = __importDefault(require("passport"));
-const passport_local_1 = require("passport-local");
+// import session from 'express-session';
+// import passport from 'passport';
+// import { Strategy } from 'passport-local';
 // import bcrypt from 'bcrypt';
+// import User from './models/user';
 const AppError_1 = __importDefault(require("./AppError"));
 const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
-const user_1 = __importDefault(require("./models/user"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
@@ -37,42 +37,52 @@ const error = safe_1.default.red;
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cors_1.default)());
-app.use((0, express_session_1.default)({
-    secret: 'justasecretfornow',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        httpOnly: true,
-    },
-}));
+// app.use(
+//   session({
+//     secret: 'justasecretfornow',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       httpOnly: true,
+//     },
+//   })
+// );
 // express session must come before passport sesion.
-app.use(passport_1.default.initialize());
-app.use(passport_1.default.session());
-passport_1.default.use(new passport_local_1.Strategy(user_1.default.authenticate())
-// new LocalStrategy(async (username, password, done) => {
-//   const existingUser = await User.findOne({ username });
-//   if (!existingUser)
-//     return done(null, false, {
-//       message: 'Username or password is incorrect.',
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(
+//   // new LocalStrategy(User.authenticate())
+//   new Strategy(async (username, password, done) => {
+//     const existingUser = await User.findOne({ username });
+//     if (!existingUser)
+//       return done(null, false, {
+//         message: 'Username or password is incorrect.',
+//       });
+//     const passwordMatches = await bcrypt.compare(
+//       password,
+//       existingUser.password
+//     );
+//     if (!passwordMatches) {
+//       return done(null, false, {
+//         message: 'Username or password is incorrect.',
+//       });
+//     }
+//     return done(null, {
+//       user_id: existingUser._id,
+//       username: existingUser.username,
+//       user_email: existingUser.email,
 //     });
-//   const passwordMatches = await bcrypt.compare(password, existingUser.hash);
-//   if (passwordMatches) {
-//     return done(null, existingUser);
-//   } else {
-//     return done(null, false, {
-//       message: 'Username or password is incorrect.',
-//     });
-//   }
-// })
-);
-passport_1.default.serializeUser(user_1.default.serializeUser());
+//   })
+// );
+// passport.serializeUser(User.serializeUser());
 // passport.serializeUser((user, done) => {
 //   done(null, user);
 // });
-passport_1.default.deserializeUser(user_1.default.deserializeUser());
+// // passport.deserializeUser(User.deserializeUser());
 // passport.deserializeUser((id, done) => {
-//   const user = User.findOne({ _id: id }).then((res) => res);
-//   done(null, user);
+//   User.findById({ _id: id }, (err: any, user: any) => {
+//     done(err, user);
+//   });
 // });
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);

@@ -2,15 +2,15 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import colors from 'colors/safe';
-import session from 'express-session';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
+// import session from 'express-session';
+// import passport from 'passport';
+// import { Strategy } from 'passport-local';
 // import bcrypt from 'bcrypt';
 
+// import User from './models/user';
 import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
-import User from './models/user';
 import userRouter from './routes/userRoutes';
 
 const error = colors.red;
@@ -28,47 +28,55 @@ const app: Express = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use(
-  session({
-    secret: 'justasecretfornow',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      httpOnly: true,
-    },
-  })
-);
+// app.use(
+//   session({
+//     secret: 'justasecretfornow',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {
+//       httpOnly: true,
+//     },
+//   })
+// );
 // express session must come before passport sesion.
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(
-  new LocalStrategy(User.authenticate())
-  // new LocalStrategy(async (username, password, done) => {
-  //   const existingUser = await User.findOne({ username });
-  //   if (!existingUser)
-  //     return done(null, false, {
-  //       message: 'Username or password is incorrect.',
-  //     });
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(
+//   // new LocalStrategy(User.authenticate())
+//   new Strategy(async (username, password, done) => {
+//     const existingUser = await User.findOne({ username });
+//     if (!existingUser)
+//       return done(null, false, {
+//         message: 'Username or password is incorrect.',
+//       });
 
-  //   const passwordMatches = await bcrypt.compare(password, existingUser.hash);
-  //   if (passwordMatches) {
-  //     return done(null, existingUser);
-  //   } else {
-  //     return done(null, false, {
-  //       message: 'Username or password is incorrect.',
-  //     });
-  //   }
-  // })
-);
+//     const passwordMatches = await bcrypt.compare(
+//       password,
+//       existingUser.password
+//     );
 
-passport.serializeUser(User.serializeUser());
+//     if (!passwordMatches) {
+//       return done(null, false, {
+//         message: 'Username or password is incorrect.',
+//       });
+//     }
+//     return done(null, {
+//       user_id: existingUser._id,
+//       username: existingUser.username,
+//       user_email: existingUser.email,
+//     });
+//   })
+// );
+
+// passport.serializeUser(User.serializeUser());
 // passport.serializeUser((user, done) => {
 //   done(null, user);
 // });
-passport.deserializeUser(User.deserializeUser());
+// // passport.deserializeUser(User.deserializeUser());
 // passport.deserializeUser((id, done) => {
-//   const user = User.findOne({ _id: id }).then((res) => res);
-//   done(null, user);
+//   User.findById({ _id: id }, (err: any, user: any) => {
+//     done(err, user);
+//   });
 // });
 
 app.use('/campgrounds', campgroundRouter);
