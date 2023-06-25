@@ -28,21 +28,16 @@ export default function SignupForm() {
     setError(false);
 
     try {
-      const response = await axios.post(
-        `http://localhost:3001/register`,
-        values,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
-      );
-      const userToken = JSON.stringify(response.data);
-      localStorage.clear();
-      localStorage.setItem('user-token', userToken);
+      // const response =
+      await axios.post(`http://localhost:3001/register`, values, {
+        withCredentials: true,
+      });
+      // const userToken = JSON.stringify(response.data);
+      // localStorage.clear();
+      // localStorage.setItem('user-token', userToken);
       // setUser(userToken);
-      const pathTo: string = location.state?.path as string | '/';
-      navigate(pathTo, {
+      // const pathTo: string = location.state?.path as string | '/';
+      navigate('/', {
         state: {
           status: 'success',
           message: 'Welcome to Jelp-Kemp🙌',
@@ -54,7 +49,7 @@ export default function SignupForm() {
       navigate('/signup', {
         state: {
           status: 'error',
-          message: err.response.data,
+          message: err.message,
         },
       });
     }

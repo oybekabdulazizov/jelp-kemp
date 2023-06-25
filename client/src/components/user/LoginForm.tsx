@@ -29,16 +29,15 @@ export default function LoginForm() {
 
     try {
       const response = await axios.post(`http://localhost:3001/login`, values, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+        withCredentials: true,
       });
-      const userToken = JSON.stringify(response.data);
-      localStorage.clear();
-      localStorage.setItem('user-token', userToken);
+      // const userToken = JSON.stringify(response.data);
+      // localStorage.clear();
+      // localStorage.setItem('user-token', userToken);
       // setUser(userToken);
-      const pathTo: string = (location.state?.path as string) || '/';
-      navigate(pathTo, {
+      // const pathTo: string = (location.state?.path as string) || '/';
+      console.log(response);
+      navigate('/', {
         state: {
           status: 'success',
           message: 'Welcome back🥳',
@@ -50,7 +49,7 @@ export default function LoginForm() {
       navigate('/login', {
         state: {
           status: 'error',
-          message: err.response.data.message,
+          message: err.message,
         },
       });
     }
@@ -73,6 +72,7 @@ export default function LoginForm() {
     validationSchema: LoginSchema,
     onSubmit,
   });
+
   return (
     <div>
       <div className='col-4 offset-4 pb-4 pt-3'>
