@@ -14,11 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const utils_1 = require("../utils");
 const user_1 = __importDefault(require("../models/user"));
 const AppError_1 = __importDefault(require("../AppError"));
 // import passport from 'passport';
 const userRouter = express_1.default.Router();
+userRouter.get('/user', (req, res, next) => {
+    console.log('inside getuser endpoint');
+    console.log(req.cookies);
+    res.send('OK');
+});
 userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password } = req.body;
     const userWithExistingEmail = yield user_1.default.findOne({ email });
@@ -30,10 +36,20 @@ userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awa
     const hashedPassword = yield bcrypt_1.default.hash(password, 12);
     const newUser = new user_1.default({ email, username, password: hashedPassword });
     yield newUser.save();
-    return res.json({
+    jsonwebtoken_1.default.sign({
         user_id: newUser._id,
         username: newUser.username,
         user_email: newUser.email,
+    }, 'jwt-secret-key-so-private', {}, (err, token) => {
+        if (err)
+            throw new AppError_1.default(500, err.message);
+        res.cookie('token', token, { httpOnly: true }).json({
+            user_id: newUser._id,
+            username: newUser.username,
+            user_email: newUser.email,
+        });
+        console.log('inside register');
+        console.log(req.cookies);
     });
     // try {
     //   const { email, username, password } = req.body;
@@ -79,10 +95,20 @@ userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaite
     const passwordMatches = yield bcrypt_1.default.compare(password, user.password);
     if (!passwordMatches)
         throw new AppError_1.default(400, 'Username or password is incorrect.');
-    res.json({
+    jsonwebtoken_1.default.sign({
         user_id: user._id,
         username: user.username,
         user_email: user.email,
+    }, 'jwt-secret-key-so-private', {}, (err, token) => {
+        if (err)
+            throw new AppError_1.default(500, err.message);
+        res.cookie('token', token, { httpOnly: true }).json({
+            user_id: user._id,
+            username: user.username,
+            user_email: user.email,
+        });
+        console.log('inside login');
+        console.log(req.cookies);
     });
     // await passport.authenticate('local', (err: any, user: any, info: any) => {
     //   if (err) {
@@ -127,9 +153,7 @@ userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaite
     // })(req, res, next);
 })));
 userRouter.get('/logout', (req, res, next) => {
-    // req.logOut((err: any) => {
-    //   if (err) throw err;
-    // });
+    res.clearCookie('token');
     res.status(200).send('Logged you out.');
 });
 exports.default = userRouter;

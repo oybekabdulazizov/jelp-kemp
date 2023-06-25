@@ -1,5 +1,6 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import { asyncHandler } from '../utils';
 import User from '../models/user';
@@ -7,6 +8,12 @@ import AppError from '../AppError';
 // import passport from 'passport';
 
 const userRouter: Router = express.Router();
+
+userRouter.get('/user', (req: Request, res: Response, next: NextFunction) => {
+  console.log('inside getuser endpoint');
+  console.log(req.cookies);
+  res.send('OK');
+});
 
 userRouter.post(
   '/register',
@@ -23,11 +30,25 @@ userRouter.post(
     const newUser = new User({ email, username, password: hashedPassword });
     await newUser.save();
 
-    return res.json({
-      user_id: newUser._id,
-      username: newUser.username,
-      user_email: newUser.email,
-    });
+    jwt.sign(
+      {
+        user_id: newUser._id,
+        username: newUser.username,
+        user_email: newUser.email,
+      },
+      'jwt-secret-key-so-private',
+      {},
+      (err, token) => {
+        if (err) throw new AppError(500, err.message);
+        res.cookie('token', token, { httpOnly: true }).json({
+          user_id: newUser._id,
+          username: newUser.username,
+          user_email: newUser.email,
+        });
+        console.log('inside register');
+        console.log(req.cookies);
+      }
+    );
     // try {
     //   const { email, username, password } = req.body;
     //   const user = new User({ email, username });
@@ -78,11 +99,25 @@ userRouter.post(
     if (!passwordMatches)
       throw new AppError(400, 'Username or password is incorrect.');
 
-    res.json({
-      user_id: user._id,
-      username: user.username,
-      user_email: user.email,
-    });
+    jwt.sign(
+      {
+        user_id: user._id,
+        username: user.username,
+        user_email: user.email,
+      },
+      'jwt-secret-key-so-private',
+      {},
+      (err, token) => {
+        if (err) throw new AppError(500, err.message);
+        res.cookie('token', token, { httpOnly: true }).json({
+          user_id: user._id,
+          username: user.username,
+          user_email: user.email,
+        });
+        console.log('inside login');
+        console.log(req.cookies);
+      }
+    );
 
     // await passport.authenticate('local', (err: any, user: any, info: any) => {
     //   if (err) {
@@ -129,9 +164,7 @@ userRouter.post(
 );
 
 userRouter.get('/logout', (req: Request, res: Response, next: NextFunction) => {
-  // req.logOut((err: any) => {
-  //   if (err) throw err;
-  // });
+  res.clearCookie('token');
   res.status(200).send('Logged you out.');
 });
 
