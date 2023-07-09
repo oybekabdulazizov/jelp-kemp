@@ -12,7 +12,19 @@ const userRouter: Router = express.Router();
 userRouter.get('/user', (req: Request, res: Response, next: NextFunction) => {
   console.log('inside getuser endpoint');
   console.log(req.cookies);
-  res.send('OK');
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, 'jwt-secret-key-so-private', {}, (err, user) => {
+      if (err) {
+        throw new AppError(500, err.message);
+      }
+      console.log('user from jwt.verify');
+      console.log(user);
+      res.json(user);
+    });
+  } else {
+    res.json(null);
+  }
 });
 
 userRouter.post(

@@ -25,6 +25,18 @@ export type Review_Type = Review_Validation_Type_Yup & {
 //   price: string | boolean;
 // };
 
+export type User_Type_forContextState = {
+  user_id: string;
+  username: string;
+  user_email: string;
+  iat?: number;
+};
+
+export type UserContext_Type = {
+  user: User_Type_forContextState;
+  setUser: (user: User_Type_forContextState) => void;
+};
+
 export type Custom_Snackbar_Type = {
   open: boolean;
   Transition: ComponentType<
