@@ -1,6 +1,9 @@
 import axios from 'axios';
 // import { useContext } from 'react';
-import { useEffect, useState } from 'react';
+import {
+  // useEffect,
+  useState,
+} from 'react';
 import {
   Link,
   Location,
@@ -23,16 +26,26 @@ export default function NavBar() {
   // const { user } = useContext(UserContext) as UserContext_Type;
   // const isLoggedIn: boolean = Object.keys(user).length > 0;
 
-  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
+    () => {
+      const user = localStorage.getItem('user');
+      if (user) {
+        return JSON.parse(user);
+      } else {
+        return null;
+      }
+    }
+  );
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
 
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    }
-  });
+  // useEffect(() => {
+  //   const user = localStorage.getItem('user');
+  //   if (user) {
+  //     const parsed = JSON.parse(user);
+  //     setCurrentUser(parsed);
+  //   }
+  // }, []);
 
   const handleLogout = async () => {
     try {
@@ -40,6 +53,7 @@ export default function NavBar() {
         withCredentials: true,
       });
       localStorage.removeItem('user');
+      setCurrentUser(null);
       navigate('/login', {
         state: {
           status: 'success',

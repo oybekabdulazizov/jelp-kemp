@@ -31,12 +31,28 @@ export default function CampgroundForm() {
   // const isLoggedIn: boolean = Object.keys(user).length > 0;
   // console.log(currentUser);
 
-  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
+  const [currentUser] = useState<CurrentUser_Type | null>(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsed = JSON.parse(user);
+      return parsed;
+    } else {
+      return null;
+    }
+  });
   const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
   const { _id } = useParams();
   const isCreate: boolean = !_id;
+
+  // useEffect(() => {
+  //   const user = localStorage.getItem('user');
+  //   if (user) {
+  //     const parsed = JSON.parse(user);
+  //     setCurrentUser(parsed);
+  //   }
+  // }, []);
 
   const create = async (values: any) => {
     try {
@@ -110,13 +126,6 @@ export default function CampgroundForm() {
     onSubmit,
   });
 
-  useState(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setCurrentUser(JSON.parse(user));
-    }
-  });
-
   useEffect(() => {
     if (!isCreate) {
       const findCampground = async () => {
@@ -138,9 +147,9 @@ export default function CampgroundForm() {
     }
   }, [isCreate]);
 
-  // const state = {
-  //   path: location.pathname,
-  // };
+  const state = {
+    path: location.pathname,
+  };
 
   return (
     <>
@@ -333,7 +342,7 @@ export default function CampgroundForm() {
           </div>
         </div>
       ) : (
-        <Navigate to='/login' />
+        <Navigate to='/login' state={state} />
       )}
       {/* )} */}
     </>

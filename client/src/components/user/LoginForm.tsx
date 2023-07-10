@@ -45,16 +45,15 @@ export default function LoginForm() {
       });
       if (response.data) {
         const user = JSON.stringify(response.data);
-        localStorage.clear();
+        localStorage.removeItem('user');
         localStorage.setItem('user', user);
       }
       const pathTo: string = (location.state?.path as string) || '/';
       // saveUserToLocalStorate(response.data);
-      navigate('/', {
+      navigate(pathTo, {
         state: {
           status: 'success',
           message: 'Welcome back🥳',
-          pathTo,
         },
       });
     } catch (err: any) {
