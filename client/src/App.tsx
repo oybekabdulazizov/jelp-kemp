@@ -1,6 +1,10 @@
-// import { useEffect, useState } from 'react';
+// import {
+//   useEffect,
+//   useState,
+// } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+// import { UserContextProvider } from './contexts/userContext';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Campgrounds from './components/campground';
@@ -12,17 +16,18 @@ import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
 
 export default function App() {
-  // const [user, setUser] = useState<{} | null>(null);
+  // const [currentUser, setCurrentUser] = useState<{} | null>(null);
 
   // useEffect(() => {
-  //   const userToken = localStorage.getItem('user-token');
-  //   if (userToken) {
-  //     setUser(JSON.parse(userToken));
+  //   const currentUser = localStorage.getItem('user');
+  //   if (currentUser) {
+  //     setCurrentUser(JSON.parse(currentUser));
   //   }
   // }, []);
 
   return (
     <>
+      {/* <UserContextProvider> */}
       <NavBar />
       <div className='container my-4'>
         <Routes>
@@ -41,6 +46,7 @@ export default function App() {
         </Routes>
       </div>
       <Footer />
+      {/* </UserContextProvider> */}
     </>
   );
 }

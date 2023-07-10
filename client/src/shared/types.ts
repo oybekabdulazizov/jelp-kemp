@@ -25,23 +25,32 @@ export type Review_Type = Review_Validation_Type_Yup & {
 //   price: string | boolean;
 // };
 
-export type User_Type_forContextState = {
-  user_id: string;
-  username: string;
-  user_email: string;
-  iat?: number;
-};
+// export type User_Type_forContextState = {
+//   user_id: string;
+//   username: string;
+//   user_email: string;
+//   iat?: number;
+// };
 
-export type UserContext_Type = {
-  user: User_Type_forContextState;
-  setUser: (user: User_Type_forContextState) => void;
-};
+// export type UserContext_Type = {
+//   // isLoggedIn: boolean;
+//   user: User_Type_forContextState;
+//   // setIsLoggedIn: (isLoggedIn: boolean) => void;
+//   setUser: (user: User_Type_forContextState) => void;
+// };
 
 export type Custom_Snackbar_Type = {
   open: boolean;
   Transition: ComponentType<
     TransitionProps & { children: ReactElement<any, any> }
   >;
+};
+
+export type CurrentUser_Type = {
+  user_id: string;
+  username: string;
+  user_email: string;
+  iat?: number;
 };
 
 export type Dimentions_Type = {

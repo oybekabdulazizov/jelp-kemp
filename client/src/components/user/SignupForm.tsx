@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+  // useContext,
+  useState,
+} from 'react';
 import {
   Link,
   Location,
@@ -11,12 +14,21 @@ import axios from 'axios';
 
 import { SignupSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
+// import { CurrentUser_Type } from '../../shared/types';
+// import {
+//   UserContext,
+//   saveUserToLocalStorate,
+// } from '../../contexts/userContext';
+// import { UserContext_Type } from '../../shared/types';
 
 // type Props = {
-//   setUser: (user: {} | null) => void;
+//   setCurrentUser: (currentUser: {} | null) => void;
 // };
 
 export default function SignupForm() {
+  // // const { setUser } = useContext(UserContext) as UserContext_Type;
+  // const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
+
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
   const navigate: NavigateFunction = useNavigate();
@@ -28,19 +40,30 @@ export default function SignupForm() {
     setError(false);
 
     try {
-      // const response =
-      await axios.post(`http://localhost:3001/register`, values, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `http://localhost:3001/register`,
+        values,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data) {
+        const user = JSON.stringify(response.data);
+        localStorage.clear();
+        localStorage.setItem('user', user);
+      }
+      const pathTo: string = (location.state?.path as string) || '/';
       // const userToken = JSON.stringify(response.data);
       // localStorage.clear();
       // localStorage.setItem('user-token', userToken);
       // setUser(userToken);
       // const pathTo: string = location.state?.path as string | '/';
+      // saveUserToLocalStorate(response.data);
       navigate('/', {
         state: {
           status: 'success',
           message: 'Welcome to Jelp-Kemp🙌',
+          pathTo,
         },
       });
     } catch (err: any) {

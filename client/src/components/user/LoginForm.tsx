@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import {
+  // useContext,
+  useState,
+} from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import {
@@ -11,12 +14,21 @@ import {
 
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
+// import { CurrentUser_Type } from '../../shared/types';
+// import {
+//   UserContext,
+//   saveUserToLocalStorate,
+// } from '../../contexts/userContext';
 
 // type Props = {
-//   setUser: (user: {} | null) => void;
+//   // currentUser: {} | null;
+//   setCurrentUser: (currentUser: {} | null) => void;
 // };
 
 export default function LoginForm() {
+  // const { user, setUser } = useContext(UserContext) as UserContext_Type;
+  // const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
+
   const [allValid, setAllValid] = useState<boolean>(false);
   const [error, setError] = useState<boolean>();
   const navigate: NavigateFunction = useNavigate();
@@ -31,16 +43,18 @@ export default function LoginForm() {
       const response = await axios.post(`http://localhost:3001/login`, values, {
         withCredentials: true,
       });
-      // const userToken = JSON.stringify(response.data);
-      // localStorage.clear();
-      // localStorage.setItem('user-token', userToken);
-      // setUser(userToken);
-      // const pathTo: string = (location.state?.path as string) || '/';
-      console.log(response);
+      if (response.data) {
+        const user = JSON.stringify(response.data);
+        localStorage.clear();
+        localStorage.setItem('user', user);
+      }
+      const pathTo: string = (location.state?.path as string) || '/';
+      // saveUserToLocalStorate(response.data);
       navigate('/', {
         state: {
           status: 'success',
           message: 'Welcome back🥳',
+          pathTo,
         },
       });
     } catch (err: any) {

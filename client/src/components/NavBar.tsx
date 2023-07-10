@@ -1,5 +1,6 @@
 import axios from 'axios';
-// import { useEffect, useState } from 'react';
+// import { useContext } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Link,
   Location,
@@ -8,6 +9,10 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
+import { CurrentUser_Type } from '../shared/types';
+
+// import { UserContext } from '../contexts/userContext';
+// import { UserContext_Type } from '../shared/types';
 
 // type Props = {
 //   user: {} | null;
@@ -15,15 +20,26 @@ import {
 // };
 
 export default function NavBar() {
+  // const { user } = useContext(UserContext) as UserContext_Type;
+  // const isLoggedIn: boolean = Object.keys(user).length > 0;
+
+  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
+
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (user) {
+      setCurrentUser(JSON.parse(user));
+    }
+  });
 
   const handleLogout = async () => {
     try {
       const response = await axios.get('http://localhost:3001/logout', {
         withCredentials: true,
       });
-      localStorage.removeItem('user-token');
+      localStorage.removeItem('user');
       navigate('/login', {
         state: {
           status: 'success',
@@ -55,19 +71,24 @@ export default function NavBar() {
             </NavLink>
           </div>
           <div className='navbar-nav ms-auto'>
-            <button className='nav-link mx-2' onClick={handleLogout}>
-              Log out
-            </button>
-            <NavLink to='/login' end className='nav-link mx-2'>
-              Log in
-            </NavLink>
-            <NavLink
-              to='/signup'
-              end
-              className='nav-link mx-2 border border-secondary rounded'
-            >
-              Sign up
-            </NavLink>
+            {currentUser !== null ? (
+              <button className='nav-link mx-2' onClick={handleLogout}>
+                Log out
+              </button>
+            ) : (
+              <>
+                <NavLink to='/login' end className='nav-link mx-2'>
+                  Log in
+                </NavLink>
+                <NavLink
+                  to='/signup'
+                  end
+                  className='nav-link mx-2 border border-secondary rounded'
+                >
+                  Sign up
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
         <div className='dropstart' data-bs-theme='dark'>
@@ -90,17 +111,20 @@ export default function NavBar() {
               New Campground
             </NavLink>
             <hr className='dropdown-divider' />
-            <button className='dropdown-item' onClick={handleLogout}>
-              Log out
-            </button>
-            <>
-              <NavLink to='/login' end className='dropdown-item'>
-                Log in
-              </NavLink>
-              <NavLink to='/signup' end className='dropdown-item'>
-                Sign up
-              </NavLink>
-            </>
+            {currentUser !== null ? (
+              <button className='dropdown-item' onClick={handleLogout}>
+                Log out
+              </button>
+            ) : (
+              <>
+                <NavLink to='/login' end className='dropdown-item'>
+                  Log in
+                </NavLink>
+                <NavLink to='/signup' end className='dropdown-item'>
+                  Sign up
+                </NavLink>
+              </>
+            )}
           </div>
         </div>
       </div>
