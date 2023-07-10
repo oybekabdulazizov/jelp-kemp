@@ -20,24 +20,23 @@ const user_1 = __importDefault(require("../models/user"));
 const AppError_1 = __importDefault(require("../AppError"));
 // import passport from 'passport';
 const userRouter = express_1.default.Router();
-userRouter.get('/user', (req, res, next) => {
-    console.log('inside getuser endpoint');
-    console.log(req.cookies);
-    const { token } = req.cookies;
-    if (token) {
-        jsonwebtoken_1.default.verify(token, 'jwt-secret-key-so-private', {}, (err, user) => {
-            if (err) {
-                throw new AppError_1.default(500, err.message);
-            }
-            console.log('user from jwt.verify');
-            console.log(user);
-            res.json(user);
-        });
-    }
-    else {
-        res.json(null);
-    }
-});
+// userRouter.get('/user', (req: Request, res: Response, next: NextFunction) => {
+//   console.log('inside getuser endpoint');
+//   console.log(req.cookies);
+//   const { token } = req.cookies;
+//   if (token) {
+//     jwt.verify(token, 'jwt-secret-key-so-private', {}, (err, user) => {
+//       if (err) {
+//         throw new AppError(500, err.message);
+//       }
+//       console.log('user from jwt.verify');
+//       console.log(user);
+//       res.json(user);
+//     });
+//   } else {
+//     res.json(null);
+//   }
+// });
 userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password } = req.body;
     const userWithExistingEmail = yield user_1.default.findOne({ email });
