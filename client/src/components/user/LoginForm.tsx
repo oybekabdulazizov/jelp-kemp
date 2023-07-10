@@ -14,18 +14,19 @@ import {
 
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
+import { CurrentUser_Type } from '../../shared/types';
 // import { CurrentUser_Type } from '../../shared/types';
 // import {
 //   UserContext,
 //   saveUserToLocalStorate,
 // } from '../../contexts/userContext';
 
-// type Props = {
-//   // currentUser: {} | null;
-//   setCurrentUser: (currentUser: {} | null) => void;
-// };
+type Props = {
+  // currentUser: CurrentUser_Type | null;
+  setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
+};
 
-export default function LoginForm() {
+export default function LoginForm({ setCurrentUser }: Props) {
   // const { user, setUser } = useContext(UserContext) as UserContext_Type;
   // const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
 
@@ -48,6 +49,7 @@ export default function LoginForm() {
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
       }
+      setCurrentUser(response.data);
       const pathTo: string = (location.state?.path as string) || '/';
       // saveUserToLocalStorate(response.data);
       navigate(pathTo, {

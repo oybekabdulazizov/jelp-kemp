@@ -21,25 +21,25 @@ import { CampgroundSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
 
-// type Props = {
-//   currentUser: {} | null;
-//   // setCurrentUser: (currentUser: any) => void;
-// };
+type Props = {
+  currentUser: CurrentUser_Type | null;
+  // setCurrentUser: (currentUser: any) => void;
+};
 
-export default function CampgroundForm() {
+export default function CampgroundForm({ currentUser }: Props) {
   // const { user } = useContext(UserContext) as UserContext_Type;
   // const isLoggedIn: boolean = Object.keys(user).length > 0;
   // console.log(currentUser);
 
-  const [currentUser] = useState<CurrentUser_Type | null>(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      const parsed = JSON.parse(user);
-      return parsed;
-    } else {
-      return null;
-    }
-  });
+  // const [currentUser] = useState<CurrentUser_Type | null>(() => {
+  //   const user = localStorage.getItem('user');
+  //   if (user) {
+  //     const parsed = JSON.parse(user);
+  //     return parsed;
+  //   } else {
+  //     return null;
+  //   }
+  // });
   const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();

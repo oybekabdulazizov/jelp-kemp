@@ -14,6 +14,7 @@ import axios from 'axios';
 
 import { SignupSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
+import { CurrentUser_Type } from '../../shared/types';
 // import { CurrentUser_Type } from '../../shared/types';
 // import {
 //   UserContext,
@@ -21,11 +22,11 @@ import CustomSnackbar from '../CustomSnackbar';
 // } from '../../contexts/userContext';
 // import { UserContext_Type } from '../../shared/types';
 
-// type Props = {
-//   setCurrentUser: (currentUser: {} | null) => void;
-// };
+type Props = {
+  setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
+};
 
-export default function SignupForm() {
+export default function SignupForm({ setCurrentUser }: Props) {
   // // const { setUser } = useContext(UserContext) as UserContext_Type;
   // const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(null);
 
@@ -52,6 +53,7 @@ export default function SignupForm() {
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
       }
+      setCurrentUser(response.data);
       const pathTo: string = (location.state?.path as string) || '/';
       // const userToken = JSON.stringify(response.data);
       // localStorage.clear();

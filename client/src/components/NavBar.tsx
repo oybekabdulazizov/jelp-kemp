@@ -1,9 +1,9 @@
 import axios from 'axios';
 // import { useContext } from 'react';
-import {
-  // useEffect,
-  useState,
-} from 'react';
+// import {
+//   useEffect,
+//   useState,
+// } from 'react';
 import {
   Link,
   Location,
@@ -17,25 +17,25 @@ import { CurrentUser_Type } from '../shared/types';
 // import { UserContext } from '../contexts/userContext';
 // import { UserContext_Type } from '../shared/types';
 
-// type Props = {
-//   user: {} | null;
-//   setUser: (user: {} | null) => void;
-// };
+type Props = {
+  currentUser: {} | null;
+  setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
+};
 
-export default function NavBar() {
+export default function NavBar({ currentUser, setCurrentUser }: Props) {
   // const { user } = useContext(UserContext) as UserContext_Type;
   // const isLoggedIn: boolean = Object.keys(user).length > 0;
 
-  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
-    () => {
-      const user = localStorage.getItem('user');
-      if (user) {
-        return JSON.parse(user);
-      } else {
-        return null;
-      }
-    }
-  );
+  // const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
+  //   () => {
+  //     const user = localStorage.getItem('user');
+  //     if (user) {
+  //       return JSON.parse(user);
+  //     } else {
+  //       return null;
+  //     }
+  //   }
+  // );
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
 

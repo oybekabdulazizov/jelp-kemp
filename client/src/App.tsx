@@ -1,7 +1,7 @@
-// import {
-//   useEffect,
-//   useState,
-// } from 'react';
+import {
+  // useEffect,
+  useState,
+} from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 // import { UserContextProvider } from './contexts/userContext';
@@ -14,9 +14,15 @@ import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
+import { CurrentUser_Type } from './shared/types';
 
 export default function App() {
-  // const [currentUser, setCurrentUser] = useState<{} | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
+    () => {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
+    }
+  );
 
   // useEffect(() => {
   //   const currentUser = localStorage.getItem('user');
@@ -28,16 +34,28 @@ export default function App() {
   return (
     <>
       {/* <UserContextProvider> */}
-      <NavBar />
+      <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <div className='container my-4'>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/campgrounds' element={<Campgrounds />} />
-          <Route path='/campgrounds/new' element={<CampgroundForm />} />
-          <Route path='/campgrounds/:_id/edit' element={<CampgroundForm />} />
+          <Route
+            path='/campgrounds/new'
+            element={<CampgroundForm currentUser={currentUser} />}
+          />
+          <Route
+            path='/campgrounds/:_id/edit'
+            element={<CampgroundForm currentUser={currentUser} />}
+          />
           <Route path='/campgrounds/:_id' element={<Details />} />
-          <Route path='/login' element={<LoginForm />} />
-          <Route path='/signup' element={<SignupForm />} />
+          <Route
+            path='/login'
+            element={<LoginForm setCurrentUser={setCurrentUser} />}
+          />
+          <Route
+            path='/signup'
+            element={<SignupForm setCurrentUser={setCurrentUser} />}
+          />
           <Route path='/404-notfound' element={<PageNotFound />} />
           <Route
             path='/*'
