@@ -13,7 +13,9 @@ export default function Campgrounds() {
   useEffect(() => {
     const fetchCampgrounds = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/campgrounds');
+        const response = await axios.get('http://localhost:3001/campgrounds', {
+          withCredentials: true,
+        });
         const data = await response.data;
         setCampgroundsData(data);
       } catch (err) {

@@ -66,12 +66,7 @@ export default function Details() {
     try {
       await axios.post(
         `http://localhost:3001/campgrounds/${_id}/reviews`,
-        values,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
+        values
       );
       actions.resetForm();
       setIsValidReview(false);

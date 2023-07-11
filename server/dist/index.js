@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const safe_1 = __importDefault(require("colors/safe"));
 const AppError_1 = __importDefault(require("./AppError"));
 const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
+const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const error = safe_1.default.red;
 (0, mongoose_1.connect)('mongodb://127.0.0.1:27017/jelp-kemp')
     .then(() => {
@@ -29,10 +31,18 @@ const error = safe_1.default.red;
     console.log(err.message);
 });
 const app = (0, express_1.default)();
-app.use(express_1.default.urlencoded({ extended: true }));
-app.use((0, cors_1.default)());
+app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: 'DELETE,GET,HEAD,PATCH,POST,PUT',
+    optionsSuccessStatus: 200,
+}));
+app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
+app.use(userRoutes_1.default);
 app.get('*', (req, res, next) => {
     next(new AppError_1.default(404, 'Page Not Found!'));
 });

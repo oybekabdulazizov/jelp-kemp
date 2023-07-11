@@ -1,11 +1,13 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import colors from 'colors/safe';
 
 import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
+import userRouter from './routes/userRoutes';
 
 const error = colors.red;
 
@@ -19,10 +21,21 @@ connect('mongodb://127.0.0.1:27017/jelp-kemp')
   });
 
 const app: Express = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+    methods: 'DELETE,GET,HEAD,PATCH,POST,PUT',
+    optionsSuccessStatus: 200,
+  })
+);
+app.use(express.urlencoded({ extended: false }));
+
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
+app.use(userRouter);
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));

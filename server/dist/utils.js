@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.asyncHandler = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
+exports.asyncHandler = exports.validateLoginFormData = exports.validateSignupFormData = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
 const schemas_1 = require("./schemas");
 const AppError_1 = __importDefault(require("./AppError"));
 const validateCampgroundFormData = (req, res, next) => {
@@ -35,6 +35,30 @@ const validateReviewFormData = (req, res, next) => {
     }
 };
 exports.validateReviewFormData = validateReviewFormData;
+const validateSignupFormData = (req, res, next) => {
+    const { email, username, password } = req.body;
+    const { error } = schemas_1.signupSchemaJoi.validate({ email, username, password });
+    if (error) {
+        console.dir(error);
+        throw new AppError_1.default(400, error.details[0].message);
+    }
+    else {
+        next();
+    }
+};
+exports.validateSignupFormData = validateSignupFormData;
+const validateLoginFormData = (req, res, next) => {
+    const { username, password } = req.body;
+    const { error } = schemas_1.loginSchemaJoi.validate({ username, password });
+    if (error) {
+        console.dir(error);
+        throw new AppError_1.default(400, error.details[0].message);
+    }
+    else {
+        next();
+    }
+};
+exports.validateLoginFormData = validateLoginFormData;
 const asyncHandler = (func) => (req, res, next) => {
     func(req, res, next).catch(next);
 };

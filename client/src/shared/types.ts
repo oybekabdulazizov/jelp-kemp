@@ -17,14 +17,6 @@ export type Review_Type = Review_Validation_Type_Yup & {
   _id?: string;
 };
 
-// export type Validation_Type = {
-//   title: string | boolean;
-//   location: string | boolean;
-//   image: string | boolean;
-//   description: string | boolean;
-//   price: string | boolean;
-// };
-
 export type Custom_Snackbar_Type = {
   open: boolean;
   Transition: ComponentType<
@@ -32,9 +24,14 @@ export type Custom_Snackbar_Type = {
   >;
 };
 
+export type CurrentUser_Type = {
+  user_id: string;
+  username: string;
+  user_email: string;
+  iat?: number;
+};
+
 export type Dimentions_Type = {
   width: number;
   height: number;
 };
-
-// export type { Campground_Type, Dimentions_Type };
