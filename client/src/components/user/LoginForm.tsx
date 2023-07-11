@@ -29,9 +29,7 @@ export default function LoginForm({ setCurrentUser }: Props) {
     setError(false);
 
     try {
-      const response = await axios.post(`http://localhost:3001/login`, values, {
-        withCredentials: true,
-      });
+      const response = await axios.post(`/login`, values);
       if (response.data) {
         const user = JSON.stringify(response.data);
         localStorage.removeItem('user');

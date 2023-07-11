@@ -29,13 +29,7 @@ export default function SignupForm({ setCurrentUser }: Props) {
     setError(false);
 
     try {
-      const response = await axios.post(
-        `http://localhost:3001/register`,
-        values,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`/register`, values);
       if (response.data) {
         const user = JSON.stringify(response.data);
         localStorage.removeItem('user');

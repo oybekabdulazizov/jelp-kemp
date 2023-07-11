@@ -28,9 +28,7 @@ export default function CampgroundForm({ currentUser }: Props) {
 
   const create = async (values: any) => {
     try {
-      await axios.post('http://localhost:3001/campgrounds', values, {
-        withCredentials: true,
-      });
+      await axios.post('/campgrounds', values);
     } catch (err: any) {
       console.log(err);
     }
@@ -38,9 +36,7 @@ export default function CampgroundForm({ currentUser }: Props) {
 
   const edit = async (values: any) => {
     try {
-      await axios.put(`http://localhost:3001/campgrounds/${_id}`, values, {
-        withCredentials: true,
-      });
+      await axios.put(`/campgrounds/${_id}`, values);
     } catch (err: any) {
       console.log(err);
     }
@@ -99,9 +95,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     if (!isCreate) {
       const findCampground = async () => {
         try {
-          const response = await axios.get(
-            `http://localhost:3001/campgrounds/${_id}`
-          );
+          const response = await axios.get(`/campgrounds/${_id}`);
           const data = await response.data;
           setValues(data);
         } catch (err: any) {

@@ -21,9 +21,7 @@ export default function NavBar({ currentUser, setCurrentUser }: Props) {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/logout', {
-        withCredentials: true,
-      });
+      const response = await axios.get('/logout');
       localStorage.removeItem('user');
       setCurrentUser(null);
       navigate('/login', {

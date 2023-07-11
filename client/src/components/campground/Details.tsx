@@ -25,9 +25,7 @@ export default function Details() {
   useEffect(() => {
     const findCampground = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/campgrounds/${_id}`
-        );
+        const response = await axios.get(`/campgrounds/${_id}`);
         const campgroundFromDb = await response.data;
         setCampground(campgroundFromDb);
       } catch (err: any) {
@@ -42,7 +40,7 @@ export default function Details() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3001/campgrounds/${_id}`);
+      await axios.delete(`/campgrounds/${_id}`);
       navigate(`/campgrounds`, {
         state: {
           status: 'warning',
@@ -64,10 +62,7 @@ export default function Details() {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
-      await axios.post(
-        `http://localhost:3001/campgrounds/${_id}/reviews`,
-        values
-      );
+      await axios.post(`/campgrounds/${_id}/reviews`, values);
       actions.resetForm();
       setIsValidReview(false);
     } catch (err: any) {
@@ -79,9 +74,7 @@ export default function Details() {
     review_id: string | undefined
   ): Promise<void> => {
     try {
-      await axios.delete(
-        `http://localhost:3001/campgrounds/${_id}/reviews/${review_id}`
-      );
+      await axios.delete(`/campgrounds/${_id}/reviews/${review_id}`);
     } catch (err: any) {
       console.log(err);
     }

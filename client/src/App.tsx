@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -11,6 +12,9 @@ import Footer from './components/Footer';
 import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
 import { CurrentUser_Type } from './shared/types';
+
+axios.defaults.baseURL = 'http://localhost:3001';
+axios.defaults.withCredentials = true;
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
