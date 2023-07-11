@@ -37,7 +37,7 @@ const userRouter = express_1.default.Router();
 //     res.json(null);
 //   }
 // });
-userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.post('/register', utils_1.validateSignupFormData, (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username, password } = req.body;
     const userWithExistingEmail = yield user_1.default.findOne({ email });
     if (userWithExistingEmail)
@@ -97,7 +97,7 @@ userRouter.post('/register', (0, utils_1.asyncHandler)((req, res, next) => __awa
 //   console.log(req.user);
 //   res.send(req.user);
 // });
-userRouter.post('/login', (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+userRouter.post('/login', utils_1.validateLoginFormData, (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, password } = req.body;
     const user = yield user_1.default.findOne({
         $or: [{ username: username }, { email: username }],

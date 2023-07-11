@@ -12,3 +12,14 @@ export const reviewSchemaJoi = Joi.object({
   rating: Joi.number().required().min(1).max(5),
   text: Joi.string().max(1000).required(),
 });
+
+export const signupSchemaJoi = Joi.object({
+  email: Joi.string().email().required(),
+  username: Joi.string().max(100).required(),
+  password: Joi.string().min(8).max(64).required(),
+});
+
+export const loginSchemaJoi = Joi.object({
+  username: Joi.string().max(100).required(),
+  password: Joi.string().min(8).max(64).required(),
+});

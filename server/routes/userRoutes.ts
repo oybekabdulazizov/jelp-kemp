@@ -2,7 +2,11 @@ import express, { NextFunction, Request, Response, Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { asyncHandler } from '../utils';
+import {
+  asyncHandler,
+  validateLoginFormData,
+  validateSignupFormData,
+} from '../utils';
 import User from '../models/user';
 import AppError from '../AppError';
 // import passport from 'passport';
@@ -29,6 +33,7 @@ const userRouter: Router = express.Router();
 
 userRouter.post(
   '/register',
+  validateSignupFormData,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { email, username, password } = req.body;
 
@@ -100,6 +105,7 @@ userRouter.post(
 
 userRouter.post(
   '/login',
+  validateLoginFormData,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { username, password } = req.body;
 
