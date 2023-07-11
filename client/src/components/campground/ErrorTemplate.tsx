@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { NotFound_Type } from './types';
+import { NotFound_Type } from '../../shared/types';
 
 export const NotFound = ({ status, message }: NotFound_Type) => {
   let item: string = '';

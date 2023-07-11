@@ -35,3 +35,8 @@ export type Dimentions_Type = {
   width: number;
   height: number;
 };
+
+export type NotFound_Type = {
+  status: number;
+  message: string;
+};
