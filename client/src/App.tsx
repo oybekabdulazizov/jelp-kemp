@@ -1,10 +1,6 @@
-import {
-  // useEffect,
-  useState,
-} from 'react';
+import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-// import { UserContextProvider } from './contexts/userContext';
 import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Campgrounds from './components/campground';
@@ -24,16 +20,8 @@ export default function App() {
     }
   );
 
-  // useEffect(() => {
-  //   const currentUser = localStorage.getItem('user');
-  //   if (currentUser) {
-  //     setCurrentUser(JSON.parse(currentUser));
-  //   }
-  // }, []);
-
   return (
     <>
-      {/* <UserContextProvider> */}
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <div className='container my-4'>
         <Routes>
@@ -64,7 +52,6 @@ export default function App() {
         </Routes>
       </div>
       <Footer />
-      {/* </UserContextProvider> */}
     </>
   );
 }

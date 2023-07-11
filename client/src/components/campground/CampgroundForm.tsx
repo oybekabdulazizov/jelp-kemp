@@ -1,9 +1,5 @@
 import axios from 'axios';
-import {
-  // useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import {
   Link,
   Location,
@@ -15,52 +11,25 @@ import {
 } from 'react-router-dom';
 import { useFormik } from 'formik';
 
-// import { UserContext } from '../../contexts/userContext';
-// import { UserContext_Type } from '../../shared/types';
 import { CampgroundSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
-  // setCurrentUser: (currentUser: any) => void;
 };
 
 export default function CampgroundForm({ currentUser }: Props) {
-  // const { user } = useContext(UserContext) as UserContext_Type;
-  // const isLoggedIn: boolean = Object.keys(user).length > 0;
-  // console.log(currentUser);
-
-  // const [currentUser] = useState<CurrentUser_Type | null>(() => {
-  //   const user = localStorage.getItem('user');
-  //   if (user) {
-  //     const parsed = JSON.parse(user);
-  //     return parsed;
-  //   } else {
-  //     return null;
-  //   }
-  // });
   const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
   const { _id } = useParams();
   const isCreate: boolean = !_id;
 
-  // useEffect(() => {
-  //   const user = localStorage.getItem('user');
-  //   if (user) {
-  //     const parsed = JSON.parse(user);
-  //     setCurrentUser(parsed);
-  //   }
-  // }, []);
-
   const create = async (values: any) => {
     try {
       await axios.post('http://localhost:3001/campgrounds', values, {
         withCredentials: true,
-        // headers: {
-        //   'Content-Type': 'application/x-www-form-urlencoded',
-        // },
       });
     } catch (err: any) {
       console.log(err);
@@ -153,9 +122,6 @@ export default function CampgroundForm({ currentUser }: Props) {
 
   return (
     <>
-      {/* {!localStorage.getItem('user-token') ? (
-        <Navigate to='/login' state={state} />
-      ) : ( */}
       {currentUser !== null ? (
         <div>
           <CustomSnackbar location={location} />
@@ -344,7 +310,6 @@ export default function CampgroundForm({ currentUser }: Props) {
       ) : (
         <Navigate to='/login' state={state} />
       )}
-      {/* )} */}
     </>
   );
 }
