@@ -1,6 +1,4 @@
 import { model, Schema } from 'mongoose';
-// import bcrypt from 'bcrypt';
-// import passportLocalMongoose from 'passport-local-mongoose';
 
 interface IUser {
   email: string;
@@ -22,8 +20,6 @@ const UserSchema = new Schema<IUser>({
     required: true,
   },
 });
-
-// UserSchema.plugin(passportLocalMongoose);
 
 const User = model<IUser>('User', UserSchema);
 
