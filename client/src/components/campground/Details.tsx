@@ -18,6 +18,7 @@ import CustomSnackbar from '../CustomSnackbar';
 export default function Details() {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
+  const [deleting, setDeleting] = useState<boolean>(false);
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const location: Location = useLocation();
@@ -40,10 +41,11 @@ export default function Details() {
         });
       }
     };
-    findCampground();
-  }, []);
+    if (!deleting) findCampground();
+  }, [campground]);
 
   const handleDelete = async () => {
+    setDeleting(true);
     try {
       await axios.delete(`/campgrounds/${_id}`);
       navigate(`/campgrounds`, {
@@ -55,6 +57,7 @@ export default function Details() {
     } catch (err) {
       console.log(err);
     }
+    setDeleting(false);
   };
 
   const initialValues = {
