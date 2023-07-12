@@ -36,15 +36,15 @@ export default function Details() {
     };
 
     findCampground();
-  }, [campground]);
+  }, []);
 
   const handleDelete = async () => {
     try {
       await axios.delete(`/campgrounds/${_id}`);
       navigate(`/campgrounds`, {
         state: {
-          status: 'warning',
-          message: `Campground deleted and it can't be retrieved!`,
+          status: 'success',
+          message: `Successfully deleted the campground.`,
         },
       });
     } catch (err) {
