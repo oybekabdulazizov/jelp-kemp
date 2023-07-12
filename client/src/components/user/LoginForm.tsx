@@ -28,21 +28,35 @@ export default function LoginForm({ setCurrentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setError(false);
 
+    const pathTo: string = (location.state?.path as string) || '/';
+
     try {
-      const response = await axios.post(`/login`, values);
-      if (response.data) {
-        const user = JSON.stringify(response.data);
+      const { data } = await axios.post(`/login`, values);
+      if (data.error) {
+        setError(true);
+        setAllValid(false);
+        navigate(location.pathname, {
+          state: {
+            status: 'error',
+            message: data.error,
+          },
+        });
+        return;
+      }
+
+      if (data) {
+        const user = JSON.stringify(data);
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
+        setCurrentUser(data);
+        navigate(pathTo, {
+          state: {
+            status: 'success',
+            message: `Welcome back, ${data.username}🥳`,
+          },
+        });
+        return;
       }
-      setCurrentUser(response.data);
-      const pathTo: string = (location.state?.path as string) || '/';
-      navigate(pathTo, {
-        state: {
-          status: 'success',
-          message: 'Welcome back🥳',
-        },
-      });
     } catch (err: any) {
       setAllValid(false);
       setError(true);

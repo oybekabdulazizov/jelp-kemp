@@ -12,10 +12,10 @@ export const signup = asyncHandler(
 
     const userWithExistingEmail = await User.findOne({ email });
     if (userWithExistingEmail)
-      return next(new AppError(400, 'Email already taken.'));
+      return res.json({ error: 'Email already taken.' });
     const userWithExistingUsername = await User.findOne({ username });
     if (userWithExistingUsername)
-      return next(new AppError(400, 'Username already taken'));
+      return res.json({ error: 'Username already taken' });
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = new User({ email, username, password: hashedPassword });
@@ -48,10 +48,10 @@ export const login = asyncHandler(
     const user = await User.findOne({
       $or: [{ username: username }, { email: username }],
     });
-    if (!user) throw new AppError(400, 'Username or password is incorrect.');
+    if (!user) return res.json({ error: 'Username or password is incorrect.' });
     const passwordMatches = await bcrypt.compare(password, user.password);
     if (!passwordMatches)
-      throw new AppError(400, 'Username or password is incorrect.');
+      return res.json({ error: 'Username or password is incorrect.' });
 
     jwt.sign(
       {

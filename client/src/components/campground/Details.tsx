@@ -26,15 +26,20 @@ export default function Details() {
     const findCampground = async () => {
       try {
         const response = await axios.get(`/campgrounds/${_id}`);
-        const campgroundFromDb = await response.data;
-        setCampground(campgroundFromDb);
+        if (response.data.error) {
+          navigate('/campgrounds', {
+            state: { status: 'error', message: response.data.error },
+          });
+        } else {
+          const campgroundFromDb = await response.data;
+          setCampground(campgroundFromDb);
+        }
       } catch (err: any) {
         navigate('/campgrounds', {
-          state: { status: 'error', message: 'Cannot find that campground!' },
+          state: { status: 'error', message: err.message },
         });
       }
     };
-
     findCampground();
   }, []);
 

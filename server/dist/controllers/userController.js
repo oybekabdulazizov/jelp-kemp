@@ -22,10 +22,10 @@ exports.signup = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0,
     const { email, password, username } = req.body;
     const userWithExistingEmail = yield user_1.default.findOne({ email });
     if (userWithExistingEmail)
-        return next(new AppError_1.default(400, 'Email already taken.'));
+        return res.json({ error: 'Email already taken.' });
     const userWithExistingUsername = yield user_1.default.findOne({ username });
     if (userWithExistingUsername)
-        return next(new AppError_1.default(400, 'Username already taken'));
+        return res.json({ error: 'Username already taken' });
     const hashedPassword = yield bcrypt_1.default.hash(password, 12);
     const newUser = new user_1.default({ email, username, password: hashedPassword });
     yield newUser.save();
@@ -49,10 +49,10 @@ exports.login = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, 
         $or: [{ username: username }, { email: username }],
     });
     if (!user)
-        throw new AppError_1.default(400, 'Username or password is incorrect.');
+        return res.json({ error: 'Username or password is incorrect.' });
     const passwordMatches = yield bcrypt_1.default.compare(password, user.password);
     if (!passwordMatches)
-        throw new AppError_1.default(400, 'Username or password is incorrect.');
+        return res.json({ error: 'Username or password is incorrect.' });
     jsonwebtoken_1.default.sign({
         user_id: user._id,
         username: user.username,
