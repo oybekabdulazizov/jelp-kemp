@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { validateCampgroundFormData } from '../utils';
+import { validateCampgroundFormData } from '../middlewares';
 import {
   createCampground,
   deleteCampground,

@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { validateReviewFormData } from '../utils';
+import { validateReviewFormData } from '../middlewares';
 import { addReview, deleteReview } from '../controllers/reviewController';
 
 const reviewRouter: Router = express.Router({ mergeParams: true });
