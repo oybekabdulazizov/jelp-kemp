@@ -139,7 +139,11 @@ export default function Details({ currentUser }: Props) {
           </div>
         </div>
         <div className='col-6'>
-          <ReviewForm {...formik} isValidReview={isValidReview} />
+          <ReviewForm
+            {...formik}
+            isValidReview={isValidReview}
+            currentUser={currentUser}
+          />
           <div className='card'>
             <ul className='list-group list-group-flush'>
               {campground?.reviews.map((review) => (

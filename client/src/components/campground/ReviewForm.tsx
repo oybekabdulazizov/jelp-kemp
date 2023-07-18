@@ -1,9 +1,13 @@
 import { FormikProps } from 'formik';
 
-import { Review_Validation_Type_Yup } from '../../shared/types';
+import {
+  CurrentUser_Type,
+  Review_Validation_Type_Yup,
+} from '../../shared/types';
 
 type Props = FormikProps<Review_Validation_Type_Yup> & {
   isValidReview: boolean;
+  currentUser: CurrentUser_Type | null;
 };
 
 export default function ReviewForm({
@@ -15,6 +19,7 @@ export default function ReviewForm({
   touched,
   values,
   isValidReview,
+  currentUser,
 }: Props) {
   return (
     <>
@@ -33,6 +38,7 @@ export default function ReviewForm({
             max={5}
             id='rating'
             onChange={handleChange}
+            disabled={currentUser === null}
           />
         </div>
 
@@ -47,6 +53,10 @@ export default function ReviewForm({
             id='text'
             name='text'
             rows={4}
+            disabled={currentUser === null}
+            placeholder={
+              currentUser === null ? 'Please log in to leave a review.' : ''
+            }
             value={values.text}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -56,7 +66,11 @@ export default function ReviewForm({
           )}
           {isValidReview && <div className='text-success'>Looks good!</div>}
         </div>
-        <button type='submit' className='btn btn-success py-2 fw-medium'>
+        <button
+          type='submit'
+          className='btn btn-success py-2 fw-medium'
+          disabled={currentUser === null}
+        >
           {isSubmitting ? (
             <>
               <span
