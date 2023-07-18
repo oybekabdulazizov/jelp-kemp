@@ -27,7 +27,7 @@ export default function Campgrounds() {
     <div className='container'>
       <CustomSnackbar location={location} />
       <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
-      {campgroundsData.map((campground) => (
+      {campgroundsData.slice(50).map((campground) => (
         <Campground {...campground} key={campground._id} />
       ))}
     </div>

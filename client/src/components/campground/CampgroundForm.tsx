@@ -89,6 +89,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     price: '',
     image: '',
     description: '',
+    author: currentUser?.user_id,
   };
 
   const {
