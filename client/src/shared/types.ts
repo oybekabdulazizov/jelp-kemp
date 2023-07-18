@@ -8,8 +8,15 @@ export type Campground_Validation_Type_Yup = InferType<typeof CampgroundSchema>;
 
 export type Campground_Type = Campground_Validation_Type_Yup & {
   _id?: string;
-  author: CurrentUser_Type;
+  author: CampgroundAuthor_Type;
   reviews: Array<Review_Type>;
+};
+
+export type CampgroundAuthor_Type = {
+  email: string;
+  username: string;
+  password: string;
+  _id?: string;
 };
 
 export type Review_Validation_Type_Yup = InferType<typeof ReviewSchema>;

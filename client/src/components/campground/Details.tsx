@@ -10,12 +10,16 @@ import {
 import axios from 'axios';
 import { useFormik } from 'formik';
 
-import { Campground_Type } from '../../shared/types';
+import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import CustomSnackbar from '../CustomSnackbar';
 
-export default function Details() {
+type Props = {
+  currentUser: CurrentUser_Type | null;
+};
+
+export default function Details({ currentUser }: Props) {
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
   const [deleting, setDeleting] = useState<boolean>(false);
@@ -117,17 +121,20 @@ export default function Details() {
               </li>
               <li className='list-group-item'>${campground?.price}/night</li>
             </ul>
-            <div className='card-body'>
-              <Link
-                to={`/campgrounds/${campground?._id}/edit`}
-                className='btn btn-primary me-2'
-              >
-                Edit
-              </Link>
-              <button className='btn btn-danger' onClick={handleDelete}>
-                Delete
-              </button>
-            </div>
+            {currentUser?.user_id &&
+              campground?.author._id === currentUser?.user_id && (
+                <div className='card-body'>
+                  <Link
+                    to={`/campgrounds/${campground?._id}/edit`}
+                    className='btn btn-primary me-2'
+                  >
+                    Edit
+                  </Link>
+                  <button className='btn btn-danger' onClick={handleDelete}>
+                    Delete
+                  </button>
+                </div>
+              )}
             <div className='card-footer text-body-secondary'>2 days ago</div>
           </div>
         </div>

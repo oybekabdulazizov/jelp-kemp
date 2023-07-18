@@ -39,7 +39,10 @@ export default function App() {
             path='/campgrounds/:_id/edit'
             element={<CampgroundForm currentUser={currentUser} />}
           />
-          <Route path='/campgrounds/:_id' element={<Details />} />
+          <Route
+            path='/campgrounds/:_id'
+            element={<Details currentUser={currentUser} />}
+          />
           <Route
             path='/login'
             element={<LoginForm setCurrentUser={setCurrentUser} />}
