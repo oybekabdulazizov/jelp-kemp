@@ -45,7 +45,9 @@ exports.deleteCampground = (0, utils_1.asyncHandler)((req, res, next) => __await
 }));
 exports.getCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
-    const campground = yield campground_1.default.findById(_id).populate('reviews');
+    const campground = yield campground_1.default.findById(_id)
+        .populate('reviews')
+        .populate('author');
     if (!campground)
         return res.json({ error: 'Campground not found!' });
     res.json(campground);

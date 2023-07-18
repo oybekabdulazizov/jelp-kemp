@@ -8,6 +8,7 @@ interface ICampground {
   price: number;
   location: string;
   image?: string;
+  author: Schema.Types.ObjectId;
   reviews: Array<Object>;
 }
 
@@ -37,6 +38,10 @@ const CampgroundSchema = new Schema<ICampground>({
     type: String,
     maxLength: [250, 'Image Url length cannot exceed 250 characters'],
     required: true,
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
   reviews: [
     {

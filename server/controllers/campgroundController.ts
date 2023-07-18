@@ -49,7 +49,9 @@ export const deleteCampground = asyncHandler(
 export const getCampground = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
-    const campground = await Campground.findById(_id).populate('reviews');
+    const campground = await Campground.findById(_id)
+      .populate('reviews')
+      .populate('author');
     if (!campground) return res.json({ error: 'Campground not found!' });
     res.json(campground);
   }

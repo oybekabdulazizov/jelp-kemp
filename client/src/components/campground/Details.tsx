@@ -112,6 +112,9 @@ export default function Details() {
             </div>
             <ul className='list-group list-group-flush'>
               <li className='list-group-item'>{campground?.location}</li>
+              <li className='list-group-item'>
+                Submitted by {campground?.author.username}
+              </li>
               <li className='list-group-item'>${campground?.price}/night</li>
             </ul>
             <div className='card-body'>

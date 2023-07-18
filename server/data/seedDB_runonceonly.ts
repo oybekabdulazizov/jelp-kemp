@@ -5,6 +5,7 @@ import Campground from '../models/campground';
 import cities from './cities.json';
 import descriptors from './descriptors.json';
 import places from './places.json';
+import Review from '../models/review';
 
 connect('mongodb://127.0.0.1:27017/jelp-kemp')
   .then(() => {
@@ -36,6 +37,7 @@ const getImage = async (title: string): Promise<string> => {
 };
 
 const seedDB = async (): Promise<void> => {
+  await Review.deleteMany({});
   await Campground.deleteMany({});
   const citiesSliced = cities.slice(0, 100);
 
@@ -50,6 +52,7 @@ const seedDB = async (): Promise<void> => {
     const price: number = getRandomPrice();
     const location: string = `${citiesSliced[rand].city}, ${citiesSliced[rand].state}`;
     const image = await getImage(title);
+    const author = '6494c3061a0d0ffca2fb4f52';
 
     const campground = new Campground({
       title,
@@ -57,6 +60,7 @@ const seedDB = async (): Promise<void> => {
       price,
       location,
       image,
+      author,
     });
     campground.save();
   }
