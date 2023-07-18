@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 
 import {
   campgroundSchemaJoi,
@@ -7,6 +8,8 @@ import {
   signupSchemaJoi,
 } from './schemas';
 import AppError from './AppError';
+import { asyncHandler } from './utils';
+import Campground from './models/campground';
 
 export const validateCampgroundFormData = (
   req: Request,
@@ -72,3 +75,21 @@ export const validateLoginFormData = (
     next();
   }
 };
+
+export const isAuthor = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id } = req.params;
+    const campground = await Campground.findById(_id);
+    const result = jwt.verify(
+      req.cookies.token,
+      'jwt-secret-key-so-private',
+      {}
+    ) as any;
+    if (!campground?.author.equals(result.user_id)) {
+      return res.json({
+        error: 'Oops! You do not have permission to edit this campground.',
+      });
+    }
+    next();
+  }
+);

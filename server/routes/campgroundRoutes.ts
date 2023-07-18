@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { validateCampgroundFormData } from '../middlewares';
+import { isAuthor, validateCampgroundFormData } from '../middlewares';
 import {
   createCampground,
   deleteCampground,
@@ -15,7 +15,12 @@ campgroundRouter.get('/', getCampgrounds);
 
 campgroundRouter.post('/', validateCampgroundFormData, createCampground);
 
-campgroundRouter.put('/:_id', validateCampgroundFormData, editCampground);
+campgroundRouter.put(
+  '/:_id',
+  validateCampgroundFormData,
+  isAuthor,
+  editCampground
+);
 
 campgroundRouter.delete('/:_id', deleteCampground);
 

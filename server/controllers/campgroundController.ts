@@ -28,17 +28,6 @@ export const editCampground = asyncHandler(
     const campground = await Campground.findById(_id);
     if (!campground) return res.json({ error: 'Campground Not Found!' });
 
-    const result = jwt.verify(
-      req.cookies.token,
-      'jwt-secret-key-so-private',
-      {}
-    ) as any;
-    if (!campground.author.equals(result.user_id)) {
-      return res.json({
-        error: 'Oops! You do not have permission to edit this campground.',
-      });
-    }
-
     await Campground.findByIdAndUpdate(
       _id,
       { ...req.body },

@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCampground = exports.deleteCampground = exports.editCampground = exports.createCampground = exports.getCampgrounds = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const utils_1 = require("../utils");
 const campground_1 = __importDefault(require("../models/campground"));
 exports.getCampgrounds = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,12 +31,6 @@ exports.editCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter
     const campground = yield campground_1.default.findById(_id);
     if (!campground)
         return res.json({ error: 'Campground Not Found!' });
-    const result = jsonwebtoken_1.default.verify(req.cookies.token, 'jwt-secret-key-so-private', {});
-    if (!campground.author.equals(result.user_id)) {
-        return res.json({
-            error: 'Oops! You do not have permission to edit this campground.',
-        });
-    }
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
     res.json({
         message: 'Campground modified successfully.',
