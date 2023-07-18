@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 
 import Review from './review';
 
@@ -8,7 +8,7 @@ interface ICampground {
   price: number;
   location: string;
   image?: string;
-  author: Schema.Types.ObjectId;
+  author: Types.ObjectId;
   reviews: Array<Object>;
 }
 

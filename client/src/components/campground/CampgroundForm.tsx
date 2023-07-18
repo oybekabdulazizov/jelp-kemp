@@ -36,7 +36,8 @@ export default function CampgroundForm({ currentUser }: Props) {
 
   const edit = async (values: any) => {
     try {
-      await axios.put(`/campgrounds/${_id}`, values);
+      const { data } = await axios.put(`/campgrounds/${_id}`, values);
+      return data;
     } catch (err: any) {
       console.log(err);
     }
@@ -56,14 +57,29 @@ export default function CampgroundForm({ currentUser }: Props) {
         },
       });
     } else {
-      await edit(values);
-      actions.resetForm();
-      navigate(`/campgrounds/${_id}`, {
-        state: {
-          status: 'success',
-          message: 'Campground updated!',
-        },
-      });
+      const data = await edit(values);
+
+      if (data.error) {
+        navigate(`/campgrounds/${_id}`, {
+          state: {
+            status: 'error',
+            message: data.error,
+          },
+        });
+        return;
+      }
+
+      if (data.message) {
+        await edit(values);
+        actions.resetForm();
+        navigate(`/campgrounds/${_id}`, {
+          state: {
+            status: 'success',
+            message: data.message,
+          },
+        });
+        return;
+      }
     }
   };
 
@@ -97,6 +113,15 @@ export default function CampgroundForm({ currentUser }: Props) {
         try {
           const response = await axios.get(`/campgrounds/${_id}`);
           const data = await response.data;
+          if (data.author._id !== currentUser?.user_id) {
+            navigate(`/campgrounds/${_id}`, {
+              state: {
+                status: 'error',
+                message:
+                  'Oops! You do not have permission to edit this campground.',
+              },
+            });
+          }
           setValues(data);
         } catch (err: any) {
           navigate(`/campgrounds`, {
