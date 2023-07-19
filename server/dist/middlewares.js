@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isLoggedIn = exports.isReviewAuthor = exports.isAuthor = exports.validateLoginFormData = exports.validateSignupFormData = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
+exports.isLoggedIn = exports.isReviewAuthor = exports.isCampgroundAuthor = exports.validateLoginFormData = exports.validateSignupFormData = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const schemas_1 = require("./schemas");
 const AppError_1 = __importDefault(require("./AppError"));
@@ -72,7 +72,7 @@ const validateLoginFormData = (req, res, next) => {
     }
 };
 exports.validateLoginFormData = validateLoginFormData;
-exports.isAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.isCampgroundAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     const campground = yield campground_1.default.findById(_id);
     const result = jsonwebtoken_1.default.verify(req.cookies.token, 'jwt-secret-key-so-private', {});

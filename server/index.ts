@@ -46,6 +46,11 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   let updatedCode: number = code;
   let updatedMessage: string = message;
 
+  if (message.includes('jwt must be provided')) {
+    updatedCode = 401;
+    updatedMessage = 'You do not have permission to delete this campground.';
+  }
+
   if (message.includes('Cast to ObjectId failed')) {
     updatedCode = 404;
     updatedMessage = 'Campground Not Found!';

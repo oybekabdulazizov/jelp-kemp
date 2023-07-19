@@ -77,7 +77,7 @@ export const validateLoginFormData = (
   }
 };
 
-export const isAuthor = asyncHandler(
+export const isCampgroundAuthor = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
     const campground = await Campground.findById(_id);

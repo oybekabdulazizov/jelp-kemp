@@ -50,6 +50,10 @@ app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     const { code = 500, message = 'Something went wrong!' } = err;
     let updatedCode = code;
     let updatedMessage = message;
+    if (message.includes('jwt must be provided')) {
+        updatedCode = 401;
+        updatedMessage = 'You do not have permission to delete this campground.';
+    }
     if (message.includes('Cast to ObjectId failed')) {
         updatedCode = 404;
         updatedMessage = 'Campground Not Found!';
