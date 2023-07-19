@@ -10,6 +10,7 @@ import {
 import AppError from './AppError';
 import { asyncHandler } from './utils';
 import Campground from './models/campground';
+import Review from './models/review';
 
 export const validateCampgroundFormData = (
   req: Request,
@@ -88,6 +89,27 @@ export const isAuthor = asyncHandler(
     if (!campground?.author.equals(result.user_id)) {
       return res.json({
         error: 'Oops! You do not have permission to edit this campground.',
+      });
+    }
+    next();
+  }
+);
+
+export const isReviewAuthor = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { review_id } = req.params;
+    const review = await Review.findById(review_id);
+
+    const result = jwt.verify(
+      req.cookies.token,
+      'jwt-secret-key-so-private',
+      {}
+    ) as any;
+
+    if (!review?.author.equals(result.user_id)) {
+      return res.json({
+        error:
+          'Oops! You do not have permission to edit or delete this review.',
       });
     }
     next();

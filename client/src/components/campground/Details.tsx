@@ -152,12 +152,14 @@ export default function Details({ currentUser }: Props) {
                   <h5 className='card-text'> By: {review.author.username}</h5>
                   <p className='card-title'>Rating: {review.rating}</p>
                   <p className='card-text'>Review: {review.text}</p>
-                  <button
-                    className='btn btn-sm btn-danger'
-                    onClick={() => handleReviewDelete(review._id)}
-                  >
-                    Delete
-                  </button>
+                  {review.author._id === currentUser?.user_id && (
+                    <button
+                      className='btn btn-sm btn-danger'
+                      onClick={() => handleReviewDelete(review._id)}
+                    >
+                      Delete
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
