@@ -67,6 +67,7 @@ export default function Details({ currentUser }: Props) {
   const initialValues = {
     rating: 5,
     text: '',
+    author: currentUser?.user_id,
   };
 
   const onSubmit = async (values: any, actions: any) => {
@@ -148,7 +149,8 @@ export default function Details({ currentUser }: Props) {
             <ul className='list-group list-group-flush'>
               {campground?.reviews.map((review) => (
                 <li className='list-group-item' key={review._id}>
-                  <h5 className='card-title'>Rating: {review.rating}</h5>
+                  <h5 className='card-text'> By: {review.author.username}</h5>
+                  <p className='card-title'>Rating: {review.rating}</p>
                   <p className='card-text'>Review: {review.text}</p>
                   <button
                     className='btn btn-sm btn-danger'
