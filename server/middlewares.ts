@@ -93,3 +93,14 @@ export const isAuthor = asyncHandler(
     next();
   }
 );
+
+export const isLoggedIn = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { token } = req.cookies;
+    if (!token) {
+      return res.json({ error: 'Please log in to leave a review.' });
+    }
+
+    next();
+  }
+);

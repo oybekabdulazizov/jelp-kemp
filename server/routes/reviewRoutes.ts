@@ -1,12 +1,12 @@
 import express, { Router } from 'express';
 
-import { validateReviewFormData } from '../middlewares';
+import { isLoggedIn, validateReviewFormData } from '../middlewares';
 import { addReview, deleteReview } from '../controllers/reviewController';
 
 const reviewRouter: Router = express.Router({ mergeParams: true });
 
-reviewRouter.post('/', validateReviewFormData, addReview);
+reviewRouter.post('/', isLoggedIn, validateReviewFormData, addReview);
 
-reviewRouter.delete('/:review_id', deleteReview);
+reviewRouter.delete('/:review_id', isLoggedIn, deleteReview);
 
 export default reviewRouter;

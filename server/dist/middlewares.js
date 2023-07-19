@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isAuthor = exports.validateLoginFormData = exports.validateSignupFormData = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
+exports.isLoggedIn = exports.isAuthor = exports.validateLoginFormData = exports.validateSignupFormData = exports.validateReviewFormData = exports.validateCampgroundFormData = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const schemas_1 = require("./schemas");
 const AppError_1 = __importDefault(require("./AppError"));
@@ -79,6 +79,13 @@ exports.isAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 
         return res.json({
             error: 'Oops! You do not have permission to edit this campground.',
         });
+    }
+    next();
+}));
+exports.isLoggedIn = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { token } = req.cookies;
+    if (!token) {
+        return res.json({ error: 'Please log in to leave a review.' });
     }
     next();
 }));
