@@ -21,8 +21,7 @@ exports.addReview = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void
     const campground = yield campground_1.default.findById(campground_id);
     if (!campground)
         return res.json({ error: 'Campground not found!' });
-    const { rating, text } = req.body;
-    const review = new review_1.default({ rating, text });
+    const review = new review_1.default(Object.assign({}, req.body));
     campground.reviews.push(review);
     yield review.save();
     yield campground.save();

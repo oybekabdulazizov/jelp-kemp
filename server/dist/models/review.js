@@ -13,6 +13,10 @@ const ReviewSchema = new mongoose_1.Schema({
         required: true,
         maxLength: [1000, 'Review cannot exceed 1000 characters'],
     },
+    author: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'User',
+    },
 });
 const Review = (0, mongoose_1.model)('Review', ReviewSchema);
 exports.default = Review;

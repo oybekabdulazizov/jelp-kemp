@@ -53,7 +53,7 @@ export const getCampground = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { _id } = req.params;
     const campground = await Campground.findById(_id)
-      .populate('reviews')
+      .populate({ path: 'reviews', populate: { path: 'author' } })
       .populate('author');
     if (!campground) return res.json({ error: 'Campground not found!' });
     res.json(campground);

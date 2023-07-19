@@ -10,8 +10,7 @@ export const addReview = asyncHandler(
     const campground = await Campground.findById(campground_id);
     if (!campground) return res.json({ error: 'Campground not found!' });
 
-    const { rating, text } = req.body;
-    const review = new Review({ rating, text });
+    const review = new Review({ ...req.body });
 
     campground.reviews.push(review);
     await review.save();

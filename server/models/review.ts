@@ -1,8 +1,9 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, Types } from 'mongoose';
 
 interface IReview {
   rating: number;
   text: string;
+  author: Types.ObjectId;
 }
 
 const ReviewSchema = new Schema<IReview>({
@@ -16,6 +17,10 @@ const ReviewSchema = new Schema<IReview>({
     type: String,
     required: true,
     maxLength: [1000, 'Review cannot exceed 1000 characters'],
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 
