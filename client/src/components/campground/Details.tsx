@@ -14,6 +14,7 @@ import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import CustomSnackbar from '../CustomSnackbar';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -30,18 +31,20 @@ export default function Details({ currentUser }: Props) {
   useEffect(() => {
     const findCampground = async () => {
       try {
-        const response = await axios.get(`/campgrounds/${_id}`);
-        if (response.data.error) {
+        const { data } = await axios.get(`/campgrounds/${_id}`);
+        if (data.error) {
+          toast.error(data.error);
           navigate('/campgrounds', {
-            state: { status: 'error', message: response.data.error },
+            // state: { status: 'error', message: data.error },
           });
         } else {
-          const campgroundFromDb = await response.data;
+          const campgroundFromDb = await data;
           setCampground(campgroundFromDb);
         }
       } catch (err: any) {
+        toast.error(err.message);
         navigate('/campgrounds', {
-          state: { status: 'error', message: err.message },
+          // state: { status: 'error', message: err.message },
         });
       }
     };
@@ -51,13 +54,27 @@ export default function Details({ currentUser }: Props) {
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await axios.delete(`/campgrounds/${_id}`);
-      navigate(`/campgrounds`, {
-        state: {
-          status: 'success',
-          message: `Successfully deleted the campground.`,
-        },
-      });
+      const { data } = await axios.delete(`/campgrounds/${_id}`);
+
+      if (data.error) {
+        toast.error(data.error);
+        navigate(`/campgrounds`, {
+          // state: {
+          //   status: 'error',
+          //   message: data.error,
+          // },
+        });
+      }
+
+      if (data.message) {
+        toast.success(data.message);
+        navigate(`/campgrounds`, {
+          // state: {
+          //   status: 'success',
+          //   message: `Successfully deleted the campground.`,
+          // },
+        });
+      }
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +104,17 @@ export default function Details({ currentUser }: Props) {
     review_id: string | undefined
   ): Promise<void> => {
     try {
-      await axios.delete(`/campgrounds/${_id}/reviews/${review_id}`);
+      const { data } = await axios.delete(
+        `/campgrounds/${_id}/reviews/${review_id}`
+      );
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+      if (data.message) {
+        toast.success(data.message);
+        return;
+      }
     } catch (err: any) {
       console.log(err);
     }

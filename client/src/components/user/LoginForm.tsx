@@ -12,6 +12,7 @@ import {
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
 import { CurrentUser_Type } from '../../shared/types';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
@@ -35,10 +36,12 @@ export default function LoginForm({ setCurrentUser }: Props) {
       if (data.error) {
         setError(true);
         setAllValid(false);
+        toast.error(data.error);
+        console.log(`location.pathname: ${location.pathname}`);
         navigate(location.pathname, {
           state: {
-            status: 'error',
-            message: data.error,
+            // status: 'error',
+            // message: data.error,
           },
         });
         return;
@@ -49,22 +52,24 @@ export default function LoginForm({ setCurrentUser }: Props) {
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
         setCurrentUser(data);
+        toast.success(`Welcome back, ${data.username}🥳`);
         navigate(pathTo, {
-          state: {
-            status: 'success',
-            message: `Welcome back, ${data.username}🥳`,
-          },
+          // state: {
+          //   status: 'success',
+          //   message: `Welcome back, ${data.username}🥳`,
+          // },
         });
         return;
       }
     } catch (err: any) {
       setAllValid(false);
       setError(true);
+      toast.error(err.message);
       navigate('/login', {
-        state: {
-          status: 'error',
-          message: err.message,
-        },
+        // state: {
+        //   status: 'error',
+        //   message: err.message,
+        // },
       });
     }
     actions.resetForm();

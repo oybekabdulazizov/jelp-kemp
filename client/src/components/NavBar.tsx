@@ -1,14 +1,15 @@
 import axios from 'axios';
 import {
   Link,
-  Location,
   NavLink,
-  NavigateFunction,
-  useLocation,
-  useNavigate,
+  // Location,
+  // NavigateFunction,
+  // useLocation,
+  // useNavigate,
 } from 'react-router-dom';
 
 import { CurrentUser_Type } from '../shared/types';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -16,21 +17,23 @@ type Props = {
 };
 
 export default function NavBar({ currentUser, setCurrentUser }: Props) {
-  const navigate: NavigateFunction = useNavigate();
-  const location: Location = useLocation();
+  // const navigate: NavigateFunction = useNavigate();
+  // const location: Location = useLocation();
 
   const handleLogout = async () => {
     try {
-      const response = await axios.get('/logout');
+      // const response =
+      await axios.get('/logout');
       localStorage.removeItem('user');
       setCurrentUser(null);
-      navigate('/login', {
-        state: {
-          status: 'success',
-          message: response.data,
-          path: location.pathname,
-        },
-      });
+      toast.success('Successfully logged out.');
+      // navigate('/login', {
+      //   state: {
+      //     status: 'success',
+      //     message: response.data,
+      //     path: location.pathname,
+      //   },
+      // });
     } catch (err: any) {
       console.log(err);
     }

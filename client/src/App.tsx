@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
+import { Toaster } from 'react-hot-toast';
 
 import NavBar from './components/NavBar';
 import Home from './components/Home';
@@ -27,6 +28,11 @@ export default function App() {
   return (
     <>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      <Toaster
+        position='top-center'
+        gutter={8}
+        toastOptions={{ duration: 3000, style: { marginTop: '3em' } }}
+      />
       <div className='container my-4'>
         <Routes>
           <Route path='/' element={<Home />} />

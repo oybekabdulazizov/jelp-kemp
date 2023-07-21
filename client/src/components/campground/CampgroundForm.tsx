@@ -14,6 +14,7 @@ import { useFormik } from 'formik';
 import { CampgroundSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
+import { toast } from 'react-hot-toast';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -28,7 +29,8 @@ export default function CampgroundForm({ currentUser }: Props) {
 
   const create = async (values: any) => {
     try {
-      await axios.post('/campgrounds', values);
+      const { data } = await axios.post('/campgrounds', values);
+      return data;
     } catch (err: any) {
       console.log(err);
     }
@@ -48,35 +50,37 @@ export default function CampgroundForm({ currentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     if (isCreate) {
-      await create(values);
+      const data = await create(values);
       actions.resetForm();
+      toast.success(data.message);
       navigate(`/campgrounds`, {
-        state: {
-          status: 'success',
-          message: 'New campground created!',
-        },
+        // state: {
+        //   status: 'success',
+        //   message: 'New campground created!',
+        // },
       });
     } else {
       const data = await edit(values);
-
       if (data.error) {
+        toast.error(data.error);
         navigate(`/campgrounds/${_id}`, {
-          state: {
-            status: 'error',
-            message: data.error,
-          },
+          // state: {
+          //   status: 'error',
+          //   message: data.error,
+          // },
         });
         return;
       }
 
       if (data.message) {
-        await edit(values);
+        const data = await edit(values);
         actions.resetForm();
+        toast.success(data.message);
         navigate(`/campgrounds/${_id}`, {
-          state: {
-            status: 'success',
-            message: data.message,
-          },
+          // state: {
+          //   status: 'success',
+          //   message: data.message,
+          // },
         });
         return;
       }
@@ -115,18 +119,22 @@ export default function CampgroundForm({ currentUser }: Props) {
           const response = await axios.get(`/campgrounds/${_id}`);
           const data = await response.data;
           if (data.author._id !== currentUser?.user_id) {
+            toast.error(
+              'Oops! You do not have permission to edit this campground.'
+            );
             navigate(`/campgrounds/${_id}`, {
-              state: {
-                status: 'error',
-                message:
-                  'Oops! You do not have permission to edit this campground.',
-              },
+              // state: {
+              //   status: 'error',
+              //   message:
+              //     'Oops! You do not have permission to edit this campground.',
+              // },
             });
           }
           setValues(data);
         } catch (err: any) {
+          toast.error(err.messsage);
           navigate(`/campgrounds`, {
-            state: { status: 'error', message: 'Cannot find that campground!' },
+            // state: { status: 'error', message: 'Cannot find that campground!' },
           });
         }
       };
