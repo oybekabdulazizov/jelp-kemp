@@ -36,9 +36,7 @@ export default function SignupForm({ setCurrentUser }: Props) {
         setAllValid(false);
         toast.error(data.error);
         return;
-      }
-
-      if (data.message) {
+      } else {
         const user = JSON.stringify(data);
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
