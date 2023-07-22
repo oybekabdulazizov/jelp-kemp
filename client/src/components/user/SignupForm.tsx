@@ -8,11 +8,11 @@ import {
 } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 import { SignupSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
-import { toast } from 'react-hot-toast';
 
 type Props = {
   setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
@@ -37,17 +37,17 @@ export default function SignupForm({ setCurrentUser }: Props) {
         setError(true);
         setAllValid(false);
         toast.error(data.error);
-        console.log(`location.pathname: ${location.pathname}`);
-        navigate(location.pathname, {
-          // state: {
-          //   status: 'error',
-          //   message: data.error,
-          // },
-        });
+        // console.log(`location.pathname: ${location.pathname}`);
+        // navigate(location.pathname, {
+        //   state: {
+        //   status: 'error',
+        //   message: data.error,
+        //    },
+        // });
         return;
       }
 
-      if (data) {
+      if (data.message) {
         const user = JSON.stringify(data);
         localStorage.removeItem('user');
         localStorage.setItem('user', user);

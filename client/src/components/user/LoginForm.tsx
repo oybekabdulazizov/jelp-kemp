@@ -8,11 +8,11 @@ import {
   useNavigate,
   Link,
 } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 import CustomSnackbar from '../CustomSnackbar';
 import { LoginSchema } from '../../shared/schemas';
 import { CurrentUser_Type } from '../../shared/types';
-import { toast } from 'react-hot-toast';
 
 type Props = {
   setCurrentUser: (currentUser: CurrentUser_Type | null) => void;
@@ -29,7 +29,8 @@ export default function LoginForm({ setCurrentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setError(false);
 
-    const pathTo: string = (location.state?.path as string) || '/';
+    // const pathTo: string = (location.state?.pathTo as string) || '/';
+    // console.log(`location.pathname: ${location.pathname}`);
 
     try {
       const { data } = await axios.post(`/login`, values);
@@ -37,23 +38,22 @@ export default function LoginForm({ setCurrentUser }: Props) {
         setError(true);
         setAllValid(false);
         toast.error(data.error);
-        console.log(`location.pathname: ${location.pathname}`);
-        navigate(location.pathname, {
-          state: {
-            // status: 'error',
-            // message: data.error,
-          },
-        });
+        // navigate(-1 as any, {
+        //   state: {
+        //     status: 'error',
+        //     message: data.error,
+        //   },
+        // });
         return;
       }
 
-      if (data) {
+      if (data.message) {
         const user = JSON.stringify(data);
         localStorage.removeItem('user');
         localStorage.setItem('user', user);
         setCurrentUser(data);
         toast.success(`Welcome back, ${data.username}🥳`);
-        navigate(pathTo, {
+        navigate(-1 as any, {
           // state: {
           //   status: 'success',
           //   message: `Welcome back, ${data.username}🥳`,
