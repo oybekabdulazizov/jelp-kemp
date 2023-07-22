@@ -9,12 +9,12 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
+import { toast } from 'react-hot-toast';
 
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import CustomSnackbar from '../CustomSnackbar';
-import { toast } from 'react-hot-toast';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -34,18 +34,14 @@ export default function Details({ currentUser }: Props) {
         const { data } = await axios.get(`/campgrounds/${_id}`);
         if (data.error) {
           toast.error(data.error);
-          navigate('/campgrounds', {
-            // state: { status: 'error', message: data.error },
-          });
+          navigate('/campgrounds', {});
         } else {
           const campgroundFromDb = await data;
           setCampground(campgroundFromDb);
         }
       } catch (err: any) {
         toast.error(err.message);
-        navigate('/campgrounds', {
-          // state: { status: 'error', message: err.message },
-        });
+        navigate('/campgrounds', {});
       }
     };
     if (!deleting) findCampground();
@@ -58,22 +54,12 @@ export default function Details({ currentUser }: Props) {
 
       if (data.error) {
         toast.error(data.error);
-        navigate(`/campgrounds`, {
-          // state: {
-          //   status: 'error',
-          //   message: data.error,
-          // },
-        });
+        navigate(`/campgrounds`);
       }
 
       if (data.message) {
         toast.success(data.message);
-        navigate(`/campgrounds`, {
-          // state: {
-          //   status: 'success',
-          //   message: `Successfully deleted the campground.`,
-          // },
-        });
+        navigate(`/campgrounds`);
       }
     } catch (err) {
       console.log(err);

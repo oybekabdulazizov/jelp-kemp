@@ -1,12 +1,5 @@
 import axios from 'axios';
-import {
-  Link,
-  NavLink,
-  // Location,
-  // NavigateFunction,
-  // useLocation,
-  // useNavigate,
-} from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import { CurrentUser_Type } from '../shared/types';
 import { toast } from 'react-hot-toast';
@@ -17,23 +10,12 @@ type Props = {
 };
 
 export default function NavBar({ currentUser, setCurrentUser }: Props) {
-  // const navigate: NavigateFunction = useNavigate();
-  // const location: Location = useLocation();
-
   const handleLogout = async () => {
     try {
-      // const response =
       await axios.get('/logout');
       localStorage.removeItem('user');
       setCurrentUser(null);
       toast.success('Successfully logged out.');
-      // navigate('/login', {
-      //   state: {
-      //     status: 'success',
-      //     message: response.data,
-      //     path: location.pathname,
-      //   },
-      // });
     } catch (err: any) {
       console.log(err);
     }

@@ -29,21 +29,12 @@ export default function SignupForm({ setCurrentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setError(false);
 
-    // const pathTo: string = (location.state?.path as string) || '/';
-
     try {
       const { data } = await axios.post(`/register`, values);
       if (data.error) {
         setError(true);
         setAllValid(false);
         toast.error(data.error);
-        // console.log(`location.pathname: ${location.pathname}`);
-        // navigate(location.pathname, {
-        //   state: {
-        //   status: 'error',
-        //   message: data.error,
-        //    },
-        // });
         return;
       }
 
@@ -53,25 +44,13 @@ export default function SignupForm({ setCurrentUser }: Props) {
         localStorage.setItem('user', user);
         setCurrentUser(data);
         toast.success('Welcome to Jelp-Kemp🙌');
-        navigate('/', {
-          // state: {
-          //   status: 'success',
-          //   message: 'Welcome to Jelp-Kemp🙌',
-          //   pathTo,
-          // },
-        });
+        navigate('/');
         return;
       }
     } catch (err: any) {
       setAllValid(false);
       setError(true);
       toast.error(err.message);
-      navigate('/signup', {
-        // state: {
-        //   status: 'error',
-        //   message: err.message,
-        // },
-      });
     }
     actions.resetForm();
   };

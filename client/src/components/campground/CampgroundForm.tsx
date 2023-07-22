@@ -10,11 +10,11 @@ import {
   useParams,
 } from 'react-router-dom';
 import { useFormik } from 'formik';
+import { toast } from 'react-hot-toast';
 
 import { CampgroundSchema } from '../../shared/schemas';
 import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
-import { toast } from 'react-hot-toast';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -51,37 +51,30 @@ export default function CampgroundForm({ currentUser }: Props) {
 
     if (isCreate) {
       const data = await create(values);
-      actions.resetForm();
-      toast.success(data.message);
-      navigate(`/campgrounds`, {
-        // state: {
-        //   status: 'success',
-        //   message: 'New campground created!',
-        // },
-      });
-    } else {
+      if (data.error) {
+        toast.error(data.error);
+        navigate(`/campgrounds`);
+        return;
+      }
+      if (data.message) {
+        actions.resetForm();
+        toast.success(data.message);
+        navigate(`/campgrounds`);
+        return;
+      }
+    }
+
+    if (!isCreate) {
       const data = await edit(values);
       if (data.error) {
         toast.error(data.error);
-        navigate(`/campgrounds/${_id}`, {
-          // state: {
-          //   status: 'error',
-          //   message: data.error,
-          // },
-        });
+        navigate(`/campgrounds/${_id}`);
         return;
       }
-
       if (data.message) {
-        const data = await edit(values);
         actions.resetForm();
         toast.success(data.message);
-        navigate(`/campgrounds/${_id}`, {
-          // state: {
-          //   status: 'success',
-          //   message: data.message,
-          // },
-        });
+        navigate(`/campgrounds/${_id}`);
         return;
       }
     }
@@ -122,20 +115,12 @@ export default function CampgroundForm({ currentUser }: Props) {
             toast.error(
               'Oops! You do not have permission to edit this campground.'
             );
-            navigate(`/campgrounds/${_id}`, {
-              // state: {
-              //   status: 'error',
-              //   message:
-              //     'Oops! You do not have permission to edit this campground.',
-              // },
-            });
+            navigate(`/campgrounds/${_id}`, {});
           }
           setValues(data);
         } catch (err: any) {
           toast.error(err.messsage);
-          navigate(`/campgrounds`, {
-            // state: { status: 'error', message: 'Cannot find that campground!' },
-          });
+          navigate(`/campgrounds`, {});
         }
       };
       findCampground();

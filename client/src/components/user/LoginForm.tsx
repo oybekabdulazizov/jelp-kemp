@@ -29,21 +29,12 @@ export default function LoginForm({ setCurrentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 500));
     setError(false);
 
-    // const pathTo: string = (location.state?.pathTo as string) || '/';
-    // console.log(`location.pathname: ${location.pathname}`);
-
     try {
       const { data } = await axios.post(`/login`, values);
       if (data.error) {
         setError(true);
         setAllValid(false);
         toast.error(data.error);
-        // navigate(-1 as any, {
-        //   state: {
-        //     status: 'error',
-        //     message: data.error,
-        //   },
-        // });
         return;
       }
 
@@ -53,24 +44,13 @@ export default function LoginForm({ setCurrentUser }: Props) {
         localStorage.setItem('user', user);
         setCurrentUser(data);
         toast.success(`Welcome back, ${data.username}🥳`);
-        navigate(-1 as any, {
-          // state: {
-          //   status: 'success',
-          //   message: `Welcome back, ${data.username}🥳`,
-          // },
-        });
+        navigate(-1 as any);
         return;
       }
     } catch (err: any) {
       setAllValid(false);
       setError(true);
       toast.error(err.message);
-      navigate('/login', {
-        // state: {
-        //   status: 'error',
-        //   message: err.message,
-        // },
-      });
     }
     actions.resetForm();
   };
