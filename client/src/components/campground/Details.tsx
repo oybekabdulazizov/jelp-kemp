@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   Link,
-  Location,
   NavigateFunction,
-  useLocation,
   useNavigate,
   useParams,
 } from 'react-router-dom';
@@ -14,7 +12,6 @@ import { toast } from 'react-hot-toast';
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
-import CustomSnackbar from '../CustomSnackbar';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -26,7 +23,6 @@ export default function Details({ currentUser }: Props) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
-  const location: Location = useLocation();
 
   useEffect(() => {
     const findCampground = async () => {
@@ -115,7 +111,6 @@ export default function Details({ currentUser }: Props) {
   return (
     <>
       <div className='row'>
-        <CustomSnackbar location={location} />
         <div className='col-6'>
           <div className='card mb-3'>
             <img

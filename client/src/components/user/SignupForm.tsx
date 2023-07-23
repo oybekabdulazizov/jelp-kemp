@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import {
-  Link,
-  Location,
-  NavigateFunction,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
 import { SignupSchema } from '../../shared/schemas';
-import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
 
 type Props = {
@@ -20,19 +13,15 @@ type Props = {
 
 export default function SignupForm({ setCurrentUser }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>();
   const navigate: NavigateFunction = useNavigate();
-  const location: Location = useLocation();
 
   const onSubmit = async (values: any, actions: any) => {
     if (Object.keys(errors).length < 1) setAllValid(true);
     await new Promise((resolve) => setTimeout(resolve, 500));
-    setError(false);
 
     try {
       const { data } = await axios.post(`/register`, values);
       if (data.error) {
-        setError(true);
         setAllValid(false);
         toast.error(data.error);
         return;
@@ -47,7 +36,6 @@ export default function SignupForm({ setCurrentUser }: Props) {
       }
     } catch (err: any) {
       setAllValid(false);
-      setError(true);
       toast.error(err.message);
     }
     actions.resetForm();
@@ -74,7 +62,6 @@ export default function SignupForm({ setCurrentUser }: Props) {
   return (
     <div>
       <div className='col-4 offset-4 pb-4 pt-3'>
-        {error && <CustomSnackbar location={location} />}
         <h2 className='text-center pt-3 pb-2 m-0'>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>

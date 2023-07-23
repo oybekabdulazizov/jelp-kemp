@@ -13,7 +13,6 @@ import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 
 import { CampgroundSchema } from '../../shared/schemas';
-import CustomSnackbar from '../CustomSnackbar';
 import { CurrentUser_Type } from '../../shared/types';
 
 type Props = {
@@ -137,7 +136,6 @@ export default function CampgroundForm({ currentUser }: Props) {
     <>
       {currentUser !== null ? (
         <div>
-          <CustomSnackbar location={location} />
           <div className='col-4 offset-4 pb-4 pt-3'>
             <h2 className='text-center pt-3 pb-2 m-0'>
               {isCreate ? 'New Campground' : 'Edit Campground'}

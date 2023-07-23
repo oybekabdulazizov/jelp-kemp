@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Location, useLocation } from 'react-router-dom';
 
 import Campground from './Campground';
 import { Campground_Type } from '../../shared/types';
-import CustomSnackbar from '../CustomSnackbar';
 
 export default function Campgrounds() {
   const [campgroundsData, setCampgroundsData] = useState<Campground_Type[]>([]);
-  const location: Location = useLocation();
 
   useEffect(() => {
     const fetchCampgrounds = async () => {
@@ -25,7 +22,6 @@ export default function Campgrounds() {
 
   return (
     <div className='container'>
-      <CustomSnackbar location={location} />
       <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
       {campgroundsData.slice(50).map((campground) => (
         <Campground {...campground} key={campground._id} />
