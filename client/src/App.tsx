@@ -29,9 +29,10 @@ export default function App() {
     <>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <Toaster
-        position='top-center'
+        containerStyle={{ marginTop: '3em' }}
+        position='top-right'
         gutter={8}
-        toastOptions={{ duration: 3000, style: { marginTop: '3em' } }}
+        toastOptions={{ duration: 3000 }}
       />
       <div className='container my-4'>
         <Routes>
