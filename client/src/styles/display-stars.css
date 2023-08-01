@@ -1,0 +1,19 @@
+.stars-wrapper {
+  display: flex;
+  gap: 0.2em;
+  margin: 0;
+  padding: 0;
+}
+
+.star {
+  font-size: 2em;
+  margin: 0;
+}
+
+.filled {
+  color: #f5bd23;
+}
+
+.empty {
+  color: #999999;
+}

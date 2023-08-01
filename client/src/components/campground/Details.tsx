@@ -12,6 +12,7 @@ import { toast } from 'react-hot-toast';
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
+import '../../styles/display-stars.css';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -64,7 +65,7 @@ export default function Details({ currentUser }: Props) {
   };
 
   const initialValues = {
-    rating: 5,
+    rating: 0,
     text: '',
     author: currentUser?.user_id,
   };
@@ -100,6 +101,18 @@ export default function Details({ currentUser }: Props) {
     } catch (err: any) {
       console.log(err);
     }
+  };
+
+  const ratingStars = (length: number): Array<number> => {
+    const arr: Array<number> = new Array();
+    for (let i = 1; i <= 5; i++) {
+      if (i <= length) {
+        arr.push(1);
+      } else {
+        arr.push(0);
+      }
+    }
+    return arr;
   };
 
   const formik = useFormik({
@@ -157,9 +170,20 @@ export default function Details({ currentUser }: Props) {
             <ul className='list-group list-group-flush'>
               {campground?.reviews.map((review) => (
                 <li className='list-group-item' key={review._id}>
-                  <h5 className='card-text'> By: {review.author.username}</h5>
-                  <p className='card-title'>Rating: {review.rating}</p>
-                  <p className='card-text'>Review: {review.text}</p>
+                  <h5 className='card-text mb-0'>{review.author.username}</h5>
+                  <div className='stars-wrapper'>
+                    {ratingStars(review.rating).map((s, i) => {
+                      return (
+                        <p
+                          className={`star ${s === 1 ? 'filled' : 'empty'}`}
+                          key={i}
+                        >
+                          &#9733;
+                        </p>
+                      );
+                    })}
+                  </div>
+                  <p className='card-text'>{review.text}</p>
                   {review.author._id === currentUser?.user_id && (
                     <button
                       className='btn btn-sm btn-danger'
