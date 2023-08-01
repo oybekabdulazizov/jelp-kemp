@@ -1,4 +1,5 @@
 import { FormikProps } from 'formik';
+import { Rating } from 'react-simple-star-rating';
 
 import {
   CurrentUser_Type,
@@ -20,31 +21,46 @@ export default function ReviewForm({
   values,
   isValidReview,
   currentUser,
+  setFieldValue,
 }: Props) {
+  const onRatingClick = (e: any) => {
+    setFieldValue('rating', e);
+    console.log(values.rating);
+  };
+
   return (
     <>
       <h3 className='pb-2 m-0'>Leave a review</h3>
       <form onSubmit={handleSubmit} className='mb-3'>
-        <div className='mb-3'>
-          <label htmlFor='rating' className='form-label fw-medium'>
-            Rating
-          </label>
-          <input
-            type='range'
-            className='form-range'
-            name='rating'
-            min={1}
-            value={values.rating}
-            max={5}
-            id='rating'
-            onChange={handleChange}
-            disabled={currentUser === null}
+        <div>
+          <Rating
+            style={{ marginBottom: '1em' }}
+            tooltipStyle={{
+              marginBottom: '1em',
+              backgroundColor: 'white',
+              color: 'black',
+              border: '1px solid black',
+            }}
+            SVGstorkeWidth={0}
+            transition
+            showTooltip
+            initialValue={values.rating}
+            onClick={onRatingClick}
+            tooltipDefaultText={'Please leave a rating'}
+            tooltipArray={['Terrible', 'Bad', 'Average', 'Great', 'Amazing']}
+            fillColorArray={[
+              '#f17a45',
+              '#f19745',
+              '#f1a545',
+              '#f1b345',
+              '#f1d045',
+            ]}
           />
         </div>
 
         <div className='mb-3'>
           <label htmlFor='text' className='form-label fw-medium'>
-            Review
+            Feedback
           </label>
           <textarea
             className={`form-control ${

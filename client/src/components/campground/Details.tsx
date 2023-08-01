@@ -69,7 +69,7 @@ export default function Details({ currentUser }: Props) {
     author: currentUser?.user_id,
   };
 
-  const onSubmit = async (values: any, actions: any) => {
+  const handleReviewSubmit = async (values: any, actions: any) => {
     if (Object.keys(formik.errors).length < 1) setIsValidReview(true);
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -105,7 +105,7 @@ export default function Details({ currentUser }: Props) {
   const formik = useFormik({
     initialValues,
     validationSchema: ReviewSchema,
-    onSubmit,
+    onSubmit: handleReviewSubmit,
   });
 
   return (
