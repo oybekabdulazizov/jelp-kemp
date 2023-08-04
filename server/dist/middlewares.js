@@ -25,7 +25,7 @@ const validateCampgroundFormData = (req, res, next) => {
         title,
         location,
         price,
-        image,
+        // image,
         description,
     });
     if (error) {

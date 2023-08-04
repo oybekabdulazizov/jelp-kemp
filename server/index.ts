@@ -29,6 +29,8 @@ app.use(
     credentials: true,
     methods: 'DELETE,GET,HEAD,PATCH,POST,PUT',
     optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type'],
+    exposedHeaders: ['Content-Type'],
   })
 );
 app.use(express.urlencoded({ extended: false }));
@@ -55,6 +57,9 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
     updatedCode = 404;
     updatedMessage = 'Campground Not Found!';
   }
+
+  console.log('err: ');
+  console.log(err);
   res.status(updatedCode).send(updatedMessage);
 });
 

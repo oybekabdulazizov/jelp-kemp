@@ -9,7 +9,7 @@ exports.campgroundSchemaJoi = joi_1.default.object({
     title: joi_1.default.string().max(100).required(),
     location: joi_1.default.string().max(100).required(),
     price: joi_1.default.number().min(0).max(1000).required(),
-    image: joi_1.default.string().max(250).required(),
+    // image: Joi.string().max(250).required(),
     description: joi_1.default.string().max(1000).required(),
 });
 exports.reviewSchemaJoi = joi_1.default.object({

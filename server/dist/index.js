@@ -38,6 +38,8 @@ app.use((0, cors_1.default)({
     credentials: true,
     methods: 'DELETE,GET,HEAD,PATCH,POST,PUT',
     optionsSuccessStatus: 200,
+    allowedHeaders: ['Content-Type'],
+    exposedHeaders: ['Content-Type'],
 }));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/campgrounds', campgroundRoutes_1.default);
@@ -58,6 +60,8 @@ app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         updatedCode = 404;
         updatedMessage = 'Campground Not Found!';
     }
+    console.log('err: ');
+    console.log(err);
     res.status(updatedCode).send(updatedMessage);
 }));
 app.listen('3001', () => {
