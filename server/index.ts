@@ -3,13 +3,14 @@ import { connect } from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import colors from 'colors/safe';
+const error = colors.red;
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
 import userRouter from './routes/userRoutes';
-
-const error = colors.red;
 
 connect('mongodb://127.0.0.1:27017/jelp-kemp')
   .then(() => {
