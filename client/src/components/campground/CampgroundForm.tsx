@@ -32,7 +32,9 @@ export default function CampgroundForm({ currentUser }: Props) {
     formData.append('location', values.location);
     formData.append('price', values.price);
     formData.append('description', values.description);
-    formData.append('image', values.image);
+    for (const key of Object.keys(values.images)) {
+      formData.append('images', values.images[key]);
+    }
 
     try {
       const { data } = await axios.post('/campgrounds', formData, {
@@ -56,8 +58,8 @@ export default function CampgroundForm({ currentUser }: Props) {
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const img = e.target.files ? e.target.files[0] : '';
-    setFieldValue('image', img);
+    const images = e.target.files;
+    setFieldValue('images', images);
   };
 
   const onSubmit = async (values: any, actions: any) => {
@@ -237,9 +239,10 @@ export default function CampgroundForm({ currentUser }: Props) {
               <div className='mb-3'>
                 <input
                   type='file'
-                  name='image'
-                  id='image'
-                  accept='.png, .jpg, .jpeg'
+                  name='images'
+                  id='images'
+                  accept='image/*'
+                  multiple
                   onChange={handleImageChange}
                 />
                 {/* <label htmlFor='image' className='form-label fw-medium'>

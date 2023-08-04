@@ -32,11 +32,10 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = (0, multer_1.default)({ storage, fileFilter });
 campgroundRouter.get('/', campgroundController_1.getCampgrounds);
-campgroundRouter.post('/', upload.single('image'), middlewares_1.validateCampgroundFormData, (req, res, next) => {
-    console.log(req.body, req.file);
+campgroundRouter.post('/', upload.array('images'), middlewares_1.validateCampgroundFormData, (req, res, next) => {
     res.json({
         body: req.body,
-        file: req.file,
+        files: req.files,
     });
 });
 campgroundRouter.put('/:_id', middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);

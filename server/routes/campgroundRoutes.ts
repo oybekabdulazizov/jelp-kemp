@@ -46,13 +46,12 @@ campgroundRouter.get('/', getCampgrounds);
 
 campgroundRouter.post(
   '/',
-  upload.single('image'),
+  upload.array('images'),
   validateCampgroundFormData,
   (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body, req.file);
     res.json({
       body: req.body,
-      file: req.file,
+      files: req.files,
     });
   }
 );
