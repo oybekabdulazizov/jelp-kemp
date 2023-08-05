@@ -36,13 +36,7 @@ campgroundRouter.post(
   '/',
   upload.array('images'),
   validateCampgroundFormData,
-  (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body, req.files);
-    res.json({
-      body: req.body,
-      files: req.files,
-    });
-  }
+  createCampground
 );
 
 campgroundRouter.put(

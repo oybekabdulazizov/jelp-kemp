@@ -20,7 +20,54 @@ exports.getCampgrounds = (0, utils_1.asyncHandler)((req, res, next) => __awaiter
     res.json(campgrounds);
 }));
 exports.createCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e;
+    /*
+    let images: Array<{ url: string; filename: string }> = req.files?.map(
+      (file) => ({ url: file.path, filename: file.filename })
+    );
+    Unable to proceed with the above mapping function as there currently seems to be
+    an issue with req.files array/dictionary.
+    Most of the array functions of req.files are not working and popping an error similar to below.
+    "This expression is not callable.
+    Not all constituents of type
+    'File[] | (<U>(callbackfn: (value: File, index: number, array: File[]) => U, thisArg?: any) =>
+      U[])' are callable.
+    Type 'File[]' has no call signatures.ts(2349)"
+    
+    As a workaround, the maximum images to be uploaded has been set as 5. Once the issue is resolved
+    or a better workaround is found, the code will be updated accordingly.
+    */
     const newCampground = new campground_1.default(Object.assign({}, req.body));
+    try {
+        const img0 = {
+            url: req.files[0].path,
+            filename: req.files[0].filename,
+        };
+        (_a = newCampground.images) === null || _a === void 0 ? void 0 : _a.push(img0);
+        const img1 = {
+            url: req.files[1].path,
+            filename: req.files[1].filename,
+        };
+        (_b = newCampground.images) === null || _b === void 0 ? void 0 : _b.push(img1);
+        const img2 = {
+            url: req.files[2].path,
+            filename: req.files[2].filename,
+        };
+        (_c = newCampground.images) === null || _c === void 0 ? void 0 : _c.push(img2);
+        const img3 = {
+            url: req.files[3].path,
+            filename: req.files[3].filename,
+        };
+        (_d = newCampground.images) === null || _d === void 0 ? void 0 : _d.push(img3);
+        const img4 = {
+            url: req.files[4].path,
+            filename: req.files[4].filename,
+        };
+        (_e = newCampground.images) === null || _e === void 0 ? void 0 : _e.push(img4);
+    }
+    catch (err) {
+        next;
+    }
     yield newCampground.save();
     res.json({
         message: 'Campground created successfully.',

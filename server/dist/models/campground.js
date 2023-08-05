@@ -36,11 +36,12 @@ const CampgroundSchema = new mongoose_1.Schema({
         required: true,
         maxLength: [100, 'Location cannot exceed 250 characters'],
     },
-    image: {
-        type: String,
-        maxLength: [250, 'Image Url length cannot exceed 250 characters'],
-        required: true,
-    },
+    images: [
+        {
+            url: String,
+            filename: String,
+        },
+    ],
     author: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
