@@ -238,35 +238,6 @@ export default function CampgroundForm({ currentUser }: Props) {
               </div>
 
               <div className='mb-3'>
-                <input
-                  type='file'
-                  name='images'
-                  id='images'
-                  accept='image/*'
-                  multiple
-                  onChange={handleImageChange}
-                />
-                {/* <label htmlFor='image' className='form-label fw-medium'>
-                  Image (Url)
-                </label>
-                <input
-                  type='text'
-                  className={`form-control ${
-                    errors.image && touched.image && 'border border-danger'
-                  }`}
-                  id='image'
-                  name='image'
-                  value={values.image}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.image && touched.image && (
-                  <div className='text-danger'>{errors.image}</div>
-                )}
-                {allValid && <div className='text-success'>Looks good!</div>} */}
-              </div>
-
-              <div className='mb-3'>
                 <label htmlFor='description' className='form-label fw-medium'>
                   Description
                 </label>
@@ -287,6 +258,23 @@ export default function CampgroundForm({ currentUser }: Props) {
                   <div className='text-danger'>{errors.description}</div>
                 )}
                 {allValid && <div className='text-success'>Looks good!</div>}
+              </div>
+
+              <div className='mb-3'>
+                <label className='form-label fw-medium' htmlFor='images'>
+                  Image(s)
+                </label>
+                <div className='input-group'>
+                  <input
+                    type='file'
+                    className='form-control'
+                    id='images'
+                    name='images'
+                    accept='image/*'
+                    multiple
+                    onChange={handleImageChange}
+                  />
+                </div>
               </div>
 
               {isCreate && (
