@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response, Router } from 'express';
 import multer from 'multer';
-import path from 'path';
 
 import { isCampgroundAuthor, validateCampgroundFormData } from '../middlewares';
 import {
@@ -10,22 +9,11 @@ import {
   getCampground,
   getCampgrounds,
 } from '../controllers/campgroundController';
+import { cloudinaryStorage } from '../cloudinary';
 
 const campgroundRouter: Router = express.Router({ mergeParams: true });
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'images');
-  },
-  filename: function (req, file, cb) {
-    let filename: string =
-      file.fieldname +
-      '_' +
-      Date.now().toString().replace(/:/g, '-') +
-      path.extname(file.originalname);
-    cb(null, filename);
-  },
-});
+const storage = cloudinaryStorage;
 
 const fileFilter = (
   req: Request,
@@ -49,6 +37,7 @@ campgroundRouter.post(
   upload.array('images'),
   validateCampgroundFormData,
   (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body, req.files);
     res.json({
       body: req.body,
       files: req.files,

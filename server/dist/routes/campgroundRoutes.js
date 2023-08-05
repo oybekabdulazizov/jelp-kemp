@@ -5,22 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
-const path_1 = __importDefault(require("path"));
 const middlewares_1 = require("../middlewares");
 const campgroundController_1 = require("../controllers/campgroundController");
+const cloudinary_1 = require("../cloudinary");
 const campgroundRouter = express_1.default.Router({ mergeParams: true });
-const storage = multer_1.default.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'images');
-    },
-    filename: function (req, file, cb) {
-        let filename = file.fieldname +
-            '_' +
-            Date.now().toString().replace(/:/g, '-') +
-            path_1.default.extname(file.originalname);
-        cb(null, filename);
-    },
-});
+const storage = cloudinary_1.cloudinaryStorage;
 const fileFilter = (req, file, cb) => {
     const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (allowedFileTypes.includes(file.mimetype)) {
@@ -33,6 +22,7 @@ const fileFilter = (req, file, cb) => {
 const upload = (0, multer_1.default)({ storage, fileFilter });
 campgroundRouter.get('/', campgroundController_1.getCampgrounds);
 campgroundRouter.post('/', upload.array('images'), middlewares_1.validateCampgroundFormData, (req, res, next) => {
+    console.log(req.body, req.files);
     res.json({
         body: req.body,
         files: req.files,
