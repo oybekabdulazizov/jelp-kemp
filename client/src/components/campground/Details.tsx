@@ -125,12 +125,60 @@ export default function Details({ currentUser }: Props) {
     <>
       <div className='row'>
         <div className='col-6'>
+          <div
+            id='carouselExampleAutoplaying'
+            className='carousel slide'
+            data-bs-ride='carousel'
+          >
+            <div className='carousel-inner'>
+              {campground?.images.map((img, i) => (
+                <div
+                  className={`carousel-item ${i === 0 ? 'active' : ''}`}
+                  key={i}
+                >
+                  <img
+                    src={`${img.url}`}
+                    className='d-block w-100'
+                    alt={`campground-image-${i}`}
+                  />
+                </div>
+              ))}
+            </div>
+            {campground?.images?.length && campground.images.length > 1 && (
+              <>
+                <button
+                  className='carousel-control-prev'
+                  type='button'
+                  data-bs-target='#carouselExampleAutoplaying'
+                  data-bs-slide='prev'
+                >
+                  <span
+                    className='carousel-control-prev-icon'
+                    aria-hidden='true'
+                  ></span>
+                  <span className='visually-hidden'>Previous</span>
+                </button>
+                <button
+                  className='carousel-control-next'
+                  type='button'
+                  data-bs-target='#carouselExampleAutoplaying'
+                  data-bs-slide='next'
+                >
+                  <span
+                    className='carousel-control-next-icon'
+                    aria-hidden='true'
+                  ></span>
+                  <span className='visually-hidden'>Next</span>
+                </button>
+              </>
+            )}
+          </div>
           <div className='card mb-3'>
-            <img
+            {/* <img
               src={`${campground?.image}`}
               className='card-img-top'
               alt={campground?.title}
-            />
+            /> */}
             <div className='card-body'>
               <h5 className='card-title'>{campground?.title} </h5>
 
