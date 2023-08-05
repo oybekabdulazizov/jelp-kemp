@@ -32,6 +32,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     formData.append('location', values.location);
     formData.append('price', values.price);
     formData.append('description', values.description);
+    formData.append('author', values.author);
     for (const key of Object.keys(values.images)) {
       formData.append('images', values.images[key]);
     }
