@@ -74,11 +74,43 @@ exports.createCampground = (0, utils_1.asyncHandler)((req, res, next) => __await
     });
 }));
 exports.editCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g, _h, _j, _k;
     const { _id } = req.params;
     const campground = yield campground_1.default.findById(_id);
     if (!campground)
         return res.json({ error: 'Campground Not Found!' });
     yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
+    try {
+        const img0 = {
+            url: req.files[0].path,
+            filename: req.files[0].filename,
+        };
+        (_f = campground.images) === null || _f === void 0 ? void 0 : _f.push(img0);
+        const img1 = {
+            url: req.files[1].path,
+            filename: req.files[1].filename,
+        };
+        (_g = campground.images) === null || _g === void 0 ? void 0 : _g.push(img1);
+        const img2 = {
+            url: req.files[2].path,
+            filename: req.files[2].filename,
+        };
+        (_h = campground.images) === null || _h === void 0 ? void 0 : _h.push(img2);
+        const img3 = {
+            url: req.files[3].path,
+            filename: req.files[3].filename,
+        };
+        (_j = campground.images) === null || _j === void 0 ? void 0 : _j.push(img3);
+        const img4 = {
+            url: req.files[4].path,
+            filename: req.files[4].filename,
+        };
+        (_k = campground.images) === null || _k === void 0 ? void 0 : _k.push(img4);
+    }
+    catch (err) {
+        next;
+    }
+    yield campground.save();
     res.json({
         message: 'Campground modified successfully.',
     });

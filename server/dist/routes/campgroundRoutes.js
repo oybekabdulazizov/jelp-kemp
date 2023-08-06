@@ -21,8 +21,8 @@ const fileFilter = (req, file, cb) => {
 };
 const upload = (0, multer_1.default)({ storage, fileFilter });
 campgroundRouter.get('/', campgroundController_1.getCampgrounds);
-campgroundRouter.post('/', upload.array('images'), middlewares_1.validateCampgroundFormData, campgroundController_1.createCampground);
-campgroundRouter.put('/:_id', middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);
+campgroundRouter.post('/', upload.array('images', 5), middlewares_1.validateCampgroundFormData, campgroundController_1.createCampground);
+campgroundRouter.put('/:_id', upload.array('images', 5), middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);
 campgroundRouter.delete('/:_id', middlewares_1.isCampgroundAuthor, campgroundController_1.deleteCampground);
 campgroundRouter.get('/:_id', campgroundController_1.getCampground);
 exports.default = campgroundRouter;

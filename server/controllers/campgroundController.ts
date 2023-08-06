@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
 import { asyncHandler } from '../utils';
 import Campground from '../models/campground';
@@ -79,6 +78,39 @@ export const editCampground = asyncHandler(
       { ...req.body },
       { runValidators: true }
     );
+
+    try {
+      const img0 = {
+        url: (req.files![0 as keyof typeof req.files] as any).path,
+        filename: (req.files![0 as keyof typeof req.files] as any).filename,
+      };
+      campground.images?.push(img0);
+      const img1 = {
+        url: (req.files![1 as keyof typeof req.files] as any).path,
+        filename: (req.files![1 as keyof typeof req.files] as any).filename,
+      };
+      campground.images?.push(img1);
+      const img2 = {
+        url: (req.files![2 as keyof typeof req.files] as any).path,
+        filename: (req.files![2 as keyof typeof req.files] as any).filename,
+      };
+      campground.images?.push(img2);
+      const img3 = {
+        url: (req.files![3 as keyof typeof req.files] as any).path,
+        filename: (req.files![3 as keyof typeof req.files] as any).filename,
+      };
+      campground.images?.push(img3);
+      const img4 = {
+        url: (req.files![4 as keyof typeof req.files] as any).path,
+        filename: (req.files![4 as keyof typeof req.files] as any).filename,
+      };
+      campground.images?.push(img4);
+    } catch (err) {
+      next;
+    }
+
+    await campground.save();
+
     res.json({
       message: 'Campground modified successfully.',
     });

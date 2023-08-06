@@ -34,13 +34,14 @@ campgroundRouter.get('/', getCampgrounds);
 
 campgroundRouter.post(
   '/',
-  upload.array('images'),
+  upload.array('images', 5),
   validateCampgroundFormData,
   createCampground
 );
 
 campgroundRouter.put(
   '/:_id',
+  upload.array('images', 5),
   validateCampgroundFormData,
   isCampgroundAuthor,
   editCampground

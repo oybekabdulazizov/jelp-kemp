@@ -13,7 +13,7 @@ import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 
 import { CampgroundSchema } from '../../shared/schemas';
-import { CurrentUser_Type } from '../../shared/types';
+import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -25,6 +25,7 @@ export default function CampgroundForm({ currentUser }: Props) {
   const location: Location = useLocation();
   const { _id } = useParams();
   const isCreate: boolean = !_id;
+  const [campground, setCampground] = useState<Campground_Type>();
 
   const create = async (values: any) => {
     const formData = new FormData();
@@ -50,8 +51,22 @@ export default function CampgroundForm({ currentUser }: Props) {
   };
 
   const edit = async (values: any) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('location', values.location);
+    formData.append('price', values.price);
+    formData.append('description', values.description);
+    formData.append('author', values.author._id);
+    for (const key of Object.keys(values.images)) {
+      formData.append('images', values.images[key]);
+    }
+
     try {
-      const { data } = await axios.put(`/campgrounds/${_id}`, values);
+      const { data } = await axios.put(`/campgrounds/${_id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return data;
     } catch (err: any) {
       console.log(err);
@@ -59,7 +74,7 @@ export default function CampgroundForm({ currentUser }: Props) {
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const images = e.target.files;
+    const images = { ...campground?.images, ...e.target.files };
     setFieldValue('images', images);
   };
 
@@ -102,7 +117,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     title: '',
     location: '',
     price: '',
-    // image: '',
+    images: [] || campground?.images,
     description: '',
     author: currentUser?.user_id,
   };
@@ -134,9 +149,10 @@ export default function CampgroundForm({ currentUser }: Props) {
             toast.error(
               'Oops! You do not have permission to edit this campground.'
             );
-            navigate(`/campgrounds/${_id}`, {});
+            navigate(`/campgrounds/${_id}`);
           }
           setValues(data);
+          setCampground(data);
         } catch (err: any) {
           toast.error(err.messsage);
           navigate(`/campgrounds`, {});
