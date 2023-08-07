@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCampground = exports.deleteCampground = exports.editCampground = exports.createCampground = exports.getCampgrounds = void 0;
+exports.deleteCampgroundImage = exports.getCampground = exports.deleteCampground = exports.editCampground = exports.createCampground = exports.getCampgrounds = void 0;
 const utils_1 = require("../utils");
 const campground_1 = __importDefault(require("../models/campground"));
+const cloudinary_1 = require("../cloudinary");
 exports.getCampgrounds = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const campgrounds = yield campground_1.default.find({});
     res.json(campgrounds);
@@ -130,4 +131,16 @@ exports.getCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(
     if (!campground)
         return res.json({ error: 'Campground not found!' });
     res.json(campground);
+}));
+exports.deleteCampgroundImage = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { _id, image_filename } = req.params;
+    const campground = yield campground_1.default.findById(_id);
+    if (!campground)
+        return res.json({ error: 'Campground not found!' });
+    const image = 'JelpKemp/' + image_filename;
+    yield cloudinary_1.cloudinary.uploader.destroy(image);
+    yield campground.updateOne({
+        $pull: { images: { filename: image } },
+    });
+    res.json({ message: 'Successfully deleted the image.' });
 }));

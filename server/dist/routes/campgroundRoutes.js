@@ -25,4 +25,5 @@ campgroundRouter.post('/', upload.array('images', 5), middlewares_1.validateCamp
 campgroundRouter.put('/:_id', upload.array('images', 5), middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);
 campgroundRouter.delete('/:_id', middlewares_1.isCampgroundAuthor, campgroundController_1.deleteCampground);
 campgroundRouter.get('/:_id', campgroundController_1.getCampground);
+campgroundRouter.delete('/:_id/images/:image_filename', middlewares_1.isCampgroundAuthor, campgroundController_1.deleteCampgroundImage);
 exports.default = campgroundRouter;

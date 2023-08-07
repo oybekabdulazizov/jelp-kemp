@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { asyncHandler } from '../utils';
 import Campground from '../models/campground';
+import { cloudinary } from '../cloudinary';
 
 export const getCampgrounds = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -135,5 +136,20 @@ export const getCampground = asyncHandler(
       .populate('author');
     if (!campground) return res.json({ error: 'Campground not found!' });
     res.json(campground);
+  }
+);
+
+export const deleteCampgroundImage = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { _id, image_filename } = req.params;
+    const campground = await Campground.findById(_id);
+    if (!campground) return res.json({ error: 'Campground not found!' });
+
+    const image = 'JelpKemp/' + image_filename;
+    await cloudinary.uploader.destroy(image);
+    await campground.updateOne({
+      $pull: { images: { filename: image } },
+    });
+    res.json({ message: 'Successfully deleted the image.' });
   }
 );

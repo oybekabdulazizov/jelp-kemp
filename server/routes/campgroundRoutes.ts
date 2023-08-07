@@ -5,6 +5,7 @@ import { isCampgroundAuthor, validateCampgroundFormData } from '../middlewares';
 import {
   createCampground,
   deleteCampground,
+  deleteCampgroundImage,
   editCampground,
   getCampground,
   getCampgrounds,
@@ -50,5 +51,11 @@ campgroundRouter.put(
 campgroundRouter.delete('/:_id', isCampgroundAuthor, deleteCampground);
 
 campgroundRouter.get('/:_id', getCampground);
+
+campgroundRouter.delete(
+  '/:_id/images/:image_filename',
+  isCampgroundAuthor,
+  deleteCampgroundImage
+);
 
 export default campgroundRouter;
