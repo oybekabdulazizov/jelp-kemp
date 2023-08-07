@@ -22,7 +22,7 @@ export const validateCampgroundFormData = (
     title,
     location,
     price,
-    image,
+    // image,
     description,
   });
   if (error) {

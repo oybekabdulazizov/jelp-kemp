@@ -4,12 +4,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const multer_1 = __importDefault(require("multer"));
 const middlewares_1 = require("../middlewares");
 const campgroundController_1 = require("../controllers/campgroundController");
+const cloudinary_1 = require("../cloudinary");
 const campgroundRouter = express_1.default.Router({ mergeParams: true });
+const storage = cloudinary_1.cloudinaryStorage;
+const fileFilter = (req, file, cb) => {
+    const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (allowedFileTypes.includes(file.mimetype)) {
+        cb(null, true);
+    }
+    else {
+        cb(null, false);
+    }
+};
+const upload = (0, multer_1.default)({ storage, fileFilter });
 campgroundRouter.get('/', campgroundController_1.getCampgrounds);
-campgroundRouter.post('/', middlewares_1.validateCampgroundFormData, campgroundController_1.createCampground);
-campgroundRouter.put('/:_id', middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);
+campgroundRouter.post('/', upload.array('images', 5), middlewares_1.validateCampgroundFormData, campgroundController_1.createCampground);
+campgroundRouter.put('/:_id', upload.array('images', 5), middlewares_1.validateCampgroundFormData, middlewares_1.isCampgroundAuthor, campgroundController_1.editCampground);
 campgroundRouter.delete('/:_id', middlewares_1.isCampgroundAuthor, campgroundController_1.deleteCampground);
 campgroundRouter.get('/:_id', campgroundController_1.getCampground);
+campgroundRouter.delete('/:_id/images/:image_filename', middlewares_1.isCampgroundAuthor, campgroundController_1.deleteCampgroundImage);
 exports.default = campgroundRouter;

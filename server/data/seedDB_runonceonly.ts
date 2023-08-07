@@ -51,7 +51,17 @@ const seedDB = async (): Promise<void> => {
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ultricies, nunc eu hendrerit volutpat, quam neque accumsan tellus, vel molestie arcu purus non velit. Mauris sagittis non nibh et laoreet. Sed viverra orci ipsum, quis lobortis dui eleifend at. Quisque quis felis elit. Donec ut convallis orci, ac egestas ipsum. Suspendisse viverra nulla in erat rutrum hendrerit. Donec facilisis massa et tincidunt maximus. Ut sit amet augue ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam malesuada volutpat ligula, vel tincidunt neque scelerisque varius. Sed lorem tortor, dignissim non arcu eu, convallis luctus metus. Quisque nec dignissim leo, quis condimentum felis. Donec ut eros lectus. Nullam at mi suscipit, sodales justo eget, tempus arcu. Etiam hendrerit est ac diam elementum tristique.';
     const price: number = getRandomPrice();
     const location: string = `${citiesSliced[rand].city}, ${citiesSliced[rand].state}`;
-    const image = await getImage(title);
+    // const image = await getImage(title);
+    const images = [
+      {
+        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1691231779/JelpKemp/ny2jh1rjghv3pwlyu4lo.jpg',
+        filename: 'JelpKemp/ny2jh1rjghv3pwlyu4lo',
+      },
+      {
+        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1691231779/JelpKemp/lvm2mm9xnwxpiqxwgsqq.png',
+        filename: 'JelpKemp/ny2jh1rjghv3pwlyu4lo',
+      },
+    ];
     const author = '6494c3061a0d0ffca2fb4f52';
 
     const campground = new Campground({
@@ -59,7 +69,7 @@ const seedDB = async (): Promise<void> => {
       description,
       price,
       location,
-      image,
+      images,
       author,
     });
     campground.save();

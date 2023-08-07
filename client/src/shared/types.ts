@@ -16,6 +16,7 @@ export type Campground_Type = Campground_Validation_Type_Yup & {
   _id?: string;
   author: Author_Type;
   reviews: Array<Review_Type>;
+  images: Array<{ _id: string; url: string; filename: string }>;
 };
 
 export type Review_Validation_Type_Yup = InferType<typeof ReviewSchema> & {

@@ -10,7 +10,7 @@ export default function Campground({
   title,
   description,
   price,
-  image,
+  images,
   location,
 }: Props) {
   const { width } = useResize();
@@ -20,7 +20,7 @@ export default function Campground({
       <div className='row g-0'>
         <div className='col-md-4'>
           <img
-            src={`${image}`}
+            src={`${images[0].url}`}
             className='img-fluid rounded-start mask'
             alt={title}
           />
