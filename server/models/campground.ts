@@ -2,17 +2,22 @@ import { model, Schema, Types } from 'mongoose';
 
 import Review from './review';
 
+interface IImage {
+  url: string;
+  filename: string;
+}
+
+const ImageSchema = new Schema<IImage>({
+  url: String,
+  filename: String,
+});
+
 interface ICampground {
   title: string;
   description: string;
   price: number;
   location: string;
-  images?: [
-    {
-      url: string;
-      filename: string;
-    }
-  ];
+  images?: Array<IImage>;
   author: Types.ObjectId;
   reviews: Array<Object>;
 }
@@ -39,12 +44,7 @@ const CampgroundSchema = new Schema<ICampground>({
     required: true,
     maxLength: [100, 'Location cannot exceed 250 characters'],
   },
-  images: [
-    {
-      url: String,
-      filename: String,
-    },
-  ],
+  images: [ImageSchema],
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User',

@@ -14,6 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
 const review_1 = __importDefault(require("./review"));
+const ImageSchema = new mongoose_1.Schema({
+    url: String,
+    filename: String,
+});
 const CampgroundSchema = new mongoose_1.Schema({
     title: {
         type: String,
@@ -36,12 +40,7 @@ const CampgroundSchema = new mongoose_1.Schema({
         required: true,
         maxLength: [100, 'Location cannot exceed 250 characters'],
     },
-    images: [
-        {
-            url: String,
-            filename: String,
-        },
-    ],
+    images: [ImageSchema],
     author: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
