@@ -26,6 +26,12 @@ export default function CampgroundForm({ currentUser }: Props) {
   const { _id } = useParams();
   const isCreate: boolean = !_id;
   const [campground, setCampground] = useState<Campground_Type>();
+  const [images, setImages] = useState<{
+    [x: number]: File;
+    length?: number | undefined;
+    item?: ((index: number) => File | null) | undefined;
+    [Symbol.iterator]?: (() => IterableIterator<File>) | {};
+  }>({});
 
   const create = async (values: any) => {
     const formData = new FormData();
@@ -34,8 +40,8 @@ export default function CampgroundForm({ currentUser }: Props) {
     formData.append('price', values.price);
     formData.append('description', values.description);
     formData.append('author', values.author);
-    for (const key of Object.keys(values.images)) {
-      formData.append('images', values.images[key]);
+    for (const key of Object.keys(images)) {
+      formData.append('images', images[key as any]);
     }
 
     try {
@@ -57,8 +63,8 @@ export default function CampgroundForm({ currentUser }: Props) {
     formData.append('price', values.price);
     formData.append('description', values.description);
     formData.append('author', values.author._id);
-    for (const key of Object.keys(values.images)) {
-      formData.append('images', values.images[key]);
+    for (const key of Object.keys(images)) {
+      formData.append('images', images[key as any]);
     }
 
     try {
@@ -74,8 +80,8 @@ export default function CampgroundForm({ currentUser }: Props) {
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const images = { ...campground?.images, ...e.target.files };
-    setFieldValue('images', images);
+    const images = { ...e.target.files };
+    setImages(images);
   };
 
   const onSubmit = async (values: any, actions: any) => {
@@ -117,7 +123,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     title: '',
     location: '',
     price: '',
-    images: [] || campground?.images,
+    images: [],
     description: '',
     author: currentUser?.user_id,
   };
@@ -132,7 +138,6 @@ export default function CampgroundForm({ currentUser }: Props) {
     setValues,
     touched,
     values,
-    setFieldValue,
   } = useFormik({
     initialValues,
     validationSchema: CampgroundSchema,
@@ -162,7 +167,16 @@ export default function CampgroundForm({ currentUser }: Props) {
     } else {
       resetForm();
     }
-  }, [isCreate]);
+  }, [isCreate, campground]);
+
+  const deleteImage = async (image_filename: string) => {
+    const image = image_filename.replace('JelpKemp/', '');
+    try {
+      await axios.delete(`/campgrounds/${_id}/images/${image}`);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
 
   const state = {
     path: location.pathname,
@@ -280,7 +294,7 @@ export default function CampgroundForm({ currentUser }: Props) {
                 <label className='form-label fw-medium' htmlFor='images'>
                   Image(s)
                 </label>
-                <div className='input-group'>
+                <div className='input-group mb-1'>
                   <input
                     type='file'
                     className='form-control'
@@ -290,6 +304,20 @@ export default function CampgroundForm({ currentUser }: Props) {
                     multiple
                     onChange={handleImageChange}
                   />
+                </div>
+                <div>
+                  {campground?.images.map((i) => (
+                    <div
+                      key={i.filename}
+                      onClick={() => deleteImage(i.filename)}
+                    >
+                      <img
+                        className='mb-1 w-100'
+                        src={`${i.url}`}
+                        alt={`${i.filename}`}
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
 

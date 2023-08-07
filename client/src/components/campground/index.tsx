@@ -23,7 +23,7 @@ export default function Campgrounds() {
   return (
     <div className='container'>
       <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
-      {campgroundsData.slice(50).map((campground) => (
+      {campgroundsData.slice().map((campground) => (
         <Campground {...campground} key={campground._id} />
       ))}
     </div>
