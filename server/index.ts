@@ -54,11 +54,6 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
     updatedMessage = 'You do not have permission to delete this campground.';
   }
 
-  if (message.includes('Cast to ObjectId failed')) {
-    updatedCode = 404;
-    updatedMessage = 'Campground Not Found!';
-  }
-
   console.log('err: ');
   console.log(err);
   res.status(updatedCode).send(updatedMessage);
