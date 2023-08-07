@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 import { asyncHandler } from '../utils';
 import User from '../models/user';
@@ -27,7 +29,7 @@ export const signup = asyncHandler(
         username: newUser.username,
         user_email: newUser.email,
       },
-      'jwt-secret-key-so-private',
+      process.env.JWT_SECRET_TOKEN!,
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);
@@ -59,7 +61,7 @@ export const login = asyncHandler(
         username: user.username,
         user_email: user.email,
       },
-      'jwt-secret-key-so-private',
+      process.env.JWT_SECRET_TOKEN!,
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);

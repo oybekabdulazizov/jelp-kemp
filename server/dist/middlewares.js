@@ -75,7 +75,7 @@ exports.validateLoginFormData = validateLoginFormData;
 exports.isCampgroundAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id } = req.params;
     const campground = yield campground_1.default.findById(_id);
-    const result = jsonwebtoken_1.default.verify(req.cookies.token, 'jwt-secret-key-so-private', {});
+    const result = jsonwebtoken_1.default.verify(req.cookies.token, process.env.JWT_SECRET_TOKEN, {});
     if (!(campground === null || campground === void 0 ? void 0 : campground.author.equals(result.user_id))) {
         return res.json({
             error: 'Oops! You do not have permission to edit this campground.',
@@ -86,7 +86,7 @@ exports.isCampgroundAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awa
 exports.isReviewAuthor = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { review_id } = req.params;
     const review = yield review_1.default.findById(review_id);
-    const result = jsonwebtoken_1.default.verify(req.cookies.token, 'jwt-secret-key-so-private', {});
+    const result = jsonwebtoken_1.default.verify(req.cookies.token, process.env.JWT_SECRET_TOKEN, {});
     if (!(review === null || review === void 0 ? void 0 : review.author.equals(result.user_id))) {
         return res.json({
             error: 'Oops! You do not have permission to edit or delete this review.',

@@ -83,7 +83,7 @@ export const isCampgroundAuthor = asyncHandler(
     const campground = await Campground.findById(_id);
     const result = jwt.verify(
       req.cookies.token,
-      'jwt-secret-key-so-private',
+      process.env.JWT_SECRET_TOKEN!,
       {}
     ) as any;
     if (!campground?.author.equals(result.user_id)) {
@@ -102,7 +102,7 @@ export const isReviewAuthor = asyncHandler(
 
     const result = jwt.verify(
       req.cookies.token,
-      'jwt-secret-key-so-private',
+      process.env.JWT_SECRET_TOKEN!,
       {}
     ) as any;
 
