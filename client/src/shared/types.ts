@@ -16,6 +16,10 @@ export type Campground_Type = Campground_Validation_Type_Yup & {
   _id?: string;
   author: Author_Type;
   reviews: Array<Review_Type>;
+  geometry: {
+    type: string;
+    coordinates: Array<number>;
+  };
   images: Array<{ _id: string; url: string; filename: string }>;
 };
 

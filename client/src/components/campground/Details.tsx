@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Link,
   NavigateFunction,
@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
+import mapboxgl, { Map } from 'mapbox-gl';
 
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
@@ -23,7 +24,12 @@ export default function Details({ currentUser }: Props) {
   const [campground, setCampground] = useState<Campground_Type>();
   const [deleting, setDeleting] = useState<boolean>(false);
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
+  const [viewPortZoom, setViewPortZoom] = useState<number>(3);
   const navigate: NavigateFunction = useNavigate();
+  const mapContainer = useRef(null);
+  const map = useRef<Map | null>(null);
+  mapboxgl.accessToken =
+    'pk.eyJ1Ijoib3liZWthYmR1bGF6aXoiLCJhIjoiY2xsMmhucjc0MDBkaTNzcGxlZndtOHBrdCJ9.OCkpW8TwtnuQpampzXJgKw';
 
   useEffect(() => {
     const findCampground = async () => {
@@ -31,10 +37,11 @@ export default function Details({ currentUser }: Props) {
         const { data } = await axios.get(`/campgrounds/${_id}`);
         if (data.error) {
           toast.error(data.error);
-          navigate('/campgrounds', {});
+          navigate('/campgrounds');
         } else {
           const campgroundFromDb = await data;
           setCampground(campgroundFromDb);
+          setViewPortZoom(6);
         }
       } catch (err: any) {
         toast.error(err.message);
@@ -42,7 +49,26 @@ export default function Details({ currentUser }: Props) {
       }
     };
     if (!deleting) findCampground();
-  }, [campground]);
+  }, []);
+
+  useEffect(() => {
+    const setMap = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (map.current) return;
+      try {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current!,
+          style: 'mapbox://styles/mapbox/streets-v12',
+          center: [
+            campground?.geometry.coordinates[0]! as number,
+            campground?.geometry.coordinates[1]! as number,
+          ],
+          zoom: viewPortZoom,
+        });
+      } catch (err: any) {}
+    };
+    if (viewPortZoom === 6) setMap();
+  }, [viewPortZoom]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -125,6 +151,7 @@ export default function Details({ currentUser }: Props) {
     <>
       <div className='row'>
         <div className='col-6'>
+          <div ref={mapContainer} style={{ height: '200px' }}></div>
           <div
             id='carouselExampleAutoplaying'
             className='carousel slide'
@@ -144,7 +171,7 @@ export default function Details({ currentUser }: Props) {
                 </div>
               ))}
             </div>
-            {campground?.images?.length && campground.images.length > 1 && (
+            {campground?.images?.length && campground.images.length > 1 ? (
               <>
                 <button
                   className='carousel-control-prev'
@@ -171,6 +198,8 @@ export default function Details({ currentUser }: Props) {
                   <span className='visually-hidden'>Next</span>
                 </button>
               </>
+            ) : (
+              <span></span>
             )}
           </div>
           <div className='card mb-3'>
