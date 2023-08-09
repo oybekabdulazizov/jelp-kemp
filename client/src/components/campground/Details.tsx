@@ -56,18 +56,19 @@ export default function Details({ currentUser }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (map.current) return;
       try {
+        const lng: number = campground?.geometry.coordinates[0]! as number;
+        const lat: number = campground?.geometry.coordinates[1]! as number;
         map.current = new mapboxgl.Map({
           container: mapContainer.current!,
           style: 'mapbox://styles/mapbox/streets-v12',
-          center: [
-            campground?.geometry.coordinates[0]! as number,
-            campground?.geometry.coordinates[1]! as number,
-          ],
+          center: [lng, lat],
           zoom: viewPortZoom,
         });
+
+        new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map.current);
       } catch (err: any) {}
     };
-    if (viewPortZoom === 6) setMap();
+    if (viewPortZoom !== 3) setMap();
   }, [viewPortZoom]);
 
   const handleDelete = async () => {
@@ -203,11 +204,6 @@ export default function Details({ currentUser }: Props) {
             )}
           </div>
           <div className='card mb-3'>
-            {/* <img
-              src={`${campground?.image}`}
-              className='card-img-top'
-              alt={campground?.title}
-            /> */}
             <div className='card-body'>
               <h5 className='card-title'>{campground?.title} </h5>
 
