@@ -14,6 +14,7 @@ import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import '../../styles/display-stars.css';
+import campground_placeholder from '../../assets/campground_placeholder.png';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -159,18 +160,28 @@ export default function Details({ currentUser }: Props) {
             data-bs-ride='carousel'
           >
             <div className='carousel-inner'>
-              {campground?.images.map((img, i) => (
-                <div
-                  className={`carousel-item ${i === 0 ? 'active' : ''}`}
-                  key={i}
-                >
+              {campground?.images?.length && campground?.images?.length > 0 ? (
+                campground?.images.map((img, i) => (
+                  <div
+                    className={`carousel-item ${i === 0 ? 'active' : ''}`}
+                    key={i}
+                  >
+                    <img
+                      src={`${img.url}`}
+                      className='d-block w-100'
+                      alt={`campground-image-${i}`}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className={`carousel-item active`}>
                   <img
-                    src={`${img.url}`}
+                    src={campground_placeholder}
                     className='d-block w-100'
-                    alt={`campground-image-${i}`}
+                    alt={`campground-image-01`}
                   />
                 </div>
-              ))}
+              )}
             </div>
             {campground?.images?.length && campground.images.length > 1 ? (
               <>
