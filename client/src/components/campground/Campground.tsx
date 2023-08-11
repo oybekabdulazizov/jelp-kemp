@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { Campground_Type } from '../../shared/types';
 import useResize from '../../hooks/useResize';
+import campground_placeholder from '../../assets/campground_placeholder.png';
 
 type Props = Campground_Type;
 
@@ -20,7 +21,9 @@ export default function Campground({
       <div className='row g-0'>
         <div className='col-md-4'>
           <img
-            src={`${images[0].url}`}
+            src={
+              images.length > 0 ? `${images[0].url}` : campground_placeholder
+            }
             className='img-fluid rounded-start mask'
             alt={title}
           />

@@ -52,7 +52,11 @@ export default function CampgroundForm({ currentUser }: Props) {
       });
       return data;
     } catch (err: any) {
-      console.log(err);
+      if (err.response) {
+        toast.error(err.response.data);
+        console.log(err.response.data);
+        return;
+      }
     }
   };
 
@@ -75,7 +79,8 @@ export default function CampgroundForm({ currentUser }: Props) {
       });
       return data;
     } catch (err: any) {
-      console.log(err);
+      toast.error(err.response.data);
+      console.log(err.response.data);
     }
   };
 

@@ -17,6 +17,10 @@ interface ICampground {
   description: string;
   price: number;
   location: string;
+  geometry: {
+    type: string;
+    coordinates: Array<number>;
+  };
   images?: Array<IImage>;
   author: Types.ObjectId;
   reviews: Array<Object>;
@@ -43,6 +47,17 @@ const CampgroundSchema = new Schema<ICampground>({
     type: String,
     required: true,
     maxLength: [100, 'Location cannot exceed 250 characters'],
+  },
+  geometry: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
   },
   images: [ImageSchema],
   author: {

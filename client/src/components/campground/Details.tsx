@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Link,
   NavigateFunction,
@@ -8,11 +8,13 @@ import {
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
+import mapboxgl, { Map } from 'mapbox-gl';
 
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import '../../styles/display-stars.css';
+import campground_placeholder from '../../assets/campground_placeholder.png';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -23,7 +25,12 @@ export default function Details({ currentUser }: Props) {
   const [campground, setCampground] = useState<Campground_Type>();
   const [deleting, setDeleting] = useState<boolean>(false);
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
+  const [viewPortZoom, setViewPortZoom] = useState<number>(3);
   const navigate: NavigateFunction = useNavigate();
+  const mapContainer = useRef(null);
+  const map = useRef<Map | null>(null);
+  mapboxgl.accessToken =
+    'pk.eyJ1Ijoib3liZWthYmR1bGF6aXoiLCJhIjoiY2xsMmhucjc0MDBkaTNzcGxlZndtOHBrdCJ9.OCkpW8TwtnuQpampzXJgKw';
 
   useEffect(() => {
     const findCampground = async () => {
@@ -31,10 +38,11 @@ export default function Details({ currentUser }: Props) {
         const { data } = await axios.get(`/campgrounds/${_id}`);
         if (data.error) {
           toast.error(data.error);
-          navigate('/campgrounds', {});
+          navigate('/campgrounds');
         } else {
           const campgroundFromDb = await data;
           setCampground(campgroundFromDb);
+          setViewPortZoom(6);
         }
       } catch (err: any) {
         toast.error(err.message);
@@ -42,7 +50,34 @@ export default function Details({ currentUser }: Props) {
       }
     };
     if (!deleting) findCampground();
-  }, [campground]);
+  }, []);
+
+  useEffect(() => {
+    const setMap = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (map.current) return;
+      try {
+        const lng: number = campground?.geometry.coordinates[0]! as number;
+        const lat: number = campground?.geometry.coordinates[1]! as number;
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current!,
+          style: 'mapbox://styles/mapbox/streets-v12',
+          center: [lng, lat],
+          zoom: viewPortZoom,
+        });
+
+        new mapboxgl.Marker()
+          .setLngLat([lng, lat])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 15 }).setHTML(
+              `<h4>${campground?.title}</h4><p>${campground?.location}</p>`
+            )
+          )
+          .addTo(map.current);
+      } catch (err: any) {}
+    };
+    if (viewPortZoom !== 3) setMap();
+  }, [viewPortZoom]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -125,26 +160,37 @@ export default function Details({ currentUser }: Props) {
     <>
       <div className='row'>
         <div className='col-6'>
+          <div ref={mapContainer} style={{ height: '200px' }}></div>
           <div
             id='carouselExampleAutoplaying'
             className='carousel slide'
             data-bs-ride='carousel'
           >
             <div className='carousel-inner'>
-              {campground?.images.map((img, i) => (
-                <div
-                  className={`carousel-item ${i === 0 ? 'active' : ''}`}
-                  key={i}
-                >
+              {campground?.images?.length && campground?.images?.length > 0 ? (
+                campground?.images.map((img, i) => (
+                  <div
+                    className={`carousel-item ${i === 0 ? 'active' : ''}`}
+                    key={i}
+                  >
+                    <img
+                      src={`${img.url}`}
+                      className='d-block w-100'
+                      alt={`campground-image-${i}`}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className={`carousel-item active`}>
                   <img
-                    src={`${img.url}`}
+                    src={campground_placeholder}
                     className='d-block w-100'
-                    alt={`campground-image-${i}`}
+                    alt={`campground-image-01`}
                   />
                 </div>
-              ))}
+              )}
             </div>
-            {campground?.images?.length && campground.images.length > 1 && (
+            {campground?.images?.length && campground.images.length > 1 ? (
               <>
                 <button
                   className='carousel-control-prev'
@@ -171,14 +217,11 @@ export default function Details({ currentUser }: Props) {
                   <span className='visually-hidden'>Next</span>
                 </button>
               </>
+            ) : (
+              <span></span>
             )}
           </div>
           <div className='card mb-3'>
-            {/* <img
-              src={`${campground?.image}`}
-              className='card-img-top'
-              alt={campground?.title}
-            /> */}
             <div className='card-body'>
               <h5 className='card-title'>{campground?.title} </h5>
 

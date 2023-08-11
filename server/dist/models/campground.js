@@ -40,6 +40,17 @@ const CampgroundSchema = new mongoose_1.Schema({
         required: true,
         maxLength: [100, 'Location cannot exceed 250 characters'],
     },
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true,
+        },
+        coordinates: {
+            type: [Number],
+            required: true,
+        },
+    },
     images: [ImageSchema],
     author: {
         type: mongoose_1.Schema.Types.ObjectId,

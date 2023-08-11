@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
+import Geocoding from '@mapbox/mapbox-sdk/services/geocoding';
+import * as dotenv from 'dotenv';
 
 import { asyncHandler } from '../utils';
 import Campground from '../models/campground';
 import { cloudinary } from '../cloudinary';
+
+dotenv.config();
+const geocoder = Geocoding({ accessToken: process.env.MAPBOX_TOKEN! });
 
 export const getCampgrounds = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +34,13 @@ export const createCampground = asyncHandler(
     As a workaround, the maximum images to be uploaded has been set as 5. Once the issue is resolved 
     or a better workaround is found, the code will be updated accordingly. 
     */
+
+    const { body } = await geocoder
+      .forwardGeocode({ query: req.body.location, limit: 1 })
+      .send();
+
     const newCampground = new Campground({ ...req.body });
+    newCampground.geometry = body.features[0].geometry;
 
     try {
       const img0 = {

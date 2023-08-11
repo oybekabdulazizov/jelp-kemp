@@ -51,11 +51,11 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
 
   if (message.includes('jwt must be provided')) {
     updatedCode = 401;
-    updatedMessage = 'You do not have permission to delete this campground.';
+    updatedMessage = 'You do not have permission to perform this operation.';
   }
 
   console.log('err: ');
-  console.log(err);
+  console.log(err.message);
   res.status(updatedCode).send(updatedMessage);
 });
 
