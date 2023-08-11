@@ -32,6 +32,7 @@ export default function CampgroundForm({ currentUser }: Props) {
     item?: ((index: number) => File | null) | undefined;
     [Symbol.iterator]?: (() => IterableIterator<File>) | {};
   }>({});
+  const [isDeletingImage, setIsDeletingImage] = useState<boolean>(false);
 
   const create = async (values: any) => {
     const formData = new FormData();
@@ -55,7 +56,6 @@ export default function CampgroundForm({ currentUser }: Props) {
       if (err.response) {
         toast.error(err.response.data);
         console.log(err.response.data);
-        return;
       }
     }
   };
@@ -172,15 +172,17 @@ export default function CampgroundForm({ currentUser }: Props) {
     } else {
       resetForm();
     }
-  }, [isCreate, campground]);
+  }, [isCreate, isDeletingImage]);
 
   const deleteImage = async (image_filename: string) => {
+    setIsDeletingImage(true);
     const image = image_filename.replace('JelpKemp/', '');
     try {
       await axios.delete(`/campgrounds/${_id}/images/${image}`);
     } catch (err: any) {
       toast.error(err.message);
     }
+    setIsDeletingImage(false);
   };
 
   const state = {

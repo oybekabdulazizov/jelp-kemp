@@ -26,6 +26,7 @@ export default function Details({ currentUser }: Props) {
   const [deleting, setDeleting] = useState<boolean>(false);
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
   const [viewPortZoom, setViewPortZoom] = useState<number>(3);
+  const [reviewChanged, setReviewChanged] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
   const mapContainer = useRef(null);
   const map = useRef<Map | null>(null);
@@ -50,7 +51,7 @@ export default function Details({ currentUser }: Props) {
       }
     };
     if (!deleting) findCampground();
-  }, []);
+  }, [reviewChanged]);
 
   useEffect(() => {
     const setMap = async () => {
@@ -93,8 +94,9 @@ export default function Details({ currentUser }: Props) {
         toast.success(data.message);
         navigate(`/campgrounds`);
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      toast.error(err.response.data);
+      console.log(err.response.data);
     }
     setDeleting(false);
   };
@@ -110,17 +112,20 @@ export default function Details({ currentUser }: Props) {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     try {
+      setReviewChanged(true);
       await axios.post(`/campgrounds/${_id}/reviews`, values);
       actions.resetForm();
       setIsValidReview(false);
     } catch (err: any) {
       console.log(err);
     }
+    setReviewChanged(false);
   };
 
   const handleReviewDelete = async (
     review_id: string | undefined
   ): Promise<void> => {
+    setReviewChanged(true);
     try {
       const { data } = await axios.delete(
         `/campgrounds/${_id}/reviews/${review_id}`
@@ -131,6 +136,7 @@ export default function Details({ currentUser }: Props) {
       }
       if (data.message) {
         toast.success(data.message);
+        setReviewChanged(false);
         return;
       }
     } catch (err: any) {
