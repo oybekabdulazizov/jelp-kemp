@@ -66,7 +66,14 @@ export default function Details({ currentUser }: Props) {
           zoom: viewPortZoom,
         });
 
-        new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map.current);
+        new mapboxgl.Marker()
+          .setLngLat([lng, lat])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 15 }).setHTML(
+              `<h4>${campground?.title}</h4><p>${campground?.location}</p>`
+            )
+          )
+          .addTo(map.current);
       } catch (err: any) {}
     };
     if (viewPortZoom !== 3) setMap();
