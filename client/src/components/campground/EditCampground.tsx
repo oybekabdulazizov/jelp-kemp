@@ -1,25 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import {
-  Link,
-  Navigate,
-  NavigateFunction,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 
 import { CampgroundSchema } from '../../shared/schemas';
 import { Campground_Type, CurrentUser_Type } from '../../shared/types';
 
-type Props = {
-  currentUser: CurrentUser_Type | null;
-};
+type Props = { currentUser: CurrentUser_Type | null };
 
 export default function EditCampground({ currentUser }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const { _id } = useParams();
   const [campground, setCampground] = useState<Campground_Type>();
   const [images, setImages] = useState<{
@@ -67,13 +59,11 @@ export default function EditCampground({ currentUser }: Props) {
     if (data.error) {
       toast.error(data.error);
       navigate(`/campgrounds/${_id}`);
-      return;
     }
     if (data.message) {
       actions.resetForm();
       toast.success(data.message);
       navigate(`/campgrounds/${_id}`);
-      return;
     }
   };
 
@@ -119,7 +109,6 @@ export default function EditCampground({ currentUser }: Props) {
         navigate(`/campgrounds`, {});
       }
     };
-    console.log('object');
     findCampground();
   }, [isDeletingImage]);
 
@@ -288,16 +277,23 @@ export default function EditCampground({ currentUser }: Props) {
                 )}
               </button>
             </form>
-            <Link
-              to={`/campgrounds/${_id}`}
+            <button
+              disabled={isSubmitting}
               className='btn btn-secondary mt-2 w-100 py-2 fw-medium'
             >
-              Cancel
-            </Link>
-            <div className='mt-3 text-center'>
-              <Link to='/campgrounds' className='link-offset-2 fw-medium'>
-                All Campgrounds
+              <Link
+                to={`/campgrounds/${_id}`}
+                className='btn btn-secondary p-0'
+              >
+                Cancel
               </Link>
+            </button>
+            <div className='mt-2 text-center'>
+              <button style={{ border: 'none' }} disabled={isSubmitting}>
+                <Link to='/campgrounds' className='link-offset-2 fw-medium'>
+                  All Campgrounds
+                </Link>
+              </button>
             </div>
           </div>
         </div>

@@ -1,24 +1,17 @@
 import axios from 'axios';
 import { useState } from 'react';
-import {
-  Link,
-  Navigate,
-  NavigateFunction,
-  useNavigate,
-} from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
 
 import { CampgroundSchema } from '../../shared/schemas';
 import { CurrentUser_Type } from '../../shared/types';
 
-type Props = {
-  currentUser: CurrentUser_Type | null;
-};
+type Props = { currentUser: CurrentUser_Type | null };
 
 export default function CreateCampground({ currentUser }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const [images, setImages] = useState<{
     [x: number]: File;
     length?: number | undefined;
@@ -65,7 +58,6 @@ export default function CreateCampground({ currentUser }: Props) {
     if (data.error) {
       toast.error(data.error);
       navigate(`/campgrounds`);
-      return;
     }
     if (data.message) {
       actions.resetForm();
@@ -78,7 +70,7 @@ export default function CreateCampground({ currentUser }: Props) {
   const initialValues = {
     title: '',
     location: '',
-    price: '',
+    price: 0,
     images: [],
     description: '',
     author: currentUser?.user_id,
@@ -238,10 +230,12 @@ export default function CreateCampground({ currentUser }: Props) {
                 )}
               </button>
             </form>
-            <div className='mt-3 text-center'>
-              <Link to='/campgrounds' className='link-offset-2 fw-medium'>
-                All Campgrounds
-              </Link>
+            <div className='mt-2 text-center'>
+              <button style={{ border: 'none' }} disabled={isSubmitting}>
+                <Link to='/campgrounds' className='link-offset-2 fw-medium'>
+                  All Campgrounds
+                </Link>
+              </button>
             </div>
           </div>
         </div>
