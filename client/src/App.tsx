@@ -7,13 +7,13 @@ import NavBar from './components/NavBar';
 import Home from './components/Home';
 import Campgrounds from './components/campground';
 import Details from './components/campground/Details';
-import CampgroundForm from './components/campground/CampgroundForm';
 import PageNotFound from './components/PageNotFound';
 import Footer from './components/Footer';
 import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
 import { CurrentUser_Type } from './shared/types';
 import EditCampground from './components/campground/EditCampground';
+import CreateCampground from './components/campground/CreateCampground';
 
 axios.defaults.baseURL = 'http://localhost:3001';
 axios.defaults.withCredentials = true;
@@ -41,7 +41,7 @@ export default function App() {
           <Route path='/campgrounds' element={<Campgrounds />} />
           <Route
             path='/campgrounds/new'
-            element={<CampgroundForm currentUser={currentUser} />}
+            element={<CreateCampground currentUser={currentUser} />}
           />
           <Route
             path='/campgrounds/:_id/edit'
