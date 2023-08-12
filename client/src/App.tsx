@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import SignupForm from './components/user/SignupForm';
 import LoginForm from './components/user/LoginForm';
 import { CurrentUser_Type } from './shared/types';
+import EditCampground from './components/campground/EditCampground';
 
 axios.defaults.baseURL = 'http://localhost:3001';
 axios.defaults.withCredentials = true;
@@ -44,7 +45,7 @@ export default function App() {
           />
           <Route
             path='/campgrounds/:_id/edit'
-            element={<CampgroundForm currentUser={currentUser} />}
+            element={<EditCampground currentUser={currentUser} />}
           />
           <Route
             path='/campgrounds/:_id'
