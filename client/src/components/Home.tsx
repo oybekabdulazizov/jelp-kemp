@@ -1,6 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
+
 import { CurrentUser_Type } from '../shared/types';
 import { logOut } from '../common';
+import '../styles/home.css';
 
 export default function Home({
   currentUser,
@@ -14,84 +16,67 @@ export default function Home({
     setCurrentUser(null);
   };
   return (
-    <>
-      <nav className='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
-        <div className='container'>
-          <Link to='/' className='navbar-brand text-light'>
-            Jelp-Kemp
-          </Link>
-          <div className='collapse navbar-collapse w-auto' data-bs-theme='dark'>
-            <div className='navbar-nav'>
-              <NavLink to='/' end className='nav-link mx-2'>
-                Home
-              </NavLink>
-              <NavLink to='/campgrounds' end className='nav-link mx-2'>
-                Campgrounds
-              </NavLink>
-              <NavLink to='/campgrounds/new' end className='nav-link mx-2'>
-                New Campground
-              </NavLink>
-            </div>
-            <div className='navbar-nav ms-auto'>
-              {currentUser !== null ? (
-                <button className='nav-link mx-2' onClick={handleLogout}>
-                  Log out
-                </button>
-              ) : (
-                <>
-                  <NavLink to='/login' end className='nav-link mx-2'>
-                    Log in
-                  </NavLink>
-                  <NavLink
-                    to='/signup'
-                    end
-                    className='nav-link mx-2 border border-secondary rounded'
-                  >
-                    Sign up
-                  </NavLink>
-                </>
-              )}
-            </div>
-          </div>
-          <div className='dropstart' data-bs-theme='dark'>
-            <button
-              className='navbar-toggler'
-              role='button'
-              data-bs-toggle='dropdown'
-              aria-expanded='false'
+    <section className='body d-flex flex-column vh-100 w-100 text-white'>
+      <header className='home-header mx-auto p-3 container'>
+        <div className='d-flex justify-content-between'>
+          <h3 className='mb-0'>JelpKemp</h3>
+          <nav className='navbar-nav d-flex flex-row'>
+            <NavLink to='/' end className='nav-link home-nav-link'>
+              Home
+            </NavLink>
+            <NavLink to='/campgrounds' end className='nav-link home-nav-link'>
+              Campgrounds
+            </NavLink>
+            <NavLink
+              to='/campgrounds/new'
+              end
+              className='nav-link home-nav-link'
             >
-              <span className='navbar-toggler-icon'></span>
-            </button>
-            <div className='dropdown-menu d-lg-none'>
-              <NavLink to='/' end className='dropdown-item'>
-                Home
-              </NavLink>
-              <NavLink to='/campgrounds' end className='dropdown-item'>
-                Campgrounds
-              </NavLink>
-              <NavLink to='/campgrounds/new' end className='dropdown-item'>
-                New Campground
-              </NavLink>
-              <hr className='dropdown-divider' />
-              {currentUser !== null ? (
-                <button className='dropdown-item' onClick={handleLogout}>
+              New Campground
+            </NavLink>
+            <div className='d-flex flex-row ms-5'>
+              {currentUser ? (
+                <button
+                  className='nav-link home-nav-link'
+                  onClick={handleLogout}
+                >
                   Log out
                 </button>
               ) : (
                 <>
-                  <NavLink to='/login' end className='dropdown-item'>
+                  <NavLink to='/login' end className='nav-link home-nav-link'>
                     Log in
                   </NavLink>
-                  <NavLink to='/signup' end className='dropdown-item'>
+                  <span className='nav-link home-nav-link'>/</span>
+                  <NavLink to='/signup' end className='nav-link home-nav-link'>
                     Sign up
                   </NavLink>
                 </>
               )}
             </div>
-          </div>
+          </nav>
         </div>
-      </nav>
-      <h1>Home</h1>
-    </>
+      </header>
+      <main className='home-main text-center d-flex flex-column justify-content-center align-items-center'>
+        <h1>JelpKemp</h1>
+        <p className='lead'>
+          Welcome to JelpKemp!
+          <br />
+          Jump right in and explore our many campgrounds.
+          <br />
+          Feel free to share some of your own and leave reviews on others!
+        </p>
+        <Link to='/campgrounds' className='btn btn-lg fw-bold border-white'>
+          Take me to Campgrounds
+        </Link>
+      </main>
+      <footer className='footer mt-auto py-3 home-footer'>
+        <div className='container'>
+          <span className='text-secondary fs-5 text-secondary'>
+            &copy;Jelp-Kemp 2023
+          </span>
+        </div>
+      </footer>
+    </section>
   );
 }

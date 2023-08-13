@@ -1,0 +1,46 @@
+.body {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url('../assets/home-cover.jpg');
+  background-position: 50% 50%;
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+}
+
+header.home-header,
+footer.home-footer {
+  height: 8vh;
+}
+
+main.home-main {
+  height: 84vh;
+}
+
+p.lead {
+  letter-spacing: 0.5px;
+}
+
+.home-nav-link {
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.25rem 0;
+  margin-left: 1rem;
+}
+
+.home-nav-link.active {
+  border-bottom: 0.25rem solid rgba(255, 255, 255);
+  color: rgba(255, 255, 255);
+}
+
+.home-nav-link:hover {
+  border-bottom: 0.25rem solid rgba(255, 255, 255);
+  color: rgba(255, 255, 255);
+}
+
+a.btn.btn-lg {
+  letter-spacing: 0.5px;
+  color: white;
+  background: transparent;
+}
+
+a.btn.btn-lg:hover {
+  color: black;
+  background: white;
+}
