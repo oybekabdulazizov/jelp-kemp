@@ -26,7 +26,7 @@ const Layout = ({
   setCurrentUser: (user: CurrentUser_Type | null) => void;
 }) => {
   return (
-    <>
+    <div className='d-flex flex-column w-100'>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <Toaster
         containerStyle={{ marginTop: '3em' }}
@@ -34,11 +34,11 @@ const Layout = ({
         gutter={8}
         toastOptions={{ duration: 3000 }}
       />
-      <div className='container my-4'>
+      <div className='container my-3'>
         <Outlet />
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 
