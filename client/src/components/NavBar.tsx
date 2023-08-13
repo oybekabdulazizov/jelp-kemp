@@ -1,8 +1,9 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { Link, NavLink } from 'react-router-dom';
 
 import { CurrentUser_Type } from '../shared/types';
-import { toast } from 'react-hot-toast';
+// import { toast } from 'react-hot-toast';
+import { logOut } from '../common';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -11,14 +12,8 @@ type Props = {
 
 export default function NavBar({ currentUser, setCurrentUser }: Props) {
   const handleLogout = async () => {
-    try {
-      await axios.get('/logout');
-      localStorage.removeItem('user');
-      setCurrentUser(null);
-      toast.success('Successfully logged out.');
-    } catch (err: any) {
-      console.log(err);
-    }
+    await logOut();
+    setCurrentUser(null);
   };
 
   return (
