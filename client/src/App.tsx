@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 
@@ -18,14 +18,13 @@ import CreateCampground from './components/campground/CreateCampground';
 axios.defaults.baseURL = 'http://localhost:3001';
 axios.defaults.withCredentials = true;
 
-export default function App() {
-  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
-    () => {
-      const user = localStorage.getItem('user');
-      return user ? JSON.parse(user) : null;
-    }
-  );
-
+const Layout = ({
+  currentUser,
+  setCurrentUser,
+}: {
+  currentUser: CurrentUser_Type | null;
+  setCurrentUser: (user: CurrentUser_Type | null) => void;
+}) => {
   return (
     <>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
@@ -36,8 +35,30 @@ export default function App() {
         toastOptions={{ duration: 3000 }}
       />
       <div className='container my-4'>
-        <Routes>
-          <Route path='/' element={<Home />} />
+        <Outlet />
+      </div>
+      <Footer />
+    </>
+  );
+};
+
+export default function App() {
+  const [currentUser, setCurrentUser] = useState<CurrentUser_Type | null>(
+    () => {
+      const user = localStorage.getItem('user');
+      return user ? JSON.parse(user) : null;
+    }
+  );
+
+  return (
+    <>
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route
+          element={
+            <Layout currentUser={currentUser} setCurrentUser={setCurrentUser} />
+          }
+        >
           <Route path='/campgrounds' element={<Campgrounds />} />
           <Route
             path='/campgrounds/new'
@@ -59,14 +80,13 @@ export default function App() {
             path='/signup'
             element={<SignupForm setCurrentUser={setCurrentUser} />}
           />
-          <Route path='/404-notfound' element={<PageNotFound />} />
-          <Route
-            path='/*'
-            element={<Navigate to='/404-notfound' replace={true} />}
-          />
-        </Routes>
-      </div>
-      <Footer />
+        </Route>
+        <Route path='/404-notfound' element={<PageNotFound />} />
+        <Route
+          path='/*'
+          element={<Navigate to='/404-notfound' replace={true} />}
+        />
+      </Routes>
     </>
   );
 }
