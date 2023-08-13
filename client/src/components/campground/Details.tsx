@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-  Link,
-  NavigateFunction,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { toast } from 'react-hot-toast';
@@ -27,7 +22,7 @@ export default function Details({ currentUser }: Props) {
   const [isValidReview, setIsValidReview] = useState<boolean>(false);
   const [viewPortZoom, setViewPortZoom] = useState<number>(3);
   const [reviewChanged, setReviewChanged] = useState<boolean>(false);
-  const navigate: NavigateFunction = useNavigate();
+  const navigate = useNavigate();
   const mapContainer = useRef(null);
   const map = useRef<Map | null>(null);
   mapboxgl.accessToken =
@@ -132,16 +127,14 @@ export default function Details({ currentUser }: Props) {
       );
       if (data.error) {
         toast.error(data.error);
-        return;
       }
       if (data.message) {
         toast.success(data.message);
-        setReviewChanged(false);
-        return;
       }
     } catch (err: any) {
       console.log(err);
     }
+    setReviewChanged(false);
   };
 
   const ratingStars = (length: number): Array<number> => {
@@ -168,7 +161,7 @@ export default function Details({ currentUser }: Props) {
         <div className='col-6'>
           <div ref={mapContainer} style={{ height: '200px' }}></div>
           <div
-            id='carouselExampleAutoplaying'
+            id='imagesCarousel'
             className='carousel slide'
             data-bs-ride='carousel'
           >
@@ -201,7 +194,7 @@ export default function Details({ currentUser }: Props) {
                 <button
                   className='carousel-control-prev'
                   type='button'
-                  data-bs-target='#carouselExampleAutoplaying'
+                  data-bs-target='#imagesCarousel'
                   data-bs-slide='prev'
                 >
                   <span
@@ -213,7 +206,7 @@ export default function Details({ currentUser }: Props) {
                 <button
                   className='carousel-control-next'
                   type='button'
-                  data-bs-target='#carouselExampleAutoplaying'
+                  data-bs-target='#imagesCarousel'
                   data-bs-slide='next'
                 >
                   <span

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
 import { Campground_Type } from '../../shared/types';
-import useResize from '../../hooks/useResize';
 import campground_placeholder from '../../assets/campground_placeholder.png';
 
 type Props = Campground_Type;
@@ -14,10 +13,8 @@ export default function Campground({
   images,
   location,
 }: Props) {
-  const { width } = useResize();
-
   return (
-    <div className={`card mb-3 ${width >= 992 ? 'w-75' : 'w-100'} mx-auto`}>
+    <div className='card mb-3 w-75 mx-auto'>
       <div className='row g-0'>
         <div className='col-md-4'>
           <img
