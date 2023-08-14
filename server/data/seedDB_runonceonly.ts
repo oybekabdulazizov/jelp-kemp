@@ -37,8 +37,8 @@ const getRandomPrice = (): number => {
 // };
 
 const seedDB = async (): Promise<void> => {
-  // await Review.deleteMany({});
-  // await Campground.deleteMany({});
+  await Review.deleteMany({});
+  await Campground.deleteMany({});
   const citiesSliced = cities.slice(0, 200);
 
   for (let i = 0; i < 200; i++) {
@@ -57,12 +57,12 @@ const seedDB = async (): Promise<void> => {
     };
     const images = [
       {
-        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1691522509/JelpKemp/w9hgt7llquxy965wphc2.jpg',
-        filename: 'JelpKemp/w9hgt7llquxy965wphc2',
+        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1692027558/JelpKemp/default/john-towner-JgOeRuGD_Y4-unsplash_dlysub.jpg',
+        filename: 'JelpKemp/default/john-towner-JgOeRuGD_Y4-unsplash_dlysub',
       },
       {
-        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1691741641/JelpKemp/jqzebpaxqslbfoczfrc2.jpg',
-        filename: 'JelpKemp/jqzebpaxqslbfoczfrc2',
+        url: 'https://res.cloudinary.com/dvcnkddfm/image/upload/v1692027555/JelpKemp/default/thumbnail-draft_hcyn0k.jpg',
+        filename: 'JelpKemp/default/thumbnail-draft_hcyn0k',
       },
     ];
     const author = '64d0b37ee01549024f5ac90c';
