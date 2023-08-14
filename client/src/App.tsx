@@ -28,12 +28,6 @@ const Layout = ({
   return (
     <div className='d-flex flex-column w-100' style={{ minHeight: '100vh' }}>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
-      <Toaster
-        containerStyle={{ marginTop: '3em' }}
-        position='top-right'
-        gutter={8}
-        toastOptions={{ duration: 3000 }}
-      />
       <div className='container my-3 h-100'>
         <Outlet />
       </div>
@@ -52,6 +46,12 @@ export default function App() {
 
   return (
     <>
+      <Toaster
+        containerStyle={{ marginTop: '3em' }}
+        position='top-right'
+        gutter={8}
+        toastOptions={{ duration: 3000 }}
+      />
       <Routes>
         <Route
           path='/'
