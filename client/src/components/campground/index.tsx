@@ -30,7 +30,7 @@ export default function Campgrounds() {
         <ClusteredMap campgroundsData={campgroundsData} />
       </div>
       <div className='container'>
-        <h2 className='w-75 mx-auto mb-3'>All Campgrounds</h2>
+        <h2 className='offset-lg-1 mb-3'>All Campgrounds</h2>
         {campgroundsData.slice().map((campground) => (
           <Campground {...campground} key={campground._id} />
         ))}
