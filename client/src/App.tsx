@@ -26,7 +26,7 @@ const Layout = ({
   setCurrentUser: (user: CurrentUser_Type | null) => void;
 }) => {
   return (
-    <div className='d-flex flex-column w-100 vh-100'>
+    <div className='d-flex flex-column w-100' style={{ minHeight: '100vh' }}>
       <NavBar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       <Toaster
         containerStyle={{ marginTop: '3em' }}
