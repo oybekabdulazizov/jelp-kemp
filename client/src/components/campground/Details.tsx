@@ -10,6 +10,7 @@ import { ReviewSchema } from '../../shared/schemas';
 import ReviewForm from './ReviewForm';
 import '../../styles/display-stars.css';
 import campground_placeholder from '../../assets/campground_placeholder.png';
+import '../../styles/map.css';
 
 type Props = {
   currentUser: CurrentUser_Type | null;
@@ -158,8 +159,12 @@ export default function Details({ currentUser }: Props) {
   return (
     <>
       <div className='row'>
-        <div className='col-6'>
-          <div ref={mapContainer} style={{ height: '200px' }}></div>
+        <div
+          ref={mapContainer}
+          className='mapbox-map mb-4 col-10 offset-1 col-sm-12 offset-sm-0'
+        ></div>
+
+        <div className='col-10 offset-1 col-lg-6 offset-lg-0 px-0'>
           <div
             id='imagesCarousel'
             className='carousel slide'
@@ -250,7 +255,8 @@ export default function Details({ currentUser }: Props) {
             <div className='card-footer text-body-secondary'>2 days ago</div>
           </div>
         </div>
-        <div className='col-6'>
+
+        <div className='col-10 offset-1 col-lg-6 offset-lg-0 ps-4 mb-3'>
           <ReviewForm
             {...formik}
             isValidReview={isValidReview}

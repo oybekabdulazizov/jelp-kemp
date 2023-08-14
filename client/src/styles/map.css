@@ -27,3 +27,7 @@
   color: red;
   width: 15px;
 }
+
+.mapbox-map {
+  height: 400px;
+}
