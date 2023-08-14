@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCampgroundImage = exports.getCampground = exports.deleteCampground = exports.editCampground = exports.createCampground = exports.getCampgrounds = void 0;
+exports.getCampground = exports.deleteCampground = exports.editCampground = exports.createCampground = exports.getCampgrounds = void 0;
 const geocoding_1 = __importDefault(require("@mapbox/mapbox-sdk/services/geocoding"));
 const dotenv = __importStar(require("dotenv"));
 const utils_1 = require("../utils");
@@ -108,10 +108,11 @@ exports.createCampground = (0, utils_1.asyncHandler)((req, res, next) => __await
 exports.editCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g, _h, _j, _k;
     const { _id } = req.params;
+    const { imagesToBeDeleted, title, price, location, description } = req.body;
     const campground = yield campground_1.default.findById(_id);
     if (!campground)
         return res.json({ error: 'Campground Not Found!' });
-    yield campground_1.default.findByIdAndUpdate(_id, Object.assign({}, req.body), { runValidators: true });
+    yield campground_1.default.findByIdAndUpdate(_id, { title, price, location, description }, { runValidators: true });
     try {
         const img0 = {
             url: req.files[0].path,
@@ -143,6 +144,14 @@ exports.editCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter
         next;
     }
     yield campground.save();
+    if (imagesToBeDeleted) {
+        for (const filename of imagesToBeDeleted) {
+            yield cloudinary_1.cloudinary.uploader.destroy(filename);
+        }
+        yield campground.updateOne({
+            $pull: { images: { filename: { $in: imagesToBeDeleted } } },
+        });
+    }
     res.json({
         message: 'Campground modified successfully.',
     });
@@ -162,16 +171,4 @@ exports.getCampground = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(
     if (!campground)
         return res.json({ error: 'Campground not found!' });
     res.json(campground);
-}));
-exports.deleteCampgroundImage = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id, image_filename } = req.params;
-    const campground = yield campground_1.default.findById(_id);
-    if (!campground)
-        return res.json({ error: 'Campground not found!' });
-    const image = 'JelpKemp/' + image_filename;
-    yield cloudinary_1.cloudinary.uploader.destroy(image);
-    yield campground.updateOne({
-        $pull: { images: { filename: image } },
-    });
-    res.json({ message: 'Successfully deleted the image.' });
 }));
