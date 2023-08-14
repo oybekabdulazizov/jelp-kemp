@@ -4,6 +4,7 @@ import useSupercluster from 'use-supercluster';
 
 import { Campground_Type } from '../../shared/types';
 import red_marker from '../../assets/red-marker.webp';
+import '../../styles/map.css';
 
 type Marker_Prop = {
   children: React.ReactNode;
@@ -49,7 +50,7 @@ export default function ClusteredMap({ campgroundsData }: Props) {
     <GoogleMapReact
       bootstrapURLKeys={{ key: `AIzaSyBl_WUqPnA_MATPRoovZx3YN5Zd5rHZ4GA` }}
       defaultCenter={{ lat: 39.56295180747039, lng: -102.07872499175548 }}
-      defaultZoom={4}
+      defaultZoom={3}
       yesIWantToUseGoogleMapApiInternals
       onGoogleApiLoaded={({ map }) => {
         mapRef.current = map;
@@ -67,14 +68,8 @@ export default function ClusteredMap({ campgroundsData }: Props) {
           return (
             <Marker key={cluster.id} lat={latitude} lng={longitude}>
               <div
+                className='clustered-map'
                 style={{
-                  color: 'white',
-                  backgroundColor: '#1978c8',
-                  borderRadius: '50%',
-                  padding: '1em',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
                   width: `${30 + (point_count / points.length) * 100}px`,
                   height: `${30 + (point_count / points.length) * 100}px`,
                 }}
@@ -87,7 +82,7 @@ export default function ClusteredMap({ campgroundsData }: Props) {
                   mapRef.current?.panTo({ lat: latitude, lng: longitude });
                 }}
               >
-                <p style={{ fontSize: '15px', margin: '0' }}>{point_count}</p>
+                <p className='point-count'>{point_count}</p>
               </div>
             </Marker>
           );
@@ -98,13 +93,11 @@ export default function ClusteredMap({ campgroundsData }: Props) {
               lat={latitude}
               lng={longitude}
             >
-              <button
-                style={{ backgroundColor: 'transparent', border: 'none' }}
-              >
+              <button className='unclustered-point'>
                 <img
+                  className='unclustered-point-image'
                   src={red_marker}
                   alt={`unclustered-marker`}
-                  style={{ width: '12px', color: 'red' }}
                 />
               </button>
             </Marker>

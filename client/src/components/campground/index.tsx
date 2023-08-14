@@ -4,6 +4,7 @@ import axios from 'axios';
 import Campground from './Campground';
 import { Campground_Type } from '../../shared/types';
 import ClusteredMap from './ClusteredMap';
+import '../../styles/map.css';
 
 export default function Campgrounds() {
   const [campgroundsData, setCampgroundsData] = useState<Campground_Type[]>([]);
@@ -25,7 +26,7 @@ export default function Campgrounds() {
 
   return (
     <>
-      <div style={{ width: '100%', height: '400px' }}>
+      <div className='clustered-map-wrapper mb-4'>
         <ClusteredMap campgroundsData={campgroundsData} />
       </div>
       <div className='container'>
