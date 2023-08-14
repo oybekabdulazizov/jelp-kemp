@@ -31,9 +31,11 @@ export default function Campgrounds() {
       </div>
       <div className='container'>
         <h2 className='offset-lg-1 mb-3'>All Campgrounds</h2>
-        {campgroundsData.slice().map((campground) => (
-          <Campground {...campground} key={campground._id} />
-        ))}
+        <div className='mb-4' style={{ height: '80vh', overflowY: 'scroll' }}>
+          {campgroundsData.slice().map((campground) => (
+            <Campground {...campground} key={campground._id} />
+          ))}
+        </div>
       </div>
     </>
   );
