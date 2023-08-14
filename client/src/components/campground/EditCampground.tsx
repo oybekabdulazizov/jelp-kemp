@@ -20,7 +20,7 @@ export default function EditCampground({ currentUser }: Props) {
     item?: ((index: number) => File | null) | undefined;
     [Symbol.iterator]?: (() => IterableIterator<File>) | {};
   }>({});
-  const [isDeletingImage, setIsDeletingImage] = useState<boolean>(false);
+  const [imagesToBeDeleted, setImagesToBeDeleted] = useState<Array<string>>([]);
 
   const edit = async (values: any) => {
     const formData = new FormData();
@@ -31,6 +31,9 @@ export default function EditCampground({ currentUser }: Props) {
     formData.append('author', values.author._id);
     for (const key of Object.keys(images)) {
       formData.append('images', images[key as any]);
+    }
+    for (const iterator of Object.keys(imagesToBeDeleted)) {
+      formData.append('imagesToBeDeleted', imagesToBeDeleted[iterator as any]);
     }
 
     try {
@@ -46,9 +49,18 @@ export default function EditCampground({ currentUser }: Props) {
     }
   };
 
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const images = { ...e.target.files };
     setImages(images);
+  };
+
+  const handleImageDelete = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { checked, value } = e.target;
+    if (checked) {
+      setImagesToBeDeleted([...imagesToBeDeleted, value]);
+    } else {
+      setImagesToBeDeleted(imagesToBeDeleted.filter((img) => img !== value));
+    }
   };
 
   const onSubmit = async (values: any, actions: any) => {
@@ -110,18 +122,7 @@ export default function EditCampground({ currentUser }: Props) {
       }
     };
     findCampground();
-  }, [isDeletingImage]);
-
-  const deleteImage = async (image_filename: string) => {
-    setIsDeletingImage(true);
-    const image = image_filename.replace('JelpKemp/', '');
-    try {
-      await axios.delete(`/campgrounds/${_id}/images/${image}`);
-    } catch (err: any) {
-      toast.error(err.message);
-    }
-    setIsDeletingImage(false);
-  };
+  }, []);
 
   return (
     <>
@@ -179,6 +180,7 @@ export default function EditCampground({ currentUser }: Props) {
                       <div className='text-success'>Looks good!</div>
                     )}
                   </div>
+
                   <div className='mb-3'>
                     <label htmlFor='price' className='form-label fw-medium'>
                       Price
@@ -259,21 +261,30 @@ export default function EditCampground({ currentUser }: Props) {
                         onChange={handleImageChange}
                       />
                     </div>
-                    <div>
-                      {campground?.images.map((i) => (
-                        <div
-                          key={i.filename}
-                          onClick={() => deleteImage(i.filename)}
-                        >
-                          <img
-                            className='mb-1 w-100'
-                            src={`${i.url}`}
-                            alt={`${i.filename}`}
+                  </div>
+
+                  <div className='mb-3'>
+                    {campground?.images.map((img, i) => (
+                      <div key={i}>
+                        <img
+                          className='img-thumbnail'
+                          src={`${img.url}`}
+                          alt={`${img.filename}`}
+                        />
+                        <div className='form-check-inline'>
+                          <input
+                            type='checkbox'
+                            id={`image-${i}`}
+                            onChange={handleImageDelete}
+                            // name='deleteImages[]'
+                            value={`${img.filename}`}
                           />
                         </div>
-                      ))}
-                    </div>
+                        <label htmlFor={`image-${i}`}>Delete?</label>
+                      </div>
+                    ))}
                   </div>
+
                   <button
                     type='submit'
                     className='btn btn-success w-100 py-2 fw-medium'
