@@ -48,7 +48,7 @@ export default function ClusteredMap({ campgroundsData }: Props) {
 
   return (
     <GoogleMapReact
-      bootstrapURLKeys={{ key: `AIzaSyBl_WUqPnA_MATPRoovZx3YN5Zd5rHZ4GA` }}
+      bootstrapURLKeys={{ key: import.meta.env.GOOGLE_MAP_API_KEY! }}
       defaultCenter={{ lat: 39.56295180747039, lng: -102.07872499175548 }}
       defaultZoom={3}
       yesIWantToUseGoogleMapApiInternals
