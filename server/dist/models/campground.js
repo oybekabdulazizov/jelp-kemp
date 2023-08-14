@@ -17,6 +17,9 @@ const review_1 = __importDefault(require("./review"));
 const ImageSchema = new mongoose_1.Schema({
     url: String,
     filename: String,
+}, { toJSON: { virtuals: true } });
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200');
 });
 const CampgroundSchema = new mongoose_1.Schema({
     title: {
@@ -62,7 +65,7 @@ const CampgroundSchema = new mongoose_1.Schema({
             ref: 'Review',
         },
     ],
-});
+}, { toJSON: { virtuals: true } });
 CampgroundSchema.post('findOneAndDelete', function (campground) {
     return __awaiter(this, void 0, void 0, function* () {
         if (campground) {
