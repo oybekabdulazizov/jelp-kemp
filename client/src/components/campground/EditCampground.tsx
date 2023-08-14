@@ -126,174 +126,193 @@ export default function EditCampground({ currentUser }: Props) {
   return (
     <>
       {currentUser !== null ? (
-        <div>
-          <div className='col-4 offset-4 my-2'>
-            <h2 className='text-center mb-3'>Edit Campground</h2>
-            <form onSubmit={handleSubmit} encType='multipart/form-data'>
-              <div className='mb-3'>
-                <label htmlFor='title' className='form-label fw-medium'>
-                  Title
-                </label>
-                <input
-                  type='text'
-                  className={`form-control ${
-                    errors.title && touched.title && 'border border-danger'
-                  }`}
-                  id='title'
-                  name='title'
-                  value={values.title}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.title && touched.title && (
-                  <div className='text-danger'>{errors.title}</div>
-                )}
-                {allValid && <div className='text-success'>Looks good!</div>}
-              </div>
+        <div className='h-100 d-flex align-items-center'>
+          <div className='col-10 offset-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3'>
+            <div className='card shadow'>
+              <div className='card-body'>
+                <h2 className='text-center mb-3'>Edit Campground</h2>
+                <form onSubmit={handleSubmit} encType='multipart/form-data'>
+                  <div className='mb-3'>
+                    <label htmlFor='title' className='form-label fw-medium'>
+                      Title
+                    </label>
+                    <input
+                      type='text'
+                      className={`form-control ${
+                        errors.title && touched.title && 'border border-danger'
+                      }`}
+                      id='title'
+                      name='title'
+                      value={values.title}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.title && touched.title && (
+                      <div className='text-danger'>{errors.title}</div>
+                    )}
+                    {allValid && (
+                      <div className='text-success'>Looks good!</div>
+                    )}
+                  </div>
 
-              <div className='mb-3'>
-                <label htmlFor='location' className='form-label fw-medium'>
-                  Location
-                </label>
-                <input
-                  type='text'
-                  className={`form-control ${
-                    errors.location &&
-                    touched.location &&
-                    'border border-danger'
-                  }`}
-                  id='location'
-                  name='location'
-                  value={values.location}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.location && touched.location && (
-                  <div className='text-danger'>{errors.location}</div>
-                )}
-                {allValid && <div className='text-success'>Looks good!</div>}
-              </div>
-              <div className='mb-3'>
-                <label htmlFor='price' className='form-label fw-medium'>
-                  Price
-                </label>
-                <div className='input-group'>
-                  <span
-                    className={`input-group-text bg-body-secondary ${
-                      errors.price && touched.price && 'border border-danger'
-                    }`}
-                  >
-                    $
-                  </span>
-                  <input
-                    type='number'
-                    className={`form-control ${
-                      errors.price && touched.price && 'border border-danger'
-                    }`}
-                    id='price'
-                    placeholder='0'
-                    name='price'
-                    value={values.price}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                </div>
-                {errors.price && touched.price && (
-                  <div className='text-danger'>{errors.price}</div>
-                )}
-                {allValid && <div className='text-success'>Looks good!</div>}
-              </div>
-
-              <div className='mb-3'>
-                <label htmlFor='description' className='form-label fw-medium'>
-                  Description
-                </label>
-                <textarea
-                  className={`form-control ${
-                    errors.description &&
-                    touched.description &&
-                    'border border-danger'
-                  }`}
-                  id='description'
-                  name='description'
-                  rows={6}
-                  value={values.description}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.description && touched.description && (
-                  <div className='text-danger'>{errors.description}</div>
-                )}
-                {allValid && <div className='text-success'>Looks good!</div>}
-              </div>
-
-              <div className='mb-3'>
-                <label className='form-label fw-medium' htmlFor='images'>
-                  Image(s)
-                </label>
-                <div className='input-group mb-1'>
-                  <input
-                    type='file'
-                    className='form-control'
-                    id='images'
-                    name='images'
-                    accept='image/*'
-                    multiple
-                    onChange={handleImageChange}
-                  />
-                </div>
-                <div>
-                  {campground?.images.map((i) => (
-                    <div
-                      key={i.filename}
-                      onClick={() => deleteImage(i.filename)}
-                    >
-                      <img
-                        className='mb-1 w-100'
-                        src={`${i.url}`}
-                        alt={`${i.filename}`}
+                  <div className='mb-3'>
+                    <label htmlFor='location' className='form-label fw-medium'>
+                      Location
+                    </label>
+                    <input
+                      type='text'
+                      className={`form-control ${
+                        errors.location &&
+                        touched.location &&
+                        'border border-danger'
+                      }`}
+                      id='location'
+                      name='location'
+                      value={values.location}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.location && touched.location && (
+                      <div className='text-danger'>{errors.location}</div>
+                    )}
+                    {allValid && (
+                      <div className='text-success'>Looks good!</div>
+                    )}
+                  </div>
+                  <div className='mb-3'>
+                    <label htmlFor='price' className='form-label fw-medium'>
+                      Price
+                    </label>
+                    <div className='input-group'>
+                      <span
+                        className={`input-group-text bg-body-secondary ${
+                          errors.price &&
+                          touched.price &&
+                          'border border-danger'
+                        }`}
+                      >
+                        $
+                      </span>
+                      <input
+                        type='number'
+                        className={`form-control ${
+                          errors.price &&
+                          touched.price &&
+                          'border border-danger'
+                        }`}
+                        id='price'
+                        placeholder='0'
+                        name='price'
+                        value={values.price}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
                     </div>
-                  ))}
+                    {errors.price && touched.price && (
+                      <div className='text-danger'>{errors.price}</div>
+                    )}
+                    {allValid && (
+                      <div className='text-success'>Looks good!</div>
+                    )}
+                  </div>
+
+                  <div className='mb-3'>
+                    <label
+                      htmlFor='description'
+                      className='form-label fw-medium'
+                    >
+                      Description
+                    </label>
+                    <textarea
+                      className={`form-control ${
+                        errors.description &&
+                        touched.description &&
+                        'border border-danger'
+                      }`}
+                      id='description'
+                      name='description'
+                      rows={6}
+                      value={values.description}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                    {errors.description && touched.description && (
+                      <div className='text-danger'>{errors.description}</div>
+                    )}
+                    {allValid && (
+                      <div className='text-success'>Looks good!</div>
+                    )}
+                  </div>
+
+                  <div className='mb-3'>
+                    <label className='form-label fw-medium' htmlFor='images'>
+                      Image(s)
+                    </label>
+                    <div className='input-group mb-1'>
+                      <input
+                        type='file'
+                        className='form-control'
+                        id='images'
+                        name='images'
+                        accept='image/*'
+                        multiple
+                        onChange={handleImageChange}
+                      />
+                    </div>
+                    <div>
+                      {campground?.images.map((i) => (
+                        <div
+                          key={i.filename}
+                          onClick={() => deleteImage(i.filename)}
+                        >
+                          <img
+                            className='mb-1 w-100'
+                            src={`${i.url}`}
+                            alt={`${i.filename}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    type='submit'
+                    className='btn btn-success w-100 py-2 fw-medium'
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span
+                          className='spinner-border spinner-border-sm'
+                          role='status'
+                          aria-hidden='true'
+                        ></span>{' '}
+                        {''}
+                        Saving
+                      </>
+                    ) : (
+                      'Save'
+                    )}
+                  </button>
+                </form>
+                <button
+                  disabled={isSubmitting}
+                  className='btn btn-secondary mt-2 w-100 py-2 fw-medium'
+                >
+                  <Link
+                    to={`/campgrounds/${_id}`}
+                    className='btn btn-secondary p-0'
+                  >
+                    Cancel
+                  </Link>
+                </button>
+                <div className='mt-2 text-center'>
+                  <button style={{ border: 'none' }} disabled={isSubmitting}>
+                    <Link to='/campgrounds' className='link-offset-2 fw-medium'>
+                      All Campgrounds
+                    </Link>
+                  </button>
                 </div>
               </div>
-              <button
-                type='submit'
-                className='btn btn-success w-100 py-2 fw-medium'
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <span
-                      className='spinner-border spinner-border-sm'
-                      role='status'
-                      aria-hidden='true'
-                    ></span>{' '}
-                    {''}
-                    Saving
-                  </>
-                ) : (
-                  'Save'
-                )}
-              </button>
-            </form>
-            <button
-              disabled={isSubmitting}
-              className='btn btn-secondary mt-2 w-100 py-2 fw-medium'
-            >
-              <Link
-                to={`/campgrounds/${_id}`}
-                className='btn btn-secondary p-0'
-              >
-                Cancel
-              </Link>
-            </button>
-            <div className='mt-2 text-center'>
-              <button style={{ border: 'none' }} disabled={isSubmitting}>
-                <Link to='/campgrounds' className='link-offset-2 fw-medium'>
-                  All Campgrounds
-                </Link>
-              </button>
             </div>
           </div>
         </div>
