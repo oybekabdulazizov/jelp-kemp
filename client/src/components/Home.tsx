@@ -36,12 +36,12 @@ export default function Home({
             </NavLink>
             <div className='d-flex flex-row ms-5'>
               {currentUser ? (
-                <button
-                  className='nav-link home-nav-link'
+                <div
+                  className='nav-link home-nav-link log-out'
                   onClick={handleLogout}
                 >
                   Log out
-                </button>
+                </div>
               ) : (
                 <>
                   <NavLink to='/login' end className='nav-link home-nav-link'>

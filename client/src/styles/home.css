@@ -34,6 +34,10 @@ p.lead {
   color: rgba(255, 255, 255);
 }
 
+.log-out:hover {
+  cursor: pointer;
+}
+
 a.btn.btn-lg {
   letter-spacing: 0.5px;
   color: white;
