@@ -268,7 +268,7 @@ export default function EditCampground({ currentUser }: Props) {
                       <div key={i}>
                         <img
                           className='img-thumbnail'
-                          src={`${img.url}`}
+                          src={`${img.thumbnail}`}
                           alt={`${img.filename}`}
                         />
                         <div className='form-check-inline'>

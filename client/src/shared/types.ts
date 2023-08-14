@@ -20,7 +20,12 @@ export type Campground_Type = Campground_Validation_Type_Yup & {
     type: string;
     coordinates: Array<number>;
   };
-  images: Array<{ _id: string; url: string; filename: string }>;
+  images: Array<{
+    _id: string;
+    url: string;
+    filename: string;
+    thumbnail?: string;
+  }>;
 };
 
 export type Review_Validation_Type_Yup = InferType<typeof ReviewSchema> & {
