@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { Link, NavigateFunction, useNavigate } from 'react-router-dom';
+import {
+  Link,
+  NavigateFunction,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -15,6 +20,7 @@ type Props = {
 export default function SignupForm({ setCurrentUser }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
+  const location = useLocation();
 
   const onSubmit = async (values: any, actions: any) => {
     if (Object.keys(errors).length < 1) setAllValid(true);
@@ -160,7 +166,11 @@ export default function SignupForm({ setCurrentUser }: Props) {
             </form>
             <div className='mt-3 text-center'>
               Already have an account?{' '}
-              <Link to='/login' className='link-offset-2 fw-medium'>
+              <Link
+                to='/login'
+                state={{ from: location.pathname }}
+                className='link-offset-2 fw-medium'
+              >
                 Log in
               </Link>
             </div>

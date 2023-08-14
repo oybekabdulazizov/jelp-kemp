@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { NavigateFunction, useNavigate, Link } from 'react-router-dom';
+import {
+  NavigateFunction,
+  useNavigate,
+  Link,
+  useLocation,
+} from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 import { LoginSchema } from '../../shared/schemas';
@@ -15,6 +20,7 @@ type Props = {
 export default function LoginForm({ setCurrentUser }: Props) {
   const [allValid, setAllValid] = useState<boolean>(false);
   const navigate: NavigateFunction = useNavigate();
+  const location = useLocation();
 
   const onSubmit = async (values: any, actions: any) => {
     if (Object.keys(errors).length < 1) setAllValid(true);
@@ -32,6 +38,10 @@ export default function LoginForm({ setCurrentUser }: Props) {
         localStorage.setItem('user', user);
         setCurrentUser(data);
         toast.success(`Welcome back, ${data.username}🥳`);
+        if (location.state?.from === '/signup') {
+          navigate('/' as any);
+          return;
+        }
         navigate(-1 as any);
         return;
       }

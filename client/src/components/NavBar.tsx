@@ -1,5 +1,5 @@
 // import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import { CurrentUser_Type } from '../shared/types';
 // import { toast } from 'react-hot-toast';
@@ -15,6 +15,7 @@ export default function NavBar({ currentUser, setCurrentUser }: Props) {
     await logOut();
     setCurrentUser(null);
   };
+  const location = useLocation();
 
   return (
     <nav className='navbar navbar-expand-lg navbar-dark bg-dark sticky-top'>
@@ -41,7 +42,12 @@ export default function NavBar({ currentUser, setCurrentUser }: Props) {
               </button>
             ) : (
               <>
-                <NavLink to='/login' end className='nav-link mx-2'>
+                <NavLink
+                  to='/login'
+                  state={{ from: location.pathname }}
+                  end
+                  className='nav-link mx-2'
+                >
                   Log in
                 </NavLink>
                 <NavLink
