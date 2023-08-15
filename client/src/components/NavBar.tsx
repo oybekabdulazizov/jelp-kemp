@@ -86,17 +86,13 @@ export default function NavBar({ currentUser, setCurrentUser }: Props) {
           </div>
           <div className='offcanvas-body text-secondary'>
             <div className='d-flex flex-column m-2'>
-              <NavLink
-                to='/'
-                end
-                className='nav-link navlink d-inline mb-2 fs-5'
-              >
+              <NavLink to='/' end className='nav-link navlink mb-2 fs-5'>
                 Home
               </NavLink>
               <NavLink
                 to='/campgrounds'
                 end
-                className='nav-link navlink d-inline mb-2 fs-5'
+                className='nav-link navlink mb-2 fs-5'
               >
                 Campgrounds
               </NavLink>
@@ -136,33 +132,6 @@ export default function NavBar({ currentUser, setCurrentUser }: Props) {
             </div>
           </div>
         </div>
-
-        {/* <div className='dropdown-menu d-lg-none'>
-          <NavLink to='/' end className='dropdown-item'>
-            Home
-          </NavLink>
-          <NavLink to='/campgrounds' end className='dropdown-item'>
-            Campgrounds
-          </NavLink>
-          <NavLink to='/campgrounds/new' end className='dropdown-item'>
-            New Campground
-          </NavLink>
-          <hr className='dropdown-divider' />
-          {currentUser !== null ? (
-            <button className='dropdown-item' onClick={handleLogout}>
-              Log out
-            </button>
-          ) : (
-            <>
-              <NavLink to='/login' end className='dropdown-item'>
-                Log in
-              </NavLink>
-              <NavLink to='/signup' end className='dropdown-item'>
-                Sign up
-              </NavLink>
-            </>
-          )}
-        </div> */}
       </div>
     </nav>
   );

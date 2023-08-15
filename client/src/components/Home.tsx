@@ -20,7 +20,7 @@ export default function Home({
       <header className='home-header mx-auto p-3 container'>
         <div className='d-flex justify-content-between'>
           <h3 className='mb-0'>JelpKemp</h3>
-          <nav className='navbar-nav d-flex flex-row'>
+          <nav className='navbar-nav d-none d-md-flex flex-row'>
             <NavLink to='/' end className='nav-link home-nav-link'>
               Home
             </NavLink>
@@ -55,8 +55,86 @@ export default function Home({
               )}
             </div>
           </nav>
+          <button
+            className='navbar-toggler home-navbar-toggler d-md-none d-flex flex-column border px-2 pb-2 rounded'
+            type='button'
+            data-bs-toggle='offcanvas'
+            data-bs-target='#offcanvas'
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle offcanvas'
+          >
+            <span className='m-0 p-0 mt-2'></span>
+            <span className='m-0 p-0 mt-2'></span>
+            <span className='m-0 p-0 mt-2'></span>
+          </button>
+
+          <div
+            className='offcanvas home-offcanvas offcanvas-end d-md-none w-50'
+            tabIndex={-1}
+            id='offcanvas'
+            aria-labelledby='offcanvasLabel'
+          >
+            <div className='offcanvas-header'>
+              <button
+                type='button'
+                className='btn-close btn-close-white'
+                data-bs-dismiss='offcanvas'
+                aria-label='Close'
+                aria-controls='offcanvas'
+              ></button>
+            </div>
+            <div className='offcanvas-body text-secondary'>
+              <div className='d-flex flex-column m-2'>
+                <NavLink to='/' end className='nav-link navlink mb-2 fs-5'>
+                  Home
+                </NavLink>
+                <NavLink
+                  to='/campgrounds'
+                  end
+                  className='nav-link navlink mb-2 fs-5'
+                >
+                  Campgrounds
+                </NavLink>
+                <NavLink
+                  to='/campgrounds/new'
+                  end
+                  className='nav-link navlink mb-3 fs-5'
+                >
+                  New Campground
+                </NavLink>
+                <hr className='m-0 mb-3' />
+                {currentUser !== null ? (
+                  <div
+                    className='nav-link navlink mb-2 fs-5'
+                    onClick={handleLogout}
+                  >
+                    Log out
+                  </div>
+                ) : (
+                  <>
+                    <NavLink
+                      to='/login'
+                      end
+                      className='nav-link navlink mb-2 fs-5'
+                    >
+                      Log in
+                    </NavLink>
+                    <NavLink
+                      to='/signup'
+                      end
+                      className='nav-link navlink mb-2 fs-5'
+                    >
+                      Sign up
+                    </NavLink>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </header>
+
       <main className='home-main text-center d-flex flex-column justify-content-center align-items-center'>
         <h1>JelpKemp</h1>
         <p className='lead'>
@@ -70,6 +148,7 @@ export default function Home({
           Take me to Campgrounds
         </Link>
       </main>
+
       <footer className='footer mt-auto py-3 home-footer'>
         <div className='container'>
           <span className='text-secondary fs-5 text-secondary'>

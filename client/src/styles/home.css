@@ -18,13 +18,13 @@ p.lead {
   letter-spacing: 0.5px;
 }
 
-.home-nav-link {
+.nav-link.home-nav-link {
   color: rgba(255, 255, 255, 0.5);
   padding: 0.25rem 0;
   margin-left: 1rem;
 }
 
-.home-nav-link.active {
+.nav-link.home-nav-link.active {
   border-bottom: 0.25rem solid rgba(255, 255, 255);
   color: rgba(255, 255, 255);
 }
@@ -47,4 +47,29 @@ a.btn.btn-lg {
 a.btn.btn-lg:hover {
   color: black;
   background: white;
+}
+
+.home-offcanvas {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.home-offcanvas.nav-link.fs-5 {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.home-offcanvas.nav-link.fs-5.active {
+  color: rgb(255, 255, 255);
+}
+
+.home-offcanvas.nav-link.fs-5:hover {
+  color: rgb(255, 255, 255);
+}
+
+div.home-offcanvas.nav-link.fs-5:hover {
+  cursor: pointer;
+}
+
+.home-navbar-toggler span {
+  width: 30px;
+  border-bottom: 1px solid white;
 }

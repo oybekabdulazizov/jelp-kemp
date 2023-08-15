@@ -5,3 +5,7 @@
 .navlink.navlink:hover {
   color: white;
 }
+
+div.nav-link.navlink.mb-2.fs-5:hover {
+  cursor: pointer;
+}
