@@ -113,6 +113,9 @@ export default function Details({ currentUser }: Props) {
       actions.resetForm();
       setIsValidReview(false);
     } catch (err: any) {
+      if (err.response) {
+        toast.error(err.response.data);
+      }
       console.log(err);
     }
     setReviewChanged(false);
