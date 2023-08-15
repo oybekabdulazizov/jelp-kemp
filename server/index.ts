@@ -2,6 +2,9 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import { connect } from 'mongoose';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import ExpressMongoSanitize from 'express-mongo-sanitize';
+import helmet from 'helmet';
+
 import colors from 'colors/safe';
 const error = colors.red;
 import * as dotenv from 'dotenv';
@@ -35,10 +38,12 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: false }));
+app.use(helmet());
 
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
 app.use(userRouter);
+app.use(ExpressMongoSanitize());
 
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   next(new AppError(404, 'Page Not Found!'));

@@ -44,8 +44,12 @@ export default function EditCampground({ currentUser }: Props) {
       });
       return data;
     } catch (err: any) {
-      toast.error(err.response.data);
-      console.log(err.response.data);
+      if (err.response) {
+        if (err.response.data) toast.error(err.response.data);
+      }
+      if (err.message) {
+        toast.error(err.message);
+      }
     }
   };
 
@@ -117,7 +121,12 @@ export default function EditCampground({ currentUser }: Props) {
         setValues(data);
         setCampground(data);
       } catch (err: any) {
-        toast.error(err.messsage);
+        if (err.response) {
+          if (err.response.data) toast.error(err.response.data);
+        }
+        if (err.message) {
+          toast.error(err.message);
+        }
         navigate(`/campgrounds`, {});
       }
     };

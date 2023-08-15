@@ -39,8 +39,10 @@ export default function CreateCampground({ currentUser }: Props) {
       return data;
     } catch (err: any) {
       if (err.response) {
-        toast.error(err.response.data);
-        console.log(err.response.data);
+        if (err.response.data) toast.error(err.response.data);
+      }
+      if (err.message) {
+        toast.error(err.message);
       }
     }
   };

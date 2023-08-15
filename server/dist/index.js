@@ -39,6 +39,8 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = require("mongoose");
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
+const helmet_1 = __importDefault(require("helmet"));
 const safe_1 = __importDefault(require("colors/safe"));
 const error = safe_1.default.red;
 const dotenv = __importStar(require("dotenv"));
@@ -67,9 +69,11 @@ app.use((0, cors_1.default)({
     exposedHeaders: ['Content-Type'],
 }));
 app.use(express_1.default.urlencoded({ extended: false }));
+app.use((0, helmet_1.default)());
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
 app.use(userRoutes_1.default);
+app.use((0, express_mongo_sanitize_1.default)());
 app.get('*', (req, res, next) => {
     next(new AppError_1.default(404, 'Page Not Found!'));
 });
