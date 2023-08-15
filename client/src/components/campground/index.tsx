@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 import Campground from './Campground';
 import { Campground_Type } from '../../shared/types';
@@ -16,9 +17,13 @@ export default function Campgrounds() {
         if (data) {
           setCampgroundsData(data);
         }
-      } catch (err) {
-        console.log('error occurred: ');
-        console.log(err);
+      } catch (err: any) {
+        if (err.response) {
+          if (err.response.data) toast.error(err.response.data);
+        }
+        if (err.message) {
+          toast.error(err.message);
+        }
       }
     };
     fetchCampgrounds();

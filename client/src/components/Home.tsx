@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 
 import { CurrentUser_Type } from '../shared/types';
-import { logOut } from '../common';
+import { logOut } from '../shared/common';
 import '../styles/home.css';
 
 export default function Home({

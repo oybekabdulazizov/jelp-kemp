@@ -47,7 +47,12 @@ export default function LoginForm({ setCurrentUser }: Props) {
       }
     } catch (err: any) {
       setAllValid(false);
-      toast.error(err.message);
+      if (err.response) {
+        if (err.response.data) toast.error(err.response.data);
+      }
+      if (err.message) {
+        toast.error(err.message);
+      }
     }
     actions.resetForm();
   };

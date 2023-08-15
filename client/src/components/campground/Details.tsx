@@ -42,7 +42,12 @@ export default function Details({ currentUser }: Props) {
           setViewPortZoom(6);
         }
       } catch (err: any) {
-        toast.error(err.message);
+        if (err.response) {
+          if (err.response.data) toast.error(err.response.data);
+        }
+        if (err.message) {
+          toast.error(err.message);
+        }
         navigate('/campgrounds', {});
       }
     };
@@ -91,8 +96,12 @@ export default function Details({ currentUser }: Props) {
         navigate(`/campgrounds`);
       }
     } catch (err: any) {
-      toast.error(err.response.data);
-      console.log(err.response.data);
+      if (err.response) {
+        if (err.response.data) toast.error(err.response.data);
+      }
+      if (err.message) {
+        toast.error(err.message);
+      }
     }
     setDeleting(false);
   };
@@ -114,9 +123,11 @@ export default function Details({ currentUser }: Props) {
       setIsValidReview(false);
     } catch (err: any) {
       if (err.response) {
-        toast.error(err.response.data);
+        if (err.response.data) toast.error(err.response.data);
       }
-      console.log(err);
+      if (err.message) {
+        toast.error(err.message);
+      }
     }
     setReviewChanged(false);
   };
@@ -136,7 +147,12 @@ export default function Details({ currentUser }: Props) {
         toast.success(data.message);
       }
     } catch (err: any) {
-      console.log(err);
+      if (err.response) {
+        if (err.response.data) toast.error(err.response.data);
+      }
+      if (err.message) {
+        toast.error(err.message);
+      }
     }
     setReviewChanged(false);
   };

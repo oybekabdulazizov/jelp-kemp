@@ -5,9 +5,13 @@ export async function logOut() {
   try {
     await axios.get('/logout');
     localStorage.removeItem('user');
-    //   setCurrentUser(null);
     toast.success('Successfully logged out.');
   } catch (err: any) {
-    console.log(err);
+    if (err.response) {
+      if (err.response.data) toast.error(err.response.data);
+    }
+    if (err.message) {
+      toast.error(err.message);
+    }
   }
 }
