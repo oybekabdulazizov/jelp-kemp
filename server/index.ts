@@ -68,5 +68,5 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen('3001', () => {
-  console.log(`Listening to port ${process.env.PORT}...`);
+  console.log(`Listening to port 3001...`);
 });
