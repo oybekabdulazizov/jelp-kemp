@@ -29,7 +29,7 @@ export const signup = asyncHandler(
         username: newUser.username,
         user_email: newUser.email,
       },
-      process.env.JWT_SECRET_TOKEN!,
+      'jelpkemp-fullstack-app',
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);
@@ -61,7 +61,7 @@ export const login = asyncHandler(
         username: user.username,
         user_email: user.email,
       },
-      process.env.JWT_SECRET_TOKEN!,
+      'jelpkemp-fullstack-app',
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);

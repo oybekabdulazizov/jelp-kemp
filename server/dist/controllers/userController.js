@@ -58,7 +58,7 @@ exports.signup = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0,
         user_id: newUser._id,
         username: newUser.username,
         user_email: newUser.email,
-    }, process.env.JWT_SECRET_TOKEN, {}, (err, token) => {
+    }, 'jelpkemp-fullstack-app', {}, (err, token) => {
         if (err)
             throw new AppError_1.default(500, err.message);
         res.cookie('token', token, { httpOnly: true }).json({
@@ -82,7 +82,7 @@ exports.login = (0, utils_1.asyncHandler)((req, res, next) => __awaiter(void 0, 
         user_id: user._id,
         username: user.username,
         user_email: user.email,
-    }, process.env.JWT_SECRET_TOKEN, {}, (err, token) => {
+    }, 'jelpkemp-fullstack-app', {}, (err, token) => {
         if (err)
             throw new AppError_1.default(500, err.message);
         res.cookie('token', token, { httpOnly: true }).json({
