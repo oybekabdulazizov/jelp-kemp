@@ -15,7 +15,7 @@ import { CurrentUser_Type } from './shared/types';
 import EditCampground from './components/campground/EditCampground';
 import CreateCampground from './components/campground/CreateCampground';
 
-axios.defaults.baseURL = 'https://jelp-kemp-0.onrender.com/';
+axios.defaults.baseURL = 'https://jelp-kemp-00.onrender.com/';
 axios.defaults.withCredentials = true;
 
 const Layout = ({
