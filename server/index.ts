@@ -12,6 +12,7 @@ import AppError from './AppError';
 import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
 import userRouter from './routes/userRoutes';
+import homeRouter from './routes/homeRoute';
 
 const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
 
@@ -40,9 +41,7 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
-app.use('/', (req: Request, res: Response, next: NextFunction) => {
-  res.json('Welcome to JelpKemp!');
-});
+app.use('/', homeRouter);
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
 app.use(userRouter);
@@ -67,6 +66,6 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(updatedCode).send(updatedMessage);
 });
 
-app.listen('3001', () => {
-  console.log(`Listening to port 3001...`);
+app.listen('3000', () => {
+  console.log(`Listening to port 3000...`);
 });

@@ -47,6 +47,7 @@ const AppError_1 = __importDefault(require("./AppError"));
 const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"));
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
+const homeRoute_1 = __importDefault(require("./routes/homeRoute"));
 const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
 (0, mongoose_1.connect)(dbUrl)
     .then(() => {
@@ -69,9 +70,7 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, helmet_1.default)());
-app.use('/', (req, res, next) => {
-    res.json('Welcome to JelpKemp!');
-});
+app.use('/', homeRoute_1.default);
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
 app.use(userRoutes_1.default);
@@ -91,6 +90,6 @@ app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     console.log(err.message);
     res.status(updatedCode).send(updatedMessage);
 }));
-app.listen('3001', () => {
-    console.log(`Listening to port 3001...`);
+app.listen('3000', () => {
+    console.log(`Listening to port 3000...`);
 });
