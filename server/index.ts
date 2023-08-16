@@ -5,8 +5,6 @@ import cookieParser from 'cookie-parser';
 import ExpressMongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
 
-import colors from 'colors/safe';
-const error = colors.red;
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,7 +20,7 @@ connect(dbUrl)
     console.log('Database connected...');
   })
   .catch((err: any) => {
-    console.log(error('***** FAILED TO CONNECT TO MONGODB *****'));
+    console.log('***** FAILED TO CONNECT TO MONGODB *****');
     console.log(err.message);
   });
 

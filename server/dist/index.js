@@ -41,8 +41,6 @@ const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
 const helmet_1 = __importDefault(require("helmet"));
-const safe_1 = __importDefault(require("colors/safe"));
-const error = safe_1.default.red;
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const AppError_1 = __importDefault(require("./AppError"));
@@ -55,7 +53,7 @@ const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
     console.log('Database connected...');
 })
     .catch((err) => {
-    console.log(error('***** FAILED TO CONNECT TO MONGODB *****'));
+    console.log('***** FAILED TO CONNECT TO MONGODB *****');
     console.log(err.message);
 });
 const app = (0, express_1.default)();
