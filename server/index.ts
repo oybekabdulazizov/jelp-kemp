@@ -14,7 +14,8 @@ import reviewRouter from './routes/reviewRoutes';
 import userRouter from './routes/userRoutes';
 import homeRouter from './routes/homeRoute';
 
-const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
+const dbUrl = process.env.MONGODB_URL!;
+// || 'mongodb://127.0.0.1:27017/jelp-kemp';
 
 connect(dbUrl)
   .then(() => {

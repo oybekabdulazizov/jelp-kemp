@@ -48,7 +48,8 @@ const campgroundRoutes_1 = __importDefault(require("./routes/campgroundRoutes"))
 const reviewRoutes_1 = __importDefault(require("./routes/reviewRoutes"));
 const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 const homeRoute_1 = __importDefault(require("./routes/homeRoute"));
-const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
+const dbUrl = process.env.MONGODB_URL;
+// || 'mongodb://127.0.0.1:27017/jelp-kemp';
 (0, mongoose_1.connect)(dbUrl)
     .then(() => {
     console.log('Database connected...');
