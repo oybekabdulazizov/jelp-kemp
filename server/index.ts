@@ -40,6 +40,9 @@ app.use(
 app.use(express.urlencoded({ extended: false }));
 app.use(helmet());
 
+app.use('/', (req: Request, res: Response, next: NextFunction) => {
+  res.json('Welcome to JelpKemp!');
+});
 app.use('/campgrounds', campgroundRouter);
 app.use('/campgrounds/:campground_id/reviews', reviewRouter);
 app.use(userRouter);

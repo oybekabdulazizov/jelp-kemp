@@ -69,6 +69,9 @@ app.use((0, cors_1.default)({
 }));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, helmet_1.default)());
+app.use('/', (req, res, next) => {
+    res.json('Welcome to JelpKemp!');
+});
 app.use('/campgrounds', campgroundRoutes_1.default);
 app.use('/campgrounds/:campground_id/reviews', reviewRoutes_1.default);
 app.use(userRoutes_1.default);
