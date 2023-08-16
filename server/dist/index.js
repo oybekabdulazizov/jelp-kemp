@@ -91,7 +91,6 @@ app.use((err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     console.log(err.message);
     res.status(updatedCode).send(updatedMessage);
 }));
-const port = process.env.PORT;
-app.listen(port, () => {
-    console.log(`Listening to port ${port}`);
+app.listen(process.env.PORT, () => {
+    console.log(`Listening to port ${process.env.PORT}`);
 });
