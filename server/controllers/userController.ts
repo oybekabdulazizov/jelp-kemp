@@ -33,7 +33,7 @@ export const signup = asyncHandler(
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);
-        res.cookie('token', token, { httpOnly: true }).json({
+        res.cookie('token', token, { secure: true }).json({
           user_id: newUser._id,
           username: newUser.username,
           user_email: newUser.email,
@@ -65,7 +65,7 @@ export const login = asyncHandler(
       {},
       (err, token) => {
         if (err) throw new AppError(500, err.message);
-        res.cookie('token', token, { httpOnly: true }).json({
+        res.cookie('token', token, { secure: true }).json({
           user_id: user._id,
           username: user.username,
           user_email: user.email,
