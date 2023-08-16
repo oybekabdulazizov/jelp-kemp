@@ -99,9 +99,6 @@ export default function Details({ currentUser }: Props) {
       if (err.response) {
         if (err.response.data) toast.error(err.response.data);
       }
-      if (err.message) {
-        toast.error(err.message);
-      }
     }
     setDeleting(false);
   };
@@ -122,6 +119,7 @@ export default function Details({ currentUser }: Props) {
       actions.resetForm();
       setIsValidReview(false);
     } catch (err: any) {
+      console.log(err);
       if (err.response) {
         if (err.response.data) toast.error(err.response.data);
       }

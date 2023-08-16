@@ -47,9 +47,6 @@ export default function EditCampground({ currentUser }: Props) {
       if (err.response) {
         if (err.response.data) toast.error(err.response.data);
       }
-      if (err.message) {
-        toast.error(err.message);
-      }
     }
   };
 
