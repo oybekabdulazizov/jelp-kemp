@@ -15,7 +15,9 @@ import campgroundRouter from './routes/campgroundRoutes';
 import reviewRouter from './routes/reviewRoutes';
 import userRouter from './routes/userRoutes';
 
-connect('mongodb://127.0.0.1:27017/jelp-kemp')
+const dbUrl = process.env.MONGODB_URL || 'mongodb://127.0.0.1:27017/jelp-kemp';
+
+connect(dbUrl)
   .then(() => {
     console.log('Database connected...');
   })
