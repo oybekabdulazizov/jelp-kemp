@@ -67,6 +67,6 @@ app.use(async (err: any, req: Request, res: Response, next: NextFunction) => {
   res.status(updatedCode).send(updatedMessage);
 });
 
-app.listen(process.env.PORT, () => {
+app.listen('3001', () => {
   console.log(`Listening to port ${process.env.PORT}...`);
 });
