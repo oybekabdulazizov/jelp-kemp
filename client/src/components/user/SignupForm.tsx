@@ -162,10 +162,10 @@ export default function SignupForm({ setCurrentUser }: Props) {
                       aria-hidden='true'
                     ></span>{' '}
                     {''}
-                    Logging in...
+                    Signing you up...
                   </>
                 ) : (
-                  'Log in'
+                  'Sign up'
                 )}
               </button>
             </form>
