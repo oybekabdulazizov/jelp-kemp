@@ -19,7 +19,7 @@
     "@types/google-map-react": "^2.1.7",
     "@types/mapbox-gl": "^2.7.13",
     "@types/react-router-dom": "^5.3.3",
-    "axios": "^1.4.0",
+    "axios": "^1.6.0",
     "bootstrap": "^5.3.0",
     "formik": "^2.4.1",
     "google-map-react": "^2.2.1",
